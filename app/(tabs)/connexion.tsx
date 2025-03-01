@@ -1,10 +1,14 @@
 import { Alert, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { Checkbox } from "react-native-paper";
-import { Image } from 'react-native';
 import React, {useEffect, useState} from "react";
 import {Link, router} from "expo-router";
 import {initializeDatabase, loginUser} from '@/database/Database';
 import { useSQLiteContext } from "expo-sqlite";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import BackGround from "@/components/BackGround";
+import RegularButton from "@/components/RegularButton";
+
+
 
 export default function TabOneScreen() {
   const [email, setEmail] = useState("");
@@ -49,34 +53,35 @@ export default function TabOneScreen() {
   // Fonction de connexion
   const handleLogin = async () => {
     if (!email || !password || !email.includes("@")) {
-      Alert.alert("Erreur", "Veuillez entrer un email et un mot de passe.");
+      Alert.alert("Erreur", "Veuillez entrer un email et un mot de passe valide.");
       return;
     }
 
     try {
-      const success = await loginUser(db, email, password);
-      if (success) {
+      const user = await loginUser(db, email, password); // 🔥 Modifier pour récupérer `id`
+
+      if (user) {
+        const { id, email } = user; // 📌 Extraction des données
+        await AsyncStorage.setItem("userId", String(id));  // 🔹 Stocker l'ID
+        await AsyncStorage.setItem("userEmail", email);    // 🔹 Stocker l'email
+
         Alert.alert("Succès", "Connexion réussie !");
         setEmail("");
         setPassword("");
-        router.push("/two");
+
+        // Redirection après connexion
+        router.push("/associations");
       } else {
-        Alert.alert("Email ou Mot de Passe Incorrect");
+        Alert.alert("Erreur", "Email ou Mot de Passe Incorrect");
       }
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
       Alert.alert("Erreur", "Une erreur est survenue lors de la connexion.");
     }
   };
-
   return (
       <>
-        <View style={styles.header}>
-          <Image source={require("../../assets/images/qr-code.png")} style={styles.logo} />
-        </View>
-
-        <View style={styles.container} />
-        <View style={styles.formContainer}>
+        <BackGround>
           <Text style={styles.title}>Connectez-vous à votre compte</Text>
 
           {/* Champ Email */}
@@ -112,17 +117,13 @@ export default function TabOneScreen() {
               </View>
               <Text style={styles.checkboxText}>Souviens-toi de moi</Text>
             </View>
-            <Link href={"/two"} asChild>
               <TouchableOpacity>
                 <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
               </TouchableOpacity>
-            </Link>
           </View>
 
           {/* Bouton Log in */}
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginText}>Log in</Text>
-          </TouchableOpacity>
+          <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Se Connecter" onPress={handleLogin}></RegularButton>
 
           {/* Lien pour s'inscrire */}
           <Text style={styles.signupText}>
@@ -131,37 +132,13 @@ export default function TabOneScreen() {
               <Text style={styles.signupLink}> S'inscrire</Text>
             </Link>
           </Text>
-        </View>
+        </BackGround>
       </>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#F5F5F5F5",
-    height: '70%',
-  },
-  header: {
-    height: "45%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#4968df",
-  },
-  logo: {
-    width: 80,
-    height: 80,
-    tintColor: "white",
-    marginTop: -120,
-  },
-  formContainer: {
-    marginTop: -680,
-    backgroundColor: "white",
-    padding: 20,
-    marginHorizontal: 20,
-    borderRadius: 20,
-    elevation: 5,
-  },
   title: {
     fontSize: 28,
     fontWeight: "bold",

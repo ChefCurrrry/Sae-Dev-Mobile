@@ -1,8 +1,10 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, Alert } from 'react-native';
 import React, { useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { registerUser } from '@/database/Database';
-import {Link, router} from "expo-router"; // Importation de la fonction d'inscription
+import {Link, router} from "expo-router";
+import BackGround from "@/components/BackGround"; // Importation de la fonction d'inscription
+import RegularButton from '@/components/RegularButton';
 
 export default function RegisterScreen() {
   const db = useSQLiteContext(); // Connexion à la base de données
@@ -44,7 +46,8 @@ export default function RegisterScreen() {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
-        router.push("/");
+        router.push("/connexion"); // ✅ Redirection correcte
+
       } else {
         Alert.alert("Erreur", "L'inscription a échoué. Vérifiez si l'email est déjà utilisé.");
       }
@@ -56,12 +59,7 @@ export default function RegisterScreen() {
 
   return (
       <>
-        <View style={styles.header}>
-          <Image source={require("../../assets/images/qr-code.png")} style={styles.logo} />
-        </View>
-
-        <View style={styles.container} />
-        <View style={styles.formContainer}>
+        <BackGround>
           <Text style={styles.title}>Créez votre compte</Text>
 
           {/* Champ Âge */}
@@ -105,17 +103,15 @@ export default function RegisterScreen() {
           />
 
           {/* Bouton S'inscrire */}
-          <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-            <Text style={styles.registerText}>S'inscrire</Text>
-          </TouchableOpacity>
+          <RegularButton styleButton={styles.registerButton} styleText={styles.registerText} text="S'inscrire" onPress={handleRegister}></RegularButton>
 
           <Text style={styles.signupText}>
             Vous avez un compte ?
-            <Link href={"/"} asChild>
+            <Link href={"/connexion"} asChild>
               <Text style={styles.signupLink}> Se Connecter</Text>
             </Link>
           </Text>
-        </View>
+        </BackGround>
       </>
   );
 }

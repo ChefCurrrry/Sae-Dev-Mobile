@@ -62,18 +62,19 @@ export async function registerUser(db: SQLiteDatabase, email: string, password: 
  * Vérifie si un utilisateur existe et si le mot de passe est correct.
  * @returns true si la connexion est réussie, false sinon.
  */
-export async function loginUser(db: SQLiteDatabase, email: string, password: string): Promise<boolean> {
+export async function loginUser(db: SQLiteDatabase, email: string, password: string): Promise<{ id: number; email: string } | null> {
     try {
-        const user = await db.getFirstAsync<{ id: number }>(
-            'SELECT id FROM users WHERE email = ? AND password = ?',
+        const user = await db.getFirstAsync<{ id: number; email: string }>(
+            'SELECT id, email FROM users WHERE email = ? AND password = ?',
             [email, password]
         );
-        return !!user;
+        return user ?? null;
     } catch (error) {
         console.error("Erreur lors de la connexion :", error);
-        return false;
+        return null;
     }
 }
+
 
 /**
  * Ajoute une association dans la base.
