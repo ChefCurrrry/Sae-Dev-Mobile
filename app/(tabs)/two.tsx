@@ -12,49 +12,14 @@ export default function RegisterScreen() {
   // États pour les champs du formulaire
   const [age, setAge] = useState("");
   const [email, setEmail] = useState("");
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // Fonction de validation et d'inscription
   const handleRegister = async () => {
-    // Vérification de l'âge (doit être un nombre ≥ 18)
-    const parsedAge = parseInt(age, 10);
-    if (isNaN(parsedAge) || parsedAge < 18) {
-      Alert.alert("Erreur", "Vous devez avoir au moins 18 ans pour vous inscrire.");
-      return;
-    }
-
-    // Vérification de l'email (doit contenir un '@')
-    if (!email.includes("@")) {
-      Alert.alert("Erreur", "Veuillez entrer un email valide.");
-      return;
-    }
-
-    // Vérification du mot de passe et de la confirmation
-    if (password !== confirmPassword) {
-      Alert.alert("Erreur", "Les mots de passe ne correspondent pas.");
-      return;
-    }
-
-    // Enregistrement de l'utilisateur dans la base de données
-    try {
-      const success = await registerUser(db, email, password);
-      if (success) {
-        Alert.alert("Succès", "Inscription réussie !");
-        // Réinitialiser le formulaire après succès
-        setAge("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        router.push("/connexion"); // ✅ Redirection correcte
-
-      } else {
-        Alert.alert("Erreur", "L'inscription a échoué. Vérifiez si l'email est déjà utilisé.");
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'inscription :", error);
-      Alert.alert("Erreur", "Une erreur est survenue lors de l'inscription.");
-    }
+    router.push("/connexion");
   };
 
   return (
@@ -62,7 +27,21 @@ export default function RegisterScreen() {
         <BackGround>
           <Text style={styles.title}>Créez votre compte</Text>
 
-          {/* Champ Âge */}
+          <TextInput
+              style={styles.input}
+              placeholder="Nom"
+              placeholderTextColor="#aaa"
+              value={nom}
+              onChangeText={setNom}
+          />
+          <TextInput
+              style={styles.input}
+              placeholder="Prenom"
+              placeholderTextColor="#aaa"
+              value={prenom}
+              onChangeText={setPrenom}
+          />
+
           <TextInput
               style={styles.input}
               placeholder="Âge"
@@ -72,7 +51,6 @@ export default function RegisterScreen() {
               onChangeText={setAge}
           />
 
-          {/* Champ Email */}
           <TextInput
               style={styles.input}
               placeholder="nom.prenom@gmail.com"
@@ -118,30 +96,6 @@ export default function RegisterScreen() {
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#F5F5F5",
-    height: '70%',
-  },
-  header: {
-    height: "45%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#4968df",
-  },
-  logo: {
-    width: 80,
-    height: 80,
-    tintColor: "white",
-    marginTop: -120,
-  },
-  formContainer: {
-    marginTop: -680,
-    backgroundColor: "white",
-    padding: 20,
-    marginHorizontal: 20,
-    borderRadius: 20,
-    elevation: 5,
-  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
