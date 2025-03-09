@@ -6,16 +6,15 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
+import RegularButton from "@/components/RegularButton";
 
-export default function PaymentScreen() {
-    // État pour suivre l'option sélectionnée, à null par defaut
-// Type explicite pour le state : peut être number ou null
+export default function Payment() {
+    // État pour suivre l'option sélectionnée, à null par défaut
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-
-    //  liste d'options
+    // Liste d'options de paiement
     const paymentOptions = [
-        { id: 1, label: 'Carte bancaire' },
+        { id: 1, label: 'Carte bancaire' }, // AJOUTER IMAGE
         { id: 2, label: 'Google & Apple pay' },
         { id: 3, label: 'Virement SEPA' },
     ];
@@ -26,7 +25,6 @@ export default function PaymentScreen() {
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>Moyen de paiement</Text>
             </View>
-
 
             <View style={styles.contentContainer}>
                 <Text style={styles.subtitle}>Sélectionnez votre moyen de paiement</Text>
@@ -49,21 +47,19 @@ export default function PaymentScreen() {
                 })}
             </View>
 
-            {/* Bouton confirmation */}
-            <TouchableOpacity
-                style={styles.confirmButton}
+            {/* Bouton confirmation avec RegularButton */}
+            <RegularButton
+                text="Confirmer"
                 onPress={() => {
                     if (selectedOption !== null) {
-                        // Votre logique de confirmation
                         console.log(`Option sélectionnée : ${selectedOption}`);
                     } else {
-                        // Gérer le cas où aucune option n'est sélectionnée
                         console.log('Aucune option sélectionnée');
                     }
                 }}
-            >
-                <Text style={styles.confirmButtonText}>Confirmer</Text>
-            </TouchableOpacity>
+                styleButton={styles.confirmButton}
+                styleText={styles.confirmButtonText}
+            />
         </SafeAreaView>
     );
 }
@@ -72,14 +68,13 @@ export default function PaymentScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffffff', // Couleur de fond globale
+        backgroundColor: '#ffffff',
     },
     header: {
-        backgroundColor: '#5E76FA', // Ajustez la couleur selon vos besoins
+        backgroundColor: '#5E76FA',
         paddingVertical: 60,
         alignItems: 'center',
         justifyContent: 'center',
-
     },
     headerTitle: {
         color: '#fff',
@@ -94,10 +89,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-
-        // Faire remonter le container sur le header
         marginTop: -20,
-
     },
     subtitle: {
         fontSize: 23,
@@ -118,7 +110,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     selectedOption: {
-        borderColor: '#5E76FA', // Couleur de surlignage pour l'option sélectionnée
+        borderColor: '#5E76FA',
         backgroundColor: '#EEF0FF',
     },
     paymentOptionText: {
@@ -139,3 +131,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+
