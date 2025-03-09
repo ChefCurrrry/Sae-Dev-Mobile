@@ -17,68 +17,10 @@ export default function TabOneScreen() {
   const[users, setUsers] = useState("");
   const db = useSQLiteContext();
 
-  useEffect(() => {
-    async function initDB() {
-      try {
-        await initializeDatabase(db);
-        console.log("✅ BDD Initialisée");
+ const handleLogin = async () => {
+   router.push("/associations")
+ }
 
-        // Vérifier les tables existantes
-        /*const tables = await db.getAllAsync("SELECT name FROM sqlite_master WHERE type='table'");
-        console.log("📌 Tables existantes :", tables);*/
-
-      } catch (error) {
-        console.error("❌ Erreur lors de l'initialisation de la base :", error);
-      }
-    }
-    initDB();
-  }, [db]);
-
-
-  // Pour vérifier les utilisateurs dans la base
-  /*useEffect(() => {
-    async function fetchUsers() {
-      try {
-        // Récupérer les utilisateurs
-        const result = await db.getAllAsync('SELECT * FROM users');
-        setUsers(result); // Mettre à jour l'état
-        console.log("📌 Utilisateurs récupérés :", result);
-      } catch (error) {
-        console.error("❌ Erreur lors de la récupération des utilisateurs :", error);
-      }
-    }
-    fetchUsers();
-  }, [db]);*/
-
-  // Fonction de connexion
-  const handleLogin = async () => {
-    if (!email || !password || !email.includes("@")) {
-      Alert.alert("Erreur", "Veuillez entrer un email et un mot de passe valide.");
-      return;
-    }
-
-    try {
-      const user = await loginUser(db, email, password); // 🔥 Modifier pour récupérer `id`
-
-      if (user) {
-        const { id, email } = user; // 📌 Extraction des données
-        await AsyncStorage.setItem("userId", String(id));  // 🔹 Stocker l'ID
-        await AsyncStorage.setItem("userEmail", email);    // 🔹 Stocker l'email
-
-        Alert.alert("Succès", "Connexion réussie !");
-        setEmail("");
-        setPassword("");
-
-        // Redirection après connexion
-        router.push("/associations");
-      } else {
-        Alert.alert("Erreur", "Email ou Mot de Passe Incorrect");
-      }
-    } catch (error) {
-      console.error("Erreur lors de la connexion :", error);
-      Alert.alert("Erreur", "Une erreur est survenue lors de la connexion.");
-    }
-  };
   return (
       <>
         <BackGround>
@@ -123,7 +65,7 @@ export default function TabOneScreen() {
           </View>
 
           {/* Bouton Log in */}
-          <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Se Connecter" onPress={handleLogin}></RegularButton>
+          <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Se Connecter" onPress={handleLogin} ></RegularButton>
 
           {/* Lien pour s'inscrire */}
           <Text style={styles.signupText}>
