@@ -2,9 +2,7 @@ import { Alert, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'reac
 import { Checkbox } from "react-native-paper";
 import React, {useEffect, useState} from "react";
 import {Link, router} from "expo-router";
-import {initializeDatabase, loginUser} from '@/database/Database';
 import { useSQLiteContext } from "expo-sqlite";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
 

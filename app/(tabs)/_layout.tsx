@@ -38,6 +38,13 @@ export default function TabLayout() {
                 headerShown: false,
             }}
         />
+        <Stack.Screen
+            name="payment"
+            options={{
+                headerTitle: '',
+                headerShown: false,
+            }}
+        />
 
     </Stack>
   );

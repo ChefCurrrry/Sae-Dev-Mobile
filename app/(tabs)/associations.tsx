@@ -1,6 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
-import {useSQLiteContext} from "expo-sqlite";
+
 import {Text} from "react-native";
 import {StyleSheet} from 'react-native';
 

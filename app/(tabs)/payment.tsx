@@ -7,6 +7,7 @@ import {
     StyleSheet
 } from 'react-native';
 import RegularButton from "@/components/RegularButton";
+import BackGround from "@/components/BackGround";
 
 export default function Payment() {
     // État pour suivre l'option sélectionnée, à null par défaut
@@ -19,14 +20,16 @@ export default function Payment() {
         { id: 3, label: 'Virement SEPA' },
     ];
 
-    return (
-        <SafeAreaView style={styles.container}>
-            {/* Header bleu/violet */}
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Moyen de paiement</Text>
-            </View>
+    const handlePress = () => {
+        if (selectedOption !== null) {
+            console.log(`Option sélectionnée : ${selectedOption}`);
+        } else {
+            console.log('Aucune option sélectionnée');
+        }
+    }
 
-            <View style={styles.contentContainer}>
+    return (
+        <BackGround>
                 <Text style={styles.subtitle}>Sélectionnez votre moyen de paiement</Text>
 
                 {/* Liste des options de paiement */}
@@ -45,56 +48,25 @@ export default function Payment() {
                         </TouchableOpacity>
                     );
                 })}
-            </View>
+
 
             {/* Bouton confirmation avec RegularButton */}
             <RegularButton
                 text="Confirmer"
-                onPress={() => {
-                    if (selectedOption !== null) {
-                        console.log(`Option sélectionnée : ${selectedOption}`);
-                    } else {
-                        console.log('Aucune option sélectionnée');
-                    }
-                }}
+                onPress={handlePress}
                 styleButton={styles.confirmButton}
                 styleText={styles.confirmButtonText}
             />
-        </SafeAreaView>
+        </BackGround>
     );
 }
 
 // Styles de base
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ffffff',
-    },
-    header: {
-        backgroundColor: '#5E76FA',
-        paddingVertical: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    headerTitle: {
-        color: '#fff',
-        fontSize: 28,
-        fontWeight: 'bold',
-    },
-    contentContainer: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingHorizontal: 20,
-        paddingTop: 30,
-        alignItems: 'center',
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        marginTop: -20,
-    },
     subtitle: {
         fontSize: 23,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 10,
         textAlign: 'center',
     },
     paymentOption: {
@@ -107,7 +79,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 15,
         marginBottom: 10,
-        marginTop: 40,
+        marginTop: 20,
     },
     selectedOption: {
         borderColor: '#5E76FA',
@@ -121,7 +93,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#5E76FA',
         paddingVertical: 15,
         marginHorizontal: 20,
-        marginBottom: 20,
+        marginBottom: 10,
+        marginTop: 20,
         borderRadius: 8,
         alignItems: 'center',
     },

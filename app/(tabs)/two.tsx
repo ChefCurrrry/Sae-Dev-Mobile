@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, Alert } from 'react-native';
 import React, { useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
-import { registerUser } from '@/database/Database';
+
 import {Link, router} from "expo-router";
 import BackGround from "@/components/BackGround"; // Importation de la fonction d'inscription
 import RegularButton from '@/components/RegularButton';
