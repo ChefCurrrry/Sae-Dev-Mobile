@@ -2,7 +2,7 @@
 import mysql from 'mysql2/promise';
 
 export class Database {
-    public pool!: mysql.Pool;
+    private pool!: mysql.Pool;
 
     // Informations de connexion pour la base de données
     private host: string = 'hopper.proxy.rlwy.net';
@@ -36,6 +36,7 @@ export class Database {
             console.log('Connexion à la base de données réussie.');
             return this.pool;
         } catch (error: any) {
+            console.error("Erreur de connexion BDD :", error);
             throw new Error(`Erreur de connexion BDD : ${error.message}`);
         }
     }
