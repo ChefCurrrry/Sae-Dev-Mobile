@@ -1,13 +1,13 @@
 import { StyleSheet, Text, TextInput, Alert } from 'react-native';
 import React, { useState } from "react";
-import { useSQLiteContext } from "expo-sqlite";
+
 
 import {Link, router} from "expo-router";
 import BackGround from "@/components/BackGround"; // Importation de la fonction d'inscription
 import RegularButton from '@/components/RegularButton';
 
 export default function RegisterScreen() {
-  const db = useSQLiteContext(); // Connexion à la base de données
+
 
   // États pour les champs du formulaire
   const [age, setAge] = useState("");

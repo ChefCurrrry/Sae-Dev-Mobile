@@ -2,7 +2,7 @@ import { Alert, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'reac
 import { Checkbox } from "react-native-paper";
 import React, {useEffect, useState} from "react";
 import {Link, router} from "expo-router";
-import { useSQLiteContext } from "expo-sqlite";
+
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
 
@@ -13,7 +13,7 @@ export default function TabOneScreen() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const[users, setUsers] = useState("");
-  const db = useSQLiteContext();
+
 
  const handleLogin = async () => {
    router.push("/associations")

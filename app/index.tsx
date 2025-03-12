@@ -9,7 +9,7 @@ import RegularButton from "@/components/RegularButton";
 export default function bienvenueDisplayScreen(){
 
     const handlePress = () => {
-        router.push("/payment");
+        router.push("/connexion");
     }
     return (
         <>
