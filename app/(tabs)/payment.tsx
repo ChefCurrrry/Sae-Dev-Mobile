@@ -4,7 +4,7 @@ import {
     View,
     Text,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet, Image
 } from 'react-native';
 import RegularButton from "@/components/RegularButton";
 import BackGround from "@/components/BackGround";
@@ -15,9 +15,9 @@ export default function Payment() {
 
     // Liste d'options de paiement
     const paymentOptions = [
-        { id: 1, label: 'Carte bancaire' }, // AJOUTER IMAGE
-        { id: 2, label: 'Google & Apple pay' },
-        { id: 3, label: 'Virement SEPA' },
+        { id: 1, label: 'Carte bancaire', image: require('@/assets/images/card.png') },
+        { id: 2, label: 'Google & Apple Pay', image: require('@/assets/images/card.png') },
+        { id: 3, label: 'Virement SEPA', image: require('@/assets/images/card.png') },
     ];
 
     const handlePress = () => {
@@ -45,6 +45,7 @@ export default function Payment() {
                             onPress={() => setSelectedOption(option.id)}
                         >
                             <Text style={styles.paymentOptionText}>{option.label}</Text>
+                            <Image source={option.image}/>
                         </TouchableOpacity>
                     );
                 })}
