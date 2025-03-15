@@ -25,7 +25,7 @@ export default function TabLayout() {
         }}
       />
         <Stack.Screen
-            name="two"
+            name="inscription"
             options={{
                 headerTitle: '',
                 headerShown: false,

@@ -2,9 +2,9 @@ import { Alert, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'reac
 import { Checkbox } from "react-native-paper";
 import React, {useEffect, useState} from "react";
 import {Link, router} from "expo-router";
-import { useSQLiteContext } from "expo-sqlite";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
+
 
 
 
@@ -12,12 +12,34 @@ export default function TabOneScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const[users, setUsers] = useState("");
-  const db = useSQLiteContext();
 
- const handleLogin = async () => {
-   router.push("/associations")
- }
+
+
+  const API_URL = "http://192.168.1.38:3000/api/users/login"; // Remplace par ton IP locale
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        Alert.alert("Bienvenue", "Connexion réussie !");
+        router.push("/associations");
+      } else {
+        Alert.alert("Erreur", data.message);
+      }
+    } catch (error) {
+      console.error("Erreur de connexion :", error);
+      Alert.alert("Erreur", "Impossible de se connecter au serveur.");
+    }
+  };
+
+
 
   return (
       <>
@@ -68,7 +90,7 @@ export default function TabOneScreen() {
           {/* Lien pour s'inscrire */}
           <Text style={styles.signupText}>
             Pas encore de compte ?
-            <Link href={"/two"} asChild>
+            <Link href={"/inscription"} asChild>
               <Text style={styles.signupLink}> S'inscrire</Text>
             </Link>
           </Text>
