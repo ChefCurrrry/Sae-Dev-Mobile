@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet } from "react-native";
+import AppBackground from "@/components/AppBackground";
 
 const API_URL = "http://192.168.1.38:3000/api/associations"; // Remplace par ton IP locale
 
@@ -41,14 +42,16 @@ export default function AssociationDisplayScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <AppBackground>
+
             <FlatList
                 data={associations}
                 keyExtractor={(item) => item.IdAsso.toString()}
                 numColumns={2}
                 renderItem={({ item }) => <AssociationCard association={item} />}
             />
-        </View>
+
+        </AppBackground>
     );
 }
 
@@ -57,12 +60,18 @@ export default function AssociationDisplayScreen() {
 
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "#f8f8f8", padding: 10 },
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        padding: 10
+    },
     card: {
         flex: 1,
         margin: 10,
         backgroundColor: "#fff",
-        borderRadius: 10,
+        borderColor: '#4968df', // ✅ Bordure violette
+        borderWidth: 2, // ✅ Nécessaire pour que la couleur de la bordure s'affiche
+        borderRadius: 30,
         alignItems: "center",
         padding: 10,
         shadowColor: "#000",
@@ -70,8 +79,15 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 3,
     },
-    image: { width: 80, height: 80, borderRadius: 10, marginBottom: 5 },
-    name: { fontSize: 14, fontWeight: "bold", textAlign: "center" },
+    image: {
+        width: "100%", // L'image prend toute la largeur du conteneur
+        height: 100, // Ajuste la hauteur selon ton design
+        borderRadius: 10,
+        marginBottom: 10,
+        resizeMode: "contain", // ✅ Ajuste l'image sans la couper
+    },
+
+    name: { fontSize: 13, fontWeight: "bold", textAlign: "center" },
 });
 
 
