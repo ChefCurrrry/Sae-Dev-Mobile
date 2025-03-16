@@ -51,8 +51,9 @@ export default function RegisterScreen() {
     };
 
     return (
+        <ScrollView contentContainerStyle={styles.scrollContainer} >
         <BackGround>
-                <ScrollView contentContainerStyle={styles.scrollContainer}>
+
                     <Text style={styles.title}>Créez votre compte</Text>
 
                     <TextInput
@@ -120,18 +121,16 @@ export default function RegisterScreen() {
                             <Text style={styles.signupLink}> Se Connecter</Text>
                         </Link>
                     </Text>
-                </ScrollView>
+
         </BackGround>
+        </ScrollView>
     );
 }
 
 // **Styles**
 const styles = StyleSheet.create({
     scrollContainer: {
-        flexGrow: 1,
-        justifyContent: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 1,
+        flex: 1,
     },
     title: {
         fontSize: 28,

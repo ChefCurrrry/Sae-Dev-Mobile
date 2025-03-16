@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import {resolve} from "path";
 
-dotenv.config({ path: resolve(".env") });
+dotenv.config({ path: resolve("backend/.env") });
 
 const app = express();
 app.use(express.json()); // Permet d'interpréter les requêtes JSON
