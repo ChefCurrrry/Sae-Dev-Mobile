@@ -9,13 +9,6 @@ export default function TabLayout() {
 
   return (
     <Stack>
-        <Stack.Screen
-            name="index"
-            options={{
-                title: 'Bienvenue',
-                headerShown: false,
-            }}
-        />
       <Stack.Screen
         name="connexion"
         options={{
