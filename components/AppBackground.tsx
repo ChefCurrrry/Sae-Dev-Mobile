@@ -1,15 +1,18 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 
 interface Props {
     children: React.ReactNode; // ✅ Permet d'afficher du contenu dans la partie blanche
+    title?: string; // ✅ Optionnel, permet d'afficher un texte en haut
 }
 
-export default function AppBackground({ children }: Props) {
+export default function AppBackground({ children, title }: Props) {
     return (
         <View style={styles.container}>
             {/* Partie haute en bleu/violet */}
-            <View style={styles.header} />
+            <View style={styles.header}>
+                <Text style={styles.pageTitle}>{title}</Text>
+            </View>
 
             {/* Partie basse blanche qui contient les enfants */}
             <View style={styles.content}>{children}</View>
@@ -27,6 +30,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#4968df",
         borderBottomLeftRadius: 30, // ✅ Bord arrondi vers la partie blanche
         borderBottomRightRadius: 30,
+        justifyContent: "center", // ✅ Centre le texte verticalement
+        alignItems: "center", // ✅ Centre le texte horizontalement
+        paddingTop: 50, // ✅ Ajuste l'espace en haut si besoin (évite le notch sur iOS)
     },
     content: {
         flex: 1,
@@ -35,5 +41,12 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         padding: 20,
         marginTop: -30, // ✅ Ajuste l'effet de transition
+    },
+    pageTitle: {
+        fontSize: 37,
+        fontWeight: "bold",
+        color: "#fff", // ✅ Texte en blanc
+        textAlign: "center",
+        marginBottom: 40,
     },
 });

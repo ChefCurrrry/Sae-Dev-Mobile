@@ -18,10 +18,15 @@ export default function AssociationDisplayScreen() {
          "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
          "ActionTraitement.png": require("@/assets/images/asso/ActionTraitement.png"),
          "AddictAlcool.png": require("@/assets/images/asso/AddictAlcool.png"),
+         "ADEPA.png": require("@/assets/images/asso/ADEPA.png"),
+         "ADMD.png": require("@/assets/images/asso/ADMD.png"),
+         "Advocacy.png": require("@/assets/images/asso/Advocacy.png"),
+
          // Ajoute ici les 93 associations avec leur image correspondante
      };
 
     const getImageSource = (logoName: string) => {
+        // @ts-ignore
         return images[logoName] || require("@/assets/images/default.png");
     };
 
@@ -42,7 +47,7 @@ export default function AssociationDisplayScreen() {
     };
 
     return (
-        <AppBackground>
+        <AppBackground title="Choisissez une association">
 
             <FlatList
                 data={associations}
@@ -68,9 +73,9 @@ const styles = StyleSheet.create({
     card: {
         flex: 1,
         margin: 10,
-        backgroundColor: "#fff",
+        backgroundColor: "#eceaea",
         borderColor: '#4968df', // ✅ Bordure violette
-        borderWidth: 2, // ✅ Nécessaire pour que la couleur de la bordure s'affiche
+        borderWidth: 3, // ✅ Nécessaire pour que la couleur de la bordure s'affiche
         borderRadius: 30,
         alignItems: "center",
         padding: 10,
@@ -81,13 +86,13 @@ const styles = StyleSheet.create({
     },
     image: {
         width: "100%", // L'image prend toute la largeur du conteneur
-        height: 100, // Ajuste la hauteur selon ton design
+        height: 90, // Ajuste la hauteur selon ton design
         borderRadius: 10,
         marginBottom: 10,
         resizeMode: "contain", // ✅ Ajuste l'image sans la couper
     },
 
-    name: { fontSize: 13, fontWeight: "bold", textAlign: "center" },
+    name: { fontSize: 16, fontWeight: "bold", textAlign: "center" },
 });
 
 
