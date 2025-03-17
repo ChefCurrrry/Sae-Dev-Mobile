@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet } from "react-native";
 import AppBackground from "@/components/AppBackground";
 
-const API_URL = "http://192.168.1.38:3000/api/associations"; // Remplace par ton IP locale
+//const API_URL = "http://192.168.1.38:3000/api/associations"; // IP Chez Kiran
+const API_URL = "http://172.20.175.204:3000/api/associations"; // IP Ilumens
 
 interface Association {
     IdAsso: number;
@@ -21,6 +22,24 @@ export default function AssociationDisplayScreen() {
          "ADEPA.png": require("@/assets/images/asso/ADEPA.png"),
          "ADMD.png": require("@/assets/images/asso/ADMD.png"),
          "Advocacy.png": require("@/assets/images/asso/Advocacy.png"),
+         "AFA.png": require("@/assets/images/asso/AFA.png"),
+        "AFDE.png": require("@/assets/images/asso/AFDE.png"),
+        "AFDOC.png": require("@/assets/images/asso/AFDOC.png"),
+        "AFGS.png": require("@/assets/images/asso/AFGS.png"),
+        "AFH.png": require("@/assets/images/asso/AFH.png"),
+        "AFM_Telethon.png": require("@/assets/images/asso/AFM_Telethon.png"),
+        "AFPRIC.png": require("@/assets/images/asso/AFPRIC.png"),
+        "AFRH.png": require("@/assets/images/asso/AFRH.png"),
+        "AFS.png": require("@/assets/images/asso/AFS.png"),
+        "AFSA.png": require("@/assets/images/asso/AFSA.png"),
+        "AFSEP.png": require("@/assets/images/asso/AFSEP.png"),
+        "AFVD.png": require("@/assets/images/asso/AFVD.png"),
+        "AFVS.png": require("@/assets/images/asso/AFVS.png"),
+        "AIDES.png": require("@/assets/images/asso/AIDES.png"),
+        "AINP.png": require("@/assets/images/asso/AINP.png"),
+        "Alcool_Ecoute.png": require("@/assets/images/asso/Alcool_Ecoute.png"),
+
+
 
          // Ajoute ici les 93 associations avec leur image correspondante
      };
