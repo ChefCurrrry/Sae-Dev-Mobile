@@ -6,7 +6,7 @@ import { resolve } from "path";
 import userRoutes from "./routes/userRoutes.js";
 import associationRoutes from "./routes/associationRoutes.js";
 
-dotenv.config({ path: resolve("backend/.env") });
+dotenv.config({ path: resolve(".env") });
 
 const app = express();
 app.use(express.json());
