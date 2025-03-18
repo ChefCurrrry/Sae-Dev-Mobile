@@ -3,9 +3,8 @@ import { View, Text, Image, FlatList, StyleSheet, TextInput } from "react-native
 import AppBackground from "@/components/AppBackground";
 
 // 📌 API_URL dynamique (Railway en prod, Localhost en dev)
-const API_URL = process.env.NODE_ENV === "development"
-    ? "http://192.168.1.38:3000/api/associations"
-    : "https://ton-backend-production.up.railway.app/api/associations";
+const API_URL = "http://192.168.1.38:3000/api/associations" // Adresse IP de Kiran
+//const API_URL = "http://192.168.1.128:3000/api/associations" // Adresse IP d'aline // Décommente cette ligne et commente la mienne pour pouvoir utiliser le serveur depuis ton pc
 
 interface Association {
     IdAsso: number;
