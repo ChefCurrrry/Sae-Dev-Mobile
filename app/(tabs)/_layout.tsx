@@ -9,13 +9,6 @@ export default function TabLayout() {
 
   return (
     <Stack>
-        <Stack.Screen
-            name="index"
-            options={{
-                title: 'Bienvenue',
-                headerShown: false,
-            }}
-        />
       <Stack.Screen
         name="connexion"
         options={{
@@ -25,7 +18,7 @@ export default function TabLayout() {
         }}
       />
         <Stack.Screen
-            name="two"
+            name="inscription"
             options={{
                 headerTitle: '',
                 headerShown: false,
@@ -33,6 +26,13 @@ export default function TabLayout() {
         />
         <Stack.Screen
             name="associations"
+            options={{
+                headerTitle: '',
+                headerShown: false,
+            }}
+        />
+        <Stack.Screen
+            name="payment"
             options={{
                 headerTitle: '',
                 headerShown: false,

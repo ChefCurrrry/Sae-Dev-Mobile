@@ -20,7 +20,7 @@ export default function BackGround({children}){
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#F5F5F5F5",
-        height: '70%',
+        height: '70%'
     },
     header: {
         height: "45%",

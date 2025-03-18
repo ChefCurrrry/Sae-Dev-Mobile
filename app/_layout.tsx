@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import * as FileSystem from 'expo-file-system';
-import { SQLiteProvider } from 'expo-sqlite'; // ✅ Ajout de SQLiteProvider
+
 
 export {
   ErrorBoundary,
@@ -40,11 +40,9 @@ const databasePath = `${FileSystem.documentDirectory}Database.sqlite`;  // 🔥 
 function RootLayoutNav() {
 
   return (
-      <SQLiteProvider databaseName={databasePath}>  {/* ✅ Ajout du Provider */}
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
         </Stack>
-      </SQLiteProvider>
   );
 }
