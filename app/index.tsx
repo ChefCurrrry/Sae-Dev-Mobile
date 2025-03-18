@@ -14,7 +14,7 @@ export default function bienvenueDisplayScreen(){
     return (
         <>
             <BackGround>
-                <Text style={styles.title}>Bienvenue sur notre aplication</Text>
+                <Text style={styles.title}>Bienvenue sur notre Application</Text>
 
                 <Text style={styles.title2}>Faites un geste pour la France, chaque don compte !</Text>
                 <Text style={styles.title2}>Choisissez une cause qui vous tiens à cœur et contribuez-y dès maintenant</Text>
