@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet, TextInput } from "react-native";
 import AppBackground from "@/components/AppBackground";
 
+// 📌 API_URL dynamique (Railway en prod, Localhost en dev)
+const API_URL = process.env.NODE_ENV === "development"
+    ? "http://192.168.1.38:3000/api/associations"
+    : "https://ton-backend-production.up.railway.app/api/associations";
+
 interface Association {
     IdAsso: number;
     NomAsso: string;
@@ -9,11 +14,11 @@ interface Association {
 }
 
 export default function AssociationDisplayScreen() {
-    const [serverIP, setServerIP] = useState<string | null>(null);
     const [associations, setAssociations] = useState<Association[]>([]);
     const [filteredAssociations, setFilteredAssociations] = useState<Association[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
 
+    // 📌 Images des associations
     const images = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
         "ActionTraitement.png": require("@/assets/images/asso/ActionTraitement.png"),
@@ -39,31 +44,23 @@ export default function AssociationDisplayScreen() {
         "Alcool_Ecoute.png": require("@/assets/images/asso/Alcool_Ecoute.png"),
     };
 
+    // 📌 Fonction pour obtenir l'image
     const getImageSource = (logoName: string) => {
         // @ts-ignore
         return images[logoName] || require("@/assets/images/default.png");
     };
 
-    // 📌 Récupérer dynamiquement l'IP du serveur
+    // 📌 Charger les associations depuis l'API
     useEffect(() => {
-        fetch("http://192.168.1.38:3000/api/ip") // 🔹 Vérifie l'IP récupérée
-            .then((res) => res.json())
+        fetch(API_URL)
+            .then((response) => response.json())
             .then((data) => {
-                console.log("✅ IP récupérée :", data.ip);
-                const apiUrl = `http://${data.ip}:3000/api/associations`;
-
-                fetch(apiUrl) // 🔹 Récupère les associations
-                    .then((res) => res.json())
-                    .then((assos) => {
-                        console.log("✅ Associations récupérées :", assos);
-                        setAssociations(assos);
-                        setFilteredAssociations(assos);
-                    })
-                    .catch((err) => console.error("❌ Erreur récupération associations", err));
+                console.log("✅ Associations récupérées :", data);
+                setAssociations(data);
+                setFilteredAssociations(data); // 🔹 Assurez-vous que la liste affichée est bien mise à jour
             })
-            .catch((err) => console.error("❌ Erreur récupération IP", err));
+            .catch((error) => console.error("❌ Erreur lors du chargement :", error));
     }, []);
-
 
     // 📌 Fonction pour filtrer les associations
     const handleSearch = (query: string) => {
@@ -102,7 +99,7 @@ export default function AssociationDisplayScreen() {
 
             {/* Liste filtrée des associations */}
             <FlatList
-                data={filteredAssociations}
+                data={filteredAssociations} // 🔹 Utilisation de `filteredAssociations`
                 keyExtractor={(item) => item.IdAsso.toString()}
                 numColumns={2}
                 renderItem={({ item }) => <AssociationCard association={item} />}
