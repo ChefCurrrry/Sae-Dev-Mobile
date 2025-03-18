@@ -5,7 +5,6 @@ import AppBackground from "@/components/AppBackground";
 // 📌 API_URL dynamique (Railway en prod, Localhost en dev)
 const API_URL = "https://backenddevmobile-production.up.railway.app/api/associations"
 
-
 interface Association {
     IdAsso: number;
     NomAsso: string;
