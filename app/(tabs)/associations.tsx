@@ -40,6 +40,35 @@ export default function AssociationDisplayScreen() {
         "AIDES.png": require("@/assets/images/asso/AIDES.png"),
         "AINP.png": require("@/assets/images/asso/AINP.png"),
         "Alcool_Ecoute.png": require("@/assets/images/asso/Alcool_Ecoute.png"),
+        "Alliance_Maladies_Rares.png": require("@/assets/images/asso/Alliance_Maladies_Rares.png"),
+        "AMADYS.png": require("@/assets/images/asso/AMADYS.png"),
+        "AMALYSTE.png": require("@/assets/images/asso/AMALYSTE.png"),
+    };
+
+    const [selectedTags, setSelectedTags] = useState<number[]>([]);
+
+    const toggleTag = (tagId: number) => {
+        setSelectedTags(prev =>
+            prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
+        );
+    };
+
+    const handleTagFilter = () => {
+        fetch("https://backenddevmobile-production.up.railway.app/api/filtrage-associations", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                tag1: selectedTags[0] || null,
+                tag2: selectedTags[1] || null,
+                tag3: selectedTags[2] || null,
+            }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                setAssociations(data);
+                setFilteredAssociations(data);
+            })
+            .catch(err => console.error("Erreur filtrage tags", err));
     };
 
     // 📌 Fonction pour obtenir l'image
