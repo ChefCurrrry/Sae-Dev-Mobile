@@ -64,6 +64,7 @@ export default function AssociationDisplayScreen() {
         "AMR.png": require("@/assets/images/asso/AMR.png"),
         "AMADYS.png": require("@/assets/images/asso/AMADYS.png"),
         "AMALYSTE.png": require("@/assets/images/asso/AMALYSTE.png"),
+        "AMI.png": require("@/assets/images/asso/AMI.png"),
         "CB.png": require("@/assets/images/asso/CB.png"),
         "CLCV.png": require("@/assets/images/asso/CLCV.png"),
         "CNAFAL.png": require("@/assets/images/asso/CNAFAL.png"),
