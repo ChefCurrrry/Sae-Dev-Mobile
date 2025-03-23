@@ -11,10 +11,18 @@ interface Association {
     LogoName: string;
 }
 
+interface Tag {
+    id: number;
+    name: string;
+}
+
 export default function AssociationDisplayScreen() {
     const [associations, setAssociations] = useState<Association[]>([]);
     const [filteredAssociations, setFilteredAssociations] = useState<Association[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [tags1, setTags1] = useState<Tag[]>([]);
+    const [tags2, setTags2] = useState<Tag[]>([]);
+    const [tags3, setTags3] = useState<Tag[]>([]);
 
     // 📌 Images des associations
     const images = {
