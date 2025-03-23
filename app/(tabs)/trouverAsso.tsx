@@ -56,6 +56,7 @@ export default function AssociationPage1() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag1(4); // ID de ce tag dans ta DB TAG1
+                        // @ts-ignore
                         navigation.navigate("trouverAsso2");
                     }}
                 />
