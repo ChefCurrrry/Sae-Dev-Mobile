@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet, TextInput } from "react-native";
 import AppBackground from "@/components/AppBackground";
+import Modal from "react-native-modal";
 
 // 📌 API_URL dynamique (Railway en prod, Localhost en dev)
-const API_URL = "https://backenddevmobile-production.up.railway.app/api/associations"
+const API_URL = "https://backenddevmobile-production.up.railway.app/api/associations/getAsso";
 
 interface Association {
     IdAsso: number;
@@ -23,8 +24,8 @@ export default function AssociationDisplayScreen() {
     const [tags1, setTags1] = useState<Tag[]>([]);
     const [tags2, setTags2] = useState<Tag[]>([]);
     const [tags3, setTags3] = useState<Tag[]>([]);
+    const [isFilterVisible, setFilterVisible] = useState(false);
 
-    // 📌 Images des associations
     const images = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
         "ActionTraitement.png": require("@/assets/images/asso/ActionTraitement.png"),
@@ -53,16 +54,18 @@ export default function AssociationDisplayScreen() {
         "AMALYSTE.png": require("@/assets/images/asso/AMALYSTE.png"),
     };
 
-    const [selectedTags, setSelectedTags] = useState<number[]>([]);
+    const [selectedTags, setSelectedTags] = useState<(number | null)[]>([null, null, null]);
 
-    const toggleTag = (tagId: number) => {
-        setSelectedTags(prev =>
-            prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
-        );
+    const toggleTag = (groupIndex: number, tagId: number) => {
+        setSelectedTags(prev => {
+            const updated = [...prev];
+            updated[groupIndex] = updated[groupIndex] === tagId ? null : tagId;
+            return updated;
+        });
     };
 
     const handleTagFilter = () => {
-        fetch("https://backenddevmobile-production.up.railway.app/api/filtrage-associations", {
+        fetch("https://backenddevmobile-production.up.railway.app/api/associations/filtrage-associations", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -73,33 +76,69 @@ export default function AssociationDisplayScreen() {
         })
             .then(res => res.json())
             .then(data => {
-                setAssociations(data);
+                console.log("✅ Données filtrées :", data);
                 setFilteredAssociations(data);
             })
             .catch(err => console.error("Erreur filtrage tags", err));
     };
 
-    // 📌 Fonction pour obtenir l'image
+
     const getImageSource = (logoName: string) => {
         // @ts-ignore
         return images[logoName] || require("@/assets/images/default.png");
     };
 
-    // 📌 Charger les associations depuis l'API
     useEffect(() => {
         fetch(API_URL)
             .then((response) => response.json())
             .then((data) => {
-                console.log("✅ Associations récupérées :", data);
                 setAssociations(data);
-                setFilteredAssociations(data); // 🔹 Assurez-vous que la liste affichée est bien mise à jour
+                setFilteredAssociations(data);
             })
             .catch((error) => console.error("❌ Erreur lors du chargement :", error));
+
+        const fetchTags = async () => {
+            try {
+                const res1 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags1");
+                const res2 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags2");
+                const res3 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags3");
+
+                const data1Raw = await res1.json();
+                const data1 = data1Raw.map((tag: any) => ({
+                    id: tag.IdTag1,
+                    name: tag.NomTag1,
+                }));
+
+                const data2Raw = await res2.json();
+                const data2 = data2Raw.map((tag: any) => ({
+                    id: tag.IdTag2,
+                    name: tag.NomTag2,
+                }));
+
+                const data3Raw = await res3.json();
+                const data3 = data3Raw.map((tag: any) => ({
+                    id: tag.IdTag3,
+                    name: tag.NomTag3,
+                }));
+                setTags1(data1);
+                setTags2(data2);
+                setTags3(data3);
+
+                console.log(data1);
+                console.log(data2);
+                console.log(data3);
+            } catch (error) {
+                console.error("❌ Erreur chargement des tags :", error);
+            }
+        };
+
+        fetchTags();
     }, []);
 
-    // 📌 Fonction pour filtrer les associations
     const handleSearch = (query: string) => {
         setSearchQuery(query);
+        if (!Array.isArray(associations)) return;
+
         if (query.trim() === "") {
             setFilteredAssociations(associations);
         } else {
@@ -109,6 +148,7 @@ export default function AssociationDisplayScreen() {
             setFilteredAssociations(filtered);
         }
     };
+
 
     const AssociationCard = ({ association }: { association: Association }) => {
         return (
@@ -123,7 +163,6 @@ export default function AssociationDisplayScreen() {
 
     return (
         <AppBackground title="Choisissez une association">
-            {/* Barre de recherche */}
             <TextInput
                 style={styles.searchInput}
                 placeholder="Rechercher une association..."
@@ -131,14 +170,89 @@ export default function AssociationDisplayScreen() {
                 value={searchQuery}
                 onChangeText={handleSearch}
             />
+            <Text style={styles.filterButton} onPress={() => setFilterVisible(true)}>
+                🎯 Filtrer par tags
+            </Text>
 
-            {/* Liste filtrée des associations */}
             <FlatList
-                data={filteredAssociations} // 🔹 Utilisation de `filteredAssociations`
+                data={filteredAssociations}
                 keyExtractor={(item) => item.IdAsso.toString()}
                 numColumns={2}
                 renderItem={({ item }) => <AssociationCard association={item} />}
             />
+
+            <Modal
+                isVisible={isFilterVisible}
+                onBackdropPress={() => setFilterVisible(false)}
+                style={styles.bottomModal}
+            >
+                <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>Filtrer les associations</Text>
+
+                    <Text style={styles.tagTitle}>Catégorie principale</Text>
+                    <View style={styles.tagContainer}>
+                        {tags1.map(tag => (
+                            <Text
+                                key={`tag1-${tag.id}`}
+                                onPress={() => toggleTag(0, tag.id)}
+                                style={[
+                                    styles.tag,
+                                    selectedTags[0] === tag.id && styles.selectedTag
+                                ]}
+                            >
+                                {tag.name}
+                            </Text>
+                        ))}
+                    </View>
+
+                    <Text style={styles.tagTitle}>Objectif</Text>
+                    <View style={styles.tagContainer}>
+                        {tags2.map(tag => (
+                            <Text
+                                key={`tag2-${tag.id}`}
+                                onPress={() => toggleTag(1, tag.id)}
+                                style={[
+                                    styles.tag,
+                                    selectedTags[1] === tag.id && styles.selectedTag
+                                ]}
+                            >
+                                {tag.name}
+                            </Text>
+                        ))}
+                    </View>
+
+                    <Text style={styles.tagTitle}>Taille</Text>
+                    <View style={styles.tagContainer}>
+                        {tags3.map(tag => (
+                            <Text
+                                key={`tag3-${tag.id}`}
+                                onPress={() => toggleTag(2, tag.id)}
+                                style={[
+                                    styles.tag,
+                                    selectedTags[2] === tag.id && styles.selectedTag
+                                ]}
+                            >
+                                {tag.name}
+                            </Text>
+                        ))}
+                    </View>
+
+                    <Text
+                        style={styles.applyButton}
+                        onPress={() => {
+                            const noTagSelected = selectedTags.every(t => t === null);
+                            if (noTagSelected) {
+                                setFilteredAssociations(associations); // ✅ remets tout
+                            } else {
+                                handleTagFilter(); // 🔍 sinon, applique le filtre
+                            }
+                            setFilterVisible(false);
+                        }}
+                    >
+                        ✅ Appliquer les filtres
+                    </Text>
+                </View>
+            </Modal>
         </AppBackground>
     );
 }
@@ -183,5 +297,62 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
+    },
+    tagContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginBottom: 10,
+        gap: 8,
+    },
+    tag: {
+        backgroundColor: "#ddd",
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 20,
+        fontSize: 14,
+    },
+    selectedTag: {
+        backgroundColor: "#4968df",
+        color: "#fff",
+    },
+    tagTitle: {
+        fontWeight: "bold",
+        fontSize: 16,
+        marginBottom: 5,
+        marginTop: 10,
+    },
+    filterButton: {
+        backgroundColor: "#4968df",
+        color: "#fff",
+        padding: 10,
+        borderRadius: 20,
+        textAlign: "center",
+        marginVertical: 10,
+    },
+    bottomModal: {
+        justifyContent: "flex-end",
+        margin: 0,
+    },
+    modalContent: {
+        backgroundColor: "white",
+        padding: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        maxHeight: "85%",
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 10,
+        textAlign: "center",
+    },
+    applyButton: {
+        backgroundColor: "#4968df",
+        color: "#fff",
+        padding: 12,
+        borderRadius: 20,
+        textAlign: "center",
+        marginTop: 10,
+        fontWeight: "bold",
     },
 });
