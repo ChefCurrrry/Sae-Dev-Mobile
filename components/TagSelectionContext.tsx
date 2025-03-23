@@ -27,5 +27,21 @@ export const TagSelectionProvider = ({ children }: { children: React.ReactNode }
 export const useTagSelection = () => {
     const context = useContext(TagSelectionContext);
     if (!context) throw new Error("useTagSelection must be used inside TagSelectionProvider");
+
     return context;
+
+
 };
+export const resetTags = () => {
+    const context = useContext(TagSelectionContext);
+    if (!context) throw new Error("useTagSelection must be used inside TagSelectionProvider");
+
+
+    context.setTag1(null);
+    context.setTag2(null);
+    context.setTag3(null);
+
+    return {context, resetTags};
+};
+
+

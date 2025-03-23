@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30, // ✅ Bord arrondi vers le haut
         borderTopRightRadius: 30,
         padding: 20,
-        marginTop: -30, // ✅ Ajuste l'effet de transition
+        marginTop: -50, // ✅ Ajuste l'effet de transition
     },
     pageTitle: {
         fontSize: 37,

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet, TextInput } from "react-native";
 import AppBackground from "@/components/AppBackground";
 import Modal from "react-native-modal";
-import {useTagSelection} from "@/components/TagSelectionContext";
+import {useTagSelection, resetTags } from "@/components/TagSelectionContext";
 import { useNavigation } from "@react-navigation/native";
-import {router} from "expo-router";
 
 
 // 📌 API_URL dynamique (Railway en prod, Localhost en dev)
@@ -223,6 +222,15 @@ export default function AssociationDisplayScreen() {
         fetchTags();
     }, [tag1, tag2, tag3]);
 
+    const resetTags = () => {
+        fetch(API_URL)
+            .then((response) => response.json())
+            .then((data) => {
+                setAssociations(data);
+                setFilteredAssociations(data);
+            })
+            .catch((error) => console.error("❌ Erreur lors du chargement :", error));
+    }
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -345,6 +353,15 @@ export default function AssociationDisplayScreen() {
                     >
                         ✅ Appliquer les filtres
                     </Text>
+                    <Text
+                        style={styles.applyButton}
+                        onPress={() => {
+                            resetTags();
+                            setFilterVisible(false);
+                        }}
+                    >
+                        🔄 Voir toutes les associations
+                    </Text>
                 </View>
             </Modal>
             <Modal
@@ -406,6 +423,7 @@ export default function AssociationDisplayScreen() {
                     <Text
                         style={styles.applyButton}
                         onPress={() => {
+                            resetTags()
                             const noTagSelected = selectedTags.every(t => t === null);
                             if (noTagSelected) {
                                 setFilteredAssociations(associations); // ✅ remets tout
@@ -433,6 +451,7 @@ export default function AssociationDisplayScreen() {
                         style={styles.applyButton}
                         onPress={() => {
                             setFilterVisible2(false);
+                            // @ts-ignore
                             navigation.navigate("trouverAsso");
                         }}
                     >
@@ -553,5 +572,13 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 16,
-    }
+    },
+    resetButton: {
+        color: "#4968df",
+        textAlign: "center",
+        fontSize: 16,
+        marginBottom: 10,
+        textDecorationLine: "underline",
+    },
+
 });

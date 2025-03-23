@@ -27,6 +27,7 @@ export default function AssociationPage3() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag3(1); // ID de ce tag dans ta DB TAG3
+                        // @ts-ignore
                         navigation.navigate("associations");
                     }}
                 />
@@ -36,6 +37,7 @@ export default function AssociationPage3() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag3(2); // ID de ce tag dans ta DB TAG3
+                        // @ts-ignore
                         navigation.navigate("associations");
                     }}
                 />

@@ -26,6 +26,7 @@ export default function AssociationPage1() {
                     onPress={() => {
                         setTag1(2); // ID de ce tag dans ta DB TAG1
                         console.log("tag choisi : 1" )
+                        // @ts-ignore
                         navigation.navigate("trouverAsso2");
                     }}
                 />
@@ -35,6 +36,7 @@ export default function AssociationPage1() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag1(1); // ID de ce tag dans ta DB TAG1
+                        // @ts-ignore
                         navigation.navigate("trouverAsso2");
                     }}
                 />
@@ -44,6 +46,7 @@ export default function AssociationPage1() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag1(3); // ID de ce tag dans ta DB TAG1
+                        // @ts-ignore
                         navigation.navigate("trouverAsso2");
                     }}
                 />

@@ -40,7 +40,8 @@ export default function TabOneScreen() {
     }
   };
 
-  // @ts-ignore
+
+
   return (
       <>
         <BackGround>

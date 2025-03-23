@@ -27,6 +27,7 @@ export default function AssociationPage2() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag2(3); // ID de ce tag dans ta DB TAG2
+                        // @ts-ignore
                         navigation.navigate("trouverAsso3");
                     }}
                 />
@@ -36,6 +37,7 @@ export default function AssociationPage2() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag2(1); // ID de ce tag dans ta DB TAG2
+                        // @ts-ignore
                         navigation.navigate("trouverAsso3");
                     }}
                 />
@@ -45,6 +47,7 @@ export default function AssociationPage2() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag2(2); // ID de ce tag dans ta DB TAG2
+                        // @ts-ignore
                         navigation.navigate("trouverAsso3");
                     }}
                 />
