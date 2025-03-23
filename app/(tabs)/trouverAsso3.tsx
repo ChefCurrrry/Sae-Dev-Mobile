@@ -1,7 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
+import {useTagSelection} from "@/components/TagSelectionContext";
+import {useRouter} from "expo-router";
 export default function AssociationPage3() {
+
+    const { setTag3 } = useTagSelection();
+    const router = useRouter();
+
     return (
         <View style={styles.container}>
             {/* Section supérieure avec le fond bleu */}
@@ -18,19 +24,28 @@ export default function AssociationPage3() {
                     text="Grande association"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Grande association")}
+                    onPress={() => {
+                        setTag3(1); // ID de ce tag dans ta DB TAG3
+                        router.push("/associations");
+                    }}
                 />
                 <RegularButton
                     text="Petite association"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Petite association")}
+                    onPress={() => {
+                        setTag3(2); // ID de ce tag dans ta DB TAG3
+                        router.push("/associations");
+                    }}
                 />
                 <RegularButton
                     text="Peu importe"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Peu importe")}
+                    onPress={() => {
+                        setTag3(null);
+                        router.push("/associations");
+                    }}
                 />
             </View>
         </View>

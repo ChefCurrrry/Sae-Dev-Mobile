@@ -1,7 +1,12 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
+import {useTagSelection} from "@/components/TagSelectionContext";
+import {useRouter} from "expo-router";
 export default function AssociationPage2() {
+
+    const { setTag2 } = useTagSelection();
+    const router = useRouter();
     return (
         <View style={styles.container}>
             {/* Section supérieure avec le fond bleu */}
@@ -18,19 +23,28 @@ export default function AssociationPage2() {
                     text="Soutenir les béneficiaires"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Soutenir les béneficiaire")}
+                    onPress={() => {
+                        setTag2(3); // ID de ce tag dans ta DB TAG2
+                        router.push("/trouverAsso3");
+                    }}
                 />
                 <RegularButton
                     text="🤝Financer la recherche et l'innovation"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Financer la recherche et l'innovation")}
+                    onPress={() => {
+                        setTag2(1); // ID de ce tag dans ta DB TAG2
+                        router.push("/trouverAsso3");
+                    }}
                 />
                 <RegularButton
                     text="Sensibiliser et éduquer"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Sensibiliser et éduquer")}
+                    onPress={() => {
+                        setTag2(2); // ID de ce tag dans ta DB TAG2
+                        router.push("/trouverAsso3");
+                    }}
                 />
             </View>
         </View>

@@ -1,7 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
+import {useTagSelection} from "@/components/TagSelectionContext";
+import {useRouter} from "expo-router";
 export default function AssociationPage1() {
+
+    const { setTag1 } = useTagSelection();
+    const router = useRouter();
+
     return (
         <View style={styles.container}>
             {/* Section supérieure avec le fond bleu */}
@@ -17,25 +23,37 @@ export default function AssociationPage1() {
                     text="🩺 Santé et recherche médicale"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Santé et recherche médicale")}
+                    onPress={() => {
+                        setTag1(2); // ID de ce tag dans ta DB TAG1
+                        router.push("/trouverAsso2");
+                    }}
                 />
                 <RegularButton
                     text="🤝 Solidarité et inclusion"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Solidarité et inclusion")}
+                    onPress={() => {
+                        setTag1(1); // ID de ce tag dans ta DB TAG1
+                        router.push("/trouverAsso2");
+                    }}
                 />
                 <RegularButton
                     text="🌱 Environnement et écologie"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Environnement et écologie")}
+                    onPress={() => {
+                        setTag1(3); // ID de ce tag dans ta DB TAG1
+                        router.push("/trouverAsso2");
+                    }}
                 />
                 <RegularButton
                     text="🏠 Lutte contre la précarité"
                     styleButton={[styles.button, styles.lightGrayButton]}
                     styleText={styles.buttonText}
-                    onPress={() => alert("Lutte contre la précarité")}
+                    onPress={() => {
+                        setTag1(4); // ID de ce tag dans ta DB TAG1
+                        router.push("/trouverAsso2");
+                    }}
                 />
             </View>
         </View>

@@ -10,7 +10,7 @@ import FloatingMenuButton from "@/components/FloatingMenuButton";
 export default function bienvenueDisplayScreen(){
 
     const handlePress = () => {
-        router.push("/associations");
+        router.push("/trouverAsso");
     }
     return (
         <>

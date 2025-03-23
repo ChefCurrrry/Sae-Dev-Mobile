@@ -8,9 +8,6 @@ import RegularButton from "@/components/RegularButton";
 import { useNavigation } from "@react-navigation/native";
 
 
-
-
-
 export default function TabOneScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,10 +40,7 @@ export default function TabOneScreen() {
     }
   };
 
-
-
-
-
+  // @ts-ignore
   return (
       <>
         <BackGround>

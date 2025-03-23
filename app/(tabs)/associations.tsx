@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet, TextInput } from "react-native";
 import AppBackground from "@/components/AppBackground";
 import Modal from "react-native-modal";
+import {useTagSelection} from "@/components/TagSelectionContext";
+
+import {router} from "expo-router";
+
 
 // 📌 API_URL dynamique (Railway en prod, Localhost en dev)
 const API_URL = "https://backenddevmobile-production.up.railway.app/api/associations/getAsso";
@@ -17,6 +21,8 @@ interface Tag {
     name: string;
 }
 
+
+
 export default function AssociationDisplayScreen() {
     const [associations, setAssociations] = useState<Association[]>([]);
     const [filteredAssociations, setFilteredAssociations] = useState<Association[]>([]);
@@ -25,6 +31,9 @@ export default function AssociationDisplayScreen() {
     const [tags2, setTags2] = useState<Tag[]>([]);
     const [tags3, setTags3] = useState<Tag[]>([]);
     const [isFilterVisible, setFilterVisible] = useState(false);
+    const [isFilterVisible2, setFilterVisible2] = useState(false);
+    const { tag1, tag2, tag3 } = useTagSelection();
+
 
     const images = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
@@ -146,15 +155,34 @@ export default function AssociationDisplayScreen() {
         return images[logoName] || require("@/assets/images/default.png");
     };
 
-    useEffect(() => {
-        fetch(API_URL)
-            .then((response) => response.json())
-            .then((data) => {
-                setAssociations(data);
-                setFilteredAssociations(data);
-            })
-            .catch((error) => console.error("❌ Erreur lors du chargement :", error));
 
+    useEffect(() => {
+        // 🔹 Si aucun tag n’est sélectionné, on charge toutes les associations
+        if (tag1 === null && tag2 === null && tag3 === null) {
+            fetch(API_URL)
+                .then((response) => response.json())
+                .then((data) => {
+                    setAssociations(data);
+                    setFilteredAssociations(data);
+                })
+                .catch((error) => console.error("❌ Erreur lors du chargement :", error));
+        } else {
+            // 🔸 Sinon, on applique les filtres
+            fetch("https://backenddevmobile-production.up.railway.app/api/associations/filtrage-associations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tag1, tag2, tag3 }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log("✅ Données filtrées :", data);
+                    setAssociations(data);
+                    setFilteredAssociations(data);
+                })
+                .catch((err) => console.error("Erreur filtrage tags", err));
+        }
+
+        // 🔹 Récupération des tags
         const fetchTags = async () => {
             try {
                 const res1 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags1");
@@ -178,20 +206,20 @@ export default function AssociationDisplayScreen() {
                     id: tag.IdTag3,
                     name: tag.NomTag3,
                 }));
+
                 setTags1(data1);
                 setTags2(data2);
                 setTags3(data3);
 
-                console.log(data1);
-                console.log(data2);
-                console.log(data3);
+                console.log(data1, data2, data3);
             } catch (error) {
                 console.error("❌ Erreur chargement des tags :", error);
             }
         };
 
         fetchTags();
-    }, []);
+    }, [tag1, tag2, tag3]);
+
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -219,6 +247,8 @@ export default function AssociationDisplayScreen() {
         );
     };
 
+
+
     return (
         <AppBackground title="Choisissez une association">
             <TextInput
@@ -230,6 +260,9 @@ export default function AssociationDisplayScreen() {
             />
             <Text style={styles.filterButton} onPress={() => setFilterVisible(true)}>
                 🎯 Filtrer par tags
+            </Text>
+            <Text style={styles.questionButton} onPress={() => setFilterVisible2(true)}>
+                Vous êtes perdu ? Cliquez ici !
             </Text>
 
             <FlatList
@@ -311,6 +344,100 @@ export default function AssociationDisplayScreen() {
                     </Text>
                 </View>
             </Modal>
+            <Modal
+                isVisible={isFilterVisible}
+                onBackdropPress={() => setFilterVisible(false)}
+                style={styles.bottomModal}
+            >
+                <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>Filtrer les associations</Text>
+
+                    <Text style={styles.tagTitle}>Catégorie principale</Text>
+                    <View style={styles.tagContainer}>
+                        {tags1.map(tag => (
+                            <Text
+                                key={`tag1-${tag.id}`}
+                                onPress={() => toggleTag(0, tag.id)}
+                                style={[
+                                    styles.tag,
+                                    selectedTags[0] === tag.id && styles.selectedTag
+                                ]}
+                            >
+                                {tag.name}
+                            </Text>
+                        ))}
+                    </View>
+
+                    <Text style={styles.tagTitle}>Objectif</Text>
+                    <View style={styles.tagContainer}>
+                        {tags2.map(tag => (
+                            <Text
+                                key={`tag2-${tag.id}`}
+                                onPress={() => toggleTag(1, tag.id)}
+                                style={[
+                                    styles.tag,
+                                    selectedTags[1] === tag.id && styles.selectedTag
+                                ]}
+                            >
+                                {tag.name}
+                            </Text>
+                        ))}
+                    </View>
+
+                    <Text style={styles.tagTitle}>Taille</Text>
+                    <View style={styles.tagContainer}>
+                        {tags3.map(tag => (
+                            <Text
+                                key={`tag3-${tag.id}`}
+                                onPress={() => toggleTag(2, tag.id)}
+                                style={[
+                                    styles.tag,
+                                    selectedTags[2] === tag.id && styles.selectedTag
+                                ]}
+                            >
+                                {tag.name}
+                            </Text>
+                        ))}
+                    </View>
+
+                    <Text
+                        style={styles.applyButton}
+                        onPress={() => {
+                            const noTagSelected = selectedTags.every(t => t === null);
+                            if (noTagSelected) {
+                                setFilteredAssociations(associations); // ✅ remets tout
+                            } else {
+                                handleTagFilter(); // 🔍 sinon, applique le filtre
+                            }
+                            setFilterVisible(false);
+                        }}
+                    >
+                        ✅ Appliquer les filtres
+                    </Text>
+                </View>
+            </Modal>
+            <Modal
+                isVisible={isFilterVisible2}
+                onBackdropPress={() => setFilterVisible2(false)}
+                style={styles.bottomModal}
+            >
+                <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>Vous êtes perdu ?</Text>
+                    <Text style={styles.modalTitle}>Décrivez ce qui vous touche ou vous motive :</Text>
+
+
+                    <Text
+                        style={styles.applyButton}
+                        onPress={() => {
+                            setFilterVisible2(false);
+                            router.push("/trouverAsso");
+                        }}
+                    >
+                        🔍 Trouver une association
+                    </Text>
+                </View>
+            </Modal>
+
         </AppBackground>
     );
 }
@@ -321,9 +448,10 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         fontSize: 16,
-        marginBottom: 10,
-        borderWidth: 1,
-        borderColor: "#ddd",
+        marginBottom: 5,
+        marginTop: -5,
+        borderWidth: 3,
+        borderColor: "#4968df",
         width: "100%",
         alignSelf: "center",
     },
@@ -413,4 +541,14 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontWeight: "bold",
     },
+    questionButton : {
+        backgroundColor: "#fff",
+        color: "#000",
+        textAlign: "center",
+        fontSize: 18,
+        marginBottom: 5
+    },
+    subtitle: {
+        fontSize: 16,
+    }
 });
