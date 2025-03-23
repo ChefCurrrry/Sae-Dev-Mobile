@@ -3,10 +3,12 @@ import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
 import {useTagSelection} from "@/components/TagSelectionContext";
 import {useRouter} from "expo-router";
+import {useNavigation} from "@react-navigation/native";
 export default function AssociationPage2() {
 
     const { setTag2 } = useTagSelection();
-    const router = useRouter();
+    const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             {/* Section supérieure avec le fond bleu */}
@@ -25,7 +27,7 @@ export default function AssociationPage2() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag2(3); // ID de ce tag dans ta DB TAG2
-                        router.push("/trouverAsso3");
+                        navigation.navigate("trouverAsso3");
                     }}
                 />
                 <RegularButton
@@ -34,7 +36,7 @@ export default function AssociationPage2() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag2(1); // ID de ce tag dans ta DB TAG2
-                        router.push("/trouverAsso3");
+                        navigation.navigate("trouverAsso3");
                     }}
                 />
                 <RegularButton
@@ -43,7 +45,7 @@ export default function AssociationPage2() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag2(2); // ID de ce tag dans ta DB TAG2
-                        router.push("/trouverAsso3");
+                        navigation.navigate("trouverAsso3");
                     }}
                 />
             </View>

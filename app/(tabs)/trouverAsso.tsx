@@ -2,11 +2,11 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
 import {useTagSelection} from "@/components/TagSelectionContext";
-import {useRouter} from "expo-router";
+import {useNavigation} from "@react-navigation/native";
 export default function AssociationPage1() {
 
     const { setTag1 } = useTagSelection();
-    const router = useRouter();
+    const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -25,7 +25,8 @@ export default function AssociationPage1() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag1(2); // ID de ce tag dans ta DB TAG1
-                        router.push("/trouverAsso2");
+                        console.log("tag choisi : 1" )
+                        navigation.navigate("trouverAsso2");
                     }}
                 />
                 <RegularButton
@@ -34,7 +35,7 @@ export default function AssociationPage1() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag1(1); // ID de ce tag dans ta DB TAG1
-                        router.push("/trouverAsso2");
+                        navigation.navigate("trouverAsso2");
                     }}
                 />
                 <RegularButton
@@ -43,7 +44,7 @@ export default function AssociationPage1() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag1(3); // ID de ce tag dans ta DB TAG1
-                        router.push("/trouverAsso2");
+                        navigation.navigate("trouverAsso2");
                     }}
                 />
                 <RegularButton
@@ -52,7 +53,7 @@ export default function AssociationPage1() {
                     styleText={styles.buttonText}
                     onPress={() => {
                         setTag1(4); // ID de ce tag dans ta DB TAG1
-                        router.push("/trouverAsso2");
+                        navigation.navigate("trouverAsso2");
                     }}
                 />
             </View>

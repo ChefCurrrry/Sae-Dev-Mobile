@@ -3,7 +3,7 @@ import { View, Text, Image, FlatList, StyleSheet, TextInput } from "react-native
 import AppBackground from "@/components/AppBackground";
 import Modal from "react-native-modal";
 import {useTagSelection} from "@/components/TagSelectionContext";
-
+import { useNavigation } from "@react-navigation/native";
 import {router} from "expo-router";
 
 
@@ -33,6 +33,9 @@ export default function AssociationDisplayScreen() {
     const [isFilterVisible, setFilterVisible] = useState(false);
     const [isFilterVisible2, setFilterVisible2] = useState(false);
     const { tag1, tag2, tag3 } = useTagSelection();
+
+    type Nav = ReturnType<typeof useNavigation>;
+    const navigation = useNavigation<Nav>();
 
 
     const images = {
@@ -430,7 +433,7 @@ export default function AssociationDisplayScreen() {
                         style={styles.applyButton}
                         onPress={() => {
                             setFilterVisible2(false);
-                            router.push("/trouverAsso");
+                            navigation.navigate("trouverAsso");
                         }}
                     >
                         🔍 Trouver une association

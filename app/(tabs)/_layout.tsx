@@ -19,8 +19,9 @@ const Stack = createStackNavigator();
 function InternalStack() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="connexion" component={TabOneScreen} />
             <Stack.Screen name="associations" component={AssociationDisplayScreen} />
+            <Stack.Screen name="connexion" component={TabOneScreen} />
+
             <Stack.Screen name="inscription" component={RegisterScreen} />
             <Stack.Screen name="payment" component={Payment} />
             <Stack.Screen name="trouverAsso" component={AssociationPage1} />
@@ -36,24 +37,24 @@ export default function TabLayout() {
         <Drawer.Navigator
             initialRouteName="Associations"
             screenOptions={{
-                headerShown: false, // ✅ Corrigé la syntaxe
+                headerShown: false,
                 drawerLabelStyle: {
-                    fontSize: 18, // ✅ Taille du texte
-                    fontWeight: "bold", // ✅ Texte en gras
-                    color: "#333", // ✅ Couleur du texte
+                    fontSize: 18,
+                    fontWeight: "bold",
+                    color: "#333",
                 },
                 drawerStyle: {
-                    backgroundColor: "#F0F0F0", // ✅ Fond du menu
-                    width: 250, // ✅ Largeur du menu
+                    backgroundColor: "#F0F0F0",
+                    width: 250,
                 },
-                drawerActiveTintColor: "#4968df", // ✅ Couleur du texte actif
-                drawerInactiveTintColor: "#555", // ✅ Couleur du texte inactif
+                drawerActiveTintColor: "#4968df",
+                drawerInactiveTintColor: "#555",
                 drawerItemStyle: {
-                    marginVertical: 10, // ✅ Espacement entre les éléments
+                    marginVertical: 10,
                 }
             }}
         >
-            <Drawer.Screen name="Associations" component={AssociationDisplayScreen} />
+            <Drawer.Screen name="Associations" component={InternalStack} />
             <Drawer.Screen name="Connexion" component={InternalStack} />
         </Drawer.Navigator>
 
