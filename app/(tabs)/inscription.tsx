@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Link, router } from "expo-router";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
+import {useNavigation} from "@react-navigation/native";
 
 export default function RegisterScreen() {
     const [nom, setNom] = useState("");
@@ -12,6 +13,8 @@ export default function RegisterScreen() {
     const [age, setAge] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const navigation = useNavigation();
 
     const handleRegister = async () => {
         if (!nom || !prenom || !email || !age || !password || !confirmPassword) {
@@ -30,7 +33,7 @@ export default function RegisterScreen() {
         }
 
         try {
-            const response = await fetch("http://192.168.1.38:3000/api/users/register", {
+            const response = await fetch("https://backenddevmobile-production.up.railway.app/api/users/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ nom, prenom, email, age, password }),
@@ -117,9 +120,7 @@ export default function RegisterScreen() {
 
                     <Text style={styles.signupText}>
                         Vous avez un compte ?
-                        <Link href={"/connexion"} asChild>
-                            <Text style={styles.signupLink}> Se Connecter</Text>
-                        </Link>
+                            <Text style={styles.signupLink} onPress={() => navigation.navigate("connexion")}> Se Connecter</Text>
                     </Text>
 
         </BackGround>

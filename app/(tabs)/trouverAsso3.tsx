@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
-export default function AssociationPage() {
+export default function AssociationPage3() {
     return (
         <View style={styles.container}>
             {/* Section supérieure avec le fond bleu */}

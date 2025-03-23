@@ -5,6 +5,9 @@ import {Link, router} from "expo-router";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
 
+import { useNavigation } from "@react-navigation/native";
+
+
 
 
 
@@ -13,10 +16,11 @@ export default function TabOneScreen() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
+  const navigation = useNavigation();
 
 
-  const API_URL = "http://192.168.1.38:3000/api/users/login"; // Remplace par ton IP locale
 
+  const API_URL = "https://backenddevmobile-production.up.railway.app/api/users/login"
   const handleLogin = async () => {
     try {
       const response = await fetch(API_URL, {
@@ -41,9 +45,12 @@ export default function TabOneScreen() {
 
 
 
+
+
   return (
       <>
         <BackGround>
+
           <Text style={styles.title}>Connectez-vous à votre compte</Text>
 
           {/* Champ Email */}
@@ -90,9 +97,7 @@ export default function TabOneScreen() {
           {/* Lien pour s'inscrire */}
           <Text style={styles.signupText}>
             Pas encore de compte ?
-            <Link href={"/inscription"} asChild>
-              <Text style={styles.signupLink}> S'inscrire</Text>
-            </Link>
+              <Text style={styles.signupLink} onPress={() => navigation.navigate("inscription")}> S'inscrire</Text>
           </Text>
         </BackGround>
       </>

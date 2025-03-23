@@ -5,11 +5,13 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import * as FileSystem from 'expo-file-system';
+import Navigation from "@/components/Navigation";
 
 
 export {
   ErrorBoundary,
 } from 'expo-router';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,7 +37,6 @@ export default function RootLayout() {
 
   return <RootLayoutNav />;
 }
-const databasePath = `${FileSystem.documentDirectory}Database.sqlite`;  // 🔥 Utiliser le même fichier que WebStorm
 
 function RootLayoutNav() {
 

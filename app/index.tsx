@@ -1,10 +1,11 @@
 
-import {Text} from "react-native";
+import {Image, Text, View} from "react-native";
 import {StyleSheet} from 'react-native';
 import React from "react";
 import BackGround from "@/components/BackGround";
 import {router} from "expo-router";
 import RegularButton from "@/components/RegularButton";
+import FloatingMenuButton from "@/components/FloatingMenuButton";
 
 export default function bienvenueDisplayScreen(){
 
@@ -13,7 +14,11 @@ export default function bienvenueDisplayScreen(){
     }
     return (
         <>
-            <BackGround>
+            <View style={styles.header}>
+                <Image source={require("../assets/images/qr-code.png")} style={styles.logo}/>
+            </View>
+            <View style={styles.container}/>
+            <View style={styles.formContainer}>
                 <Text style={styles.title}>Bienvenue sur notre Application</Text>
 
                 <Text style={styles.title2}>Faites un geste pour la France, chaque don compte !</Text>
@@ -21,7 +26,9 @@ export default function bienvenueDisplayScreen(){
                 <Text style={styles.title2}>Découvrez et aidez les associations partenaires en quelques clics !</Text>
 
                 <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Continuer" onPress={handlePress}></RegularButton>
-            </BackGround>
+            </View>
+
+
         </>
     );
 }
