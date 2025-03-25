@@ -1,6 +1,5 @@
 import {Image, StyleSheet, View} from "react-native";
 import React from "react";
-import FloatingMenuButton from "@/components/FloatingMenuButton";
 
 
 // @ts-ignore
@@ -8,7 +7,6 @@ export default function BackGround({children}){
     return (
         <>
             <View style={styles.header}>
-                <FloatingMenuButton />
                 <Image source={require("../assets/images/qr-code.png")} style={styles.logo}/>
             </View>
             <View style={styles.container}/>

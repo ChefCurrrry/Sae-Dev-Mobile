@@ -1,10 +1,8 @@
 import { Alert, StyleSheet, TextInput, TouchableOpacity, View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Checkbox } from "react-native-paper";
 import React, { useState } from "react";
 import { Link, router } from "expo-router";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
-import {useNavigation} from "@react-navigation/native";
 
 export default function RegisterScreen() {
     const [nom, setNom] = useState("");
@@ -14,7 +12,6 @@ export default function RegisterScreen() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const navigation = useNavigation();
 
     const handleRegister = async () => {
         if (!nom || !prenom || !email || !age || !password || !confirmPassword) {
@@ -120,7 +117,7 @@ export default function RegisterScreen() {
 
                     <Text style={styles.signupText}>
                         Vous avez un compte ?
-                            <Text style={styles.signupLink} onPress={() => navigation.navigate("connexion")}> Se Connecter</Text>
+                            <Text style={styles.signupLink} onPress={() => router.push("/connexion")}> Se Connecter</Text>
                     </Text>
 
         </BackGround>

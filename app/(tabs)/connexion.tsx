@@ -41,7 +41,8 @@ export default function TabOneScreen() {
   };
 
 
-
+  console.log(navigation);
+  console.log(navigation.getState());
   return (
       <>
         <BackGround>
@@ -92,7 +93,7 @@ export default function TabOneScreen() {
           {/* Lien pour s'inscrire */}
           <Text style={styles.signupText}>
             Pas encore de compte ?
-              <Text style={styles.signupLink} onPress={() => navigation.navigate("inscription")}> S'inscrire</Text>
+              <Text style={styles.signupLink} onPress={() => router.push("/inscription")}> S'inscrire</Text>
           </Text>
         </BackGround>
       </>

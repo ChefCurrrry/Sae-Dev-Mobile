@@ -6,7 +6,7 @@ import {useNavigation} from "@react-navigation/native";
 export default function AssociationPage1() {
 
     const { setTag1 } = useTagSelection();
-    const navigation = useNavigation();
+    const router = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -27,7 +27,7 @@ export default function AssociationPage1() {
                         setTag1(2); // ID de ce tag dans ta DB TAG1
                         console.log("tag choisi : 1" )
                         // @ts-ignore
-                        navigation.navigate("trouverAsso2");
+                        router.navigate("trouverAsso2");
                     }}
                 />
                 <RegularButton
@@ -37,7 +37,7 @@ export default function AssociationPage1() {
                     onPress={() => {
                         setTag1(1); // ID de ce tag dans ta DB TAG1
                         // @ts-ignore
-                        navigation.navigate("trouverAsso2");
+                        router.push("/trouverAsso2");
                     }}
                 />
                 <RegularButton
@@ -47,7 +47,7 @@ export default function AssociationPage1() {
                     onPress={() => {
                         setTag1(3); // ID de ce tag dans ta DB TAG1
                         // @ts-ignore
-                        navigation.navigate("trouverAsso2");
+                        router.push("/trouverAsso2");
                     }}
                 />
                 <RegularButton
@@ -57,7 +57,7 @@ export default function AssociationPage1() {
                     onPress={() => {
                         setTag1(4); // ID de ce tag dans ta DB TAG1
                         // @ts-ignore
-                        navigation.navigate("trouverAsso2");
+                        router.push("/trouverAsso2");
                     }}
                 />
             </View>

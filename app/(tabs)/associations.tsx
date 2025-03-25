@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, FlatList, StyleSheet, TextInput } from "react-native";
+import {View, Text, Image, FlatList, StyleSheet, TextInput, TouchableOpacity} from "react-native";
 import AppBackground from "@/components/AppBackground";
 import Modal from "react-native-modal";
 import {useTagSelection, resetTags } from "@/components/TagSelectionContext";
 import { useNavigation } from "@react-navigation/native";
+import {router} from "expo-router";
 
 
 // 📌 API_URL dynamique (Railway en prod, Localhost en dev)
@@ -248,16 +249,15 @@ export default function AssociationDisplayScreen() {
     };
 
 
-    const AssociationCard = ({ association }: { association: Association }) => {
-        return (
-            <View style={styles.wrapCard}>
-                <View style={styles.card}>
-                    <Image source={getImageSource(association.LogoName)} style={styles.image} />
-                </View>
-                <Text style={styles.name}>{association.NomAsso}</Text>
+    const AssociationCard = ({ association, onPress }: { association: Association, onPress: () => void }) => (
+        <TouchableOpacity style={styles.wrapCard} onPress={onPress}>
+            <View style={styles.card}>
+                <Image source={getImageSource(association.LogoName)} style={styles.image} />
             </View>
-        );
-    };
+            <Text style={styles.name}>{association.NomAsso}</Text>
+        </TouchableOpacity>
+    );
+
 
 
 
@@ -281,7 +281,8 @@ export default function AssociationDisplayScreen() {
                 data={filteredAssociations}
                 keyExtractor={(item) => item.IdAsso.toString()}
                 numColumns={2}
-                renderItem={({ item }) => <AssociationCard association={item} />}
+                renderItem={({ item }) => <AssociationCard association={item} onPress={() => router.push({ pathname: "/assoDetail", params: { id: item.IdAsso } })}
+                />}
             />
 
             <Modal
@@ -453,7 +454,7 @@ export default function AssociationDisplayScreen() {
                         onPress={() => {
                             setFilterVisible2(false);
                             // @ts-ignore
-                            navigation.navigate("trouverAsso");
+                            reouter.push("/trouverAsso");
                         }}
                     >
                         🔍 Trouver une association

@@ -28,7 +28,7 @@ export default function AssociationPage3() {
                     onPress={() => {
                         setTag3(1); // ID de ce tag dans ta DB TAG3
                         // @ts-ignore
-                        navigation.navigate("associations");
+                        router.push("/associations");
                     }}
                 />
                 <RegularButton
@@ -38,7 +38,7 @@ export default function AssociationPage3() {
                     onPress={() => {
                         setTag3(2); // ID de ce tag dans ta DB TAG3
                         // @ts-ignore
-                        navigation.navigate("associations");
+                        router.push("/associations");
                     }}
                 />
 

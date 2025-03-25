@@ -1,6 +1,5 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import FloatingMenuButton from "@/components/FloatingMenuButton";
 
 interface Props {
     children: React.ReactNode; // ✅ Permet d'afficher du contenu dans la partie blanche
@@ -12,7 +11,6 @@ export default function AppBackground({ children, title }: Props) {
         <View style={styles.container}>
             {/* Partie haute en bleu/violet */}
             <View style={styles.header}>
-                <FloatingMenuButton />
                 <Text style={styles.pageTitle}>{title}</Text>
             </View>
 
