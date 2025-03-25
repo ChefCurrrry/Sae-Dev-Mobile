@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { TagSelectionProvider } from "@/components/TagSelectionContext";
+import {SelectedAssoProvider} from "@/components/SelectedAssoContext";
 
 
 export {
@@ -40,11 +41,13 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
+      <SelectedAssoProvider>
       <TagSelectionProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
         </Stack>
       </TagSelectionProvider>
+      </SelectedAssoProvider>
   );
 }

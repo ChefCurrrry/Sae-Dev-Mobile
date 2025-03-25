@@ -16,15 +16,6 @@ export default function AssoDetail() {
     const [asso, setAsso] = useState<AssociationDetail | null>(null);
     const { id } = useSelectedAsso();
 
-    useEffect(() => {
-        if (id) {
-            fetch(`.../getAsso/${id}`)
-        }
-    }, [id]);
-
-
-
-
     const images: Record<string, any> = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
         "ActionTraitement.png": require("@/assets/images/asso/ActionTraitement.png"),
@@ -109,6 +100,14 @@ export default function AssoDetail() {
         "default": require("@/assets/images/default.png"),
     };
 
+    fetch(`https://backenddevmobile-production.up.railway.app/api/associations/getAssoById?id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log("✅ Asso reçue :", data);
+            setAsso(data);
+        })
+        .catch(err => console.error("❌ Erreur fetch asso :", err));
+
     const getImageSource = (logoName: string) => {
         return images[logoName] || images["default"];
     };
@@ -119,7 +118,9 @@ export default function AssoDetail() {
     return (
         <AppBackground title={asso.NomAsso}>
             <ScrollView>
+                <View style={styles.card}>
                 <Image source={getImageSource(asso.LogoName)} style={styles.image} />
+                </View>
                 <Text style={styles.description}>{asso.Description}</Text>
                 <View style={{ marginTop: 20 }}>
                     <Button title="Faire un don" onPress={() => {
@@ -132,14 +133,32 @@ export default function AssoDetail() {
 }
 
 const styles = StyleSheet.create({
+    card: {
+        flex: 1,
+        margin: 10,
+        backgroundColor: "#eceaea",
+        borderColor: "#4968df",
+        borderWidth: 3,
+        borderRadius: 30,
+        alignItems: "center",
+        padding: 10,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
+    },
     image: {
         width: "100%",
-        height: 150,
+        height: 90,
+        borderRadius: 10,
+        marginBottom: 10,
         resizeMode: "contain",
-        marginBottom: 20,
     },
     description: {
-        fontSize: 16,
+        marginTop: 50,
+        marginBottom: 20,
+        fontSize: 20,
         lineHeight: 22,
+        textAlign: "justify",
     },
 });
