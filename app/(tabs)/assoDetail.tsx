@@ -100,13 +100,18 @@ export default function AssoDetail() {
         "default": require("@/assets/images/default.png"),
     };
 
-    fetch(`https://backenddevmobile-production.up.railway.app/api/associations/getAssoById?id=${id}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log("✅ Asso reçue :", data);
-            setAsso(data);
-        })
-        .catch(err => console.error("❌ Erreur fetch asso :", err));
+    useEffect(() => {
+        if (id) {
+            fetch(`https://backenddevmobile-production.up.railway.app/api/associations/getAssoById?id=${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log("✅ Asso reçue :", data);
+                    setAsso(data);
+                })
+                .catch(err => console.error("❌ Erreur fetch asso :", err));
+        }
+    }, [id]); // ✅ on exécute uniquement si `id` change
+
 
     const getImageSource = (logoName: string) => {
         return images[logoName] || images["default"];
