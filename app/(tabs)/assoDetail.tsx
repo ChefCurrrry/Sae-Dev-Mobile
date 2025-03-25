@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Text, Image, View, StyleSheet, Button, ScrollView } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import AppBackground from "@/components/AppBackground";
+import {useSelectedAsso} from "@/components/SelectedAssoContext";
 
 interface AssociationDetail {
     IdAsso: number;
@@ -12,18 +13,15 @@ interface AssociationDetail {
 }
 
 export default function AssoDetail() {
-    const { id } = useLocalSearchParams();
     const [asso, setAsso] = useState<AssociationDetail | null>(null);
+    const { id } = useSelectedAsso();
 
     useEffect(() => {
-        const assoId = Array.isArray(id) ? id[0] : id;
-        if (assoId) {
-            fetch(`https://backenddevmobile-production.up.railway.app/api/associations/getAsso/${assoId}`)
-                .then((res) => res.json())
-                .then((data) => setAsso(data))
-                .catch((err) => console.error("❌ Erreur chargement détail asso", err));
+        if (id) {
+            fetch(`.../getAsso/${id}`)
         }
     }, [id]);
+
 
 
 

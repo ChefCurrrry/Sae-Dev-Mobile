@@ -250,7 +250,10 @@ export default function AssociationDisplayScreen() {
 
 
     const AssociationCard = ({ association, onPress }: { association: Association, onPress: () => void }) => (
-        <TouchableOpacity style={styles.wrapCard} onPress={onPress}>
+        <TouchableOpacity style={styles.wrapCard} onPress={() => {
+            setId(association.IdAsso);
+            router.push(`/assoDetail?id=${association.IdAsso}`);
+        }}>
             <View style={styles.card}>
                 <Image source={getImageSource(association.LogoName)} style={styles.image} />
             </View>
