@@ -5,6 +5,7 @@ import Modal from "react-native-modal";
 import {useTagSelection, resetTags } from "@/components/TagSelectionContext";
 import { useNavigation } from "@react-navigation/native";
 import {router} from "expo-router";
+import {useSelectedAsso} from "@/components/SelectedAssoContext";
 
 
 // 📌 API_URL dynamique (Railway en prod, Localhost en dev)
@@ -33,9 +34,8 @@ export default function AssociationDisplayScreen() {
     const [isFilterVisible, setFilterVisible] = useState(false);
     const [isFilterVisible2, setFilterVisible2] = useState(false);
     const { tag1, tag2, tag3 } = useTagSelection();
+    const { setId } = useSelectedAsso();
 
-    type Nav = ReturnType<typeof useNavigation>;
-    const navigation = useNavigation<Nav>();
 
 
     const images = {
