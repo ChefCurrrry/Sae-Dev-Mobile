@@ -40,17 +40,25 @@ export default function TabOneScreen() {
       Alert.alert("Erreur", "Impossible de se connecter au serveur.");
     }
   };
+  const [checkingLogin, setCheckingLogin] = useState(true);
 
   useEffect(() => {
-    const checkUser = async () => {
+    const checkIfLoggedIn = async () => {
       const userId = await SecureStore.getItemAsync("userId");
       if (userId) {
-        console.log("🔐 Utilisateur déjà connecté :", userId);
-        router.replace("/profile"); // ou vers ton écran d'accueil
+        // ✅ Redirige directement vers le profil
+        router.replace("/profile");
+      } else {
+        setCheckingLogin(false); // Pas connecté → on affiche la page
       }
     };
-    checkUser();
+
+    checkIfLoggedIn();
   }, []);
+
+  if (checkingLogin) {
+    return null; // 👈 on n'affiche rien le temps de vérifier
+  }
 
   console.log(navigation);
   console.log(navigation.getState());

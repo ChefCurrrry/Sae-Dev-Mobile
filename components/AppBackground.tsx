@@ -1,6 +1,8 @@
 import React from "react";
-import {View, StyleSheet, Text, Image} from "react-native";
+import {View, StyleSheet, Text, Image, TouchableOpacity} from "react-native";
 import {Link, router} from "expo-router";
+import * as SecureStore from "expo-secure-store";
+
 
 interface Props {
     children: React.ReactNode; // ✅ Permet d'afficher du contenu dans la partie blanche
@@ -8,14 +10,23 @@ interface Props {
 }
 
 export default function AppBackground({ children, title }: Props) {
+
+    const handleProfileClick = async () => {
+        const userId = await SecureStore.getItemAsync("userId");
+        if (userId) {
+            router.push("/profile");
+        } else {
+            router.push("/connexion");
+        }
+    };
     return (
         <View style={styles.container}>
             {/* Partie haute en bleu/violet */}
             <View style={styles.header}>
                 <View style={styles.profileIcon}>
-                    <Link href={"/connexion"}>
-                    <Image source={require('../assets/images/profil-de-lutilisateur.png')} />
-                    </Link>
+                    <TouchableOpacity onPress={handleProfileClick}>
+                        <Image source={require("../assets/images/profil-de-lutilisateur.png")} />
+                    </TouchableOpacity>
                 </View>
                 <Text style={styles.pageTitle}>{title}</Text>
             </View>
