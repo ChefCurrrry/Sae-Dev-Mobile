@@ -1,5 +1,6 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import {View, StyleSheet, Text, Image} from "react-native";
+import {Link, router} from "expo-router";
 
 interface Props {
     children: React.ReactNode; // ✅ Permet d'afficher du contenu dans la partie blanche
@@ -11,6 +12,11 @@ export default function AppBackground({ children, title }: Props) {
         <View style={styles.container}>
             {/* Partie haute en bleu/violet */}
             <View style={styles.header}>
+                <View style={styles.profileIcon}>
+                    <Link href={"/connexion"}>
+                    <Image source={require('../assets/images/profil-de-lutilisateur.png')} />
+                    </Link>
+                </View>
                 <Text style={styles.pageTitle}>{title}</Text>
             </View>
 
@@ -49,4 +55,11 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginBottom: 40,
     },
+    profileIcon: {
+        width: "100%",
+        height: 40,
+        alignItems: "flex-end",
+        marginRight: 50,
+        marginTop: -40,
+    }
 });
