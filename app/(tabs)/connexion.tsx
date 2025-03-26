@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import {Link, router} from "expo-router";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
-
+import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -30,6 +30,7 @@ export default function TabOneScreen() {
 
       if (data.success) {
         Alert.alert("Bienvenue", "Connexion réussie !");
+        await SecureStore.setItemAsync("userId", String(data.user.id));
         router.push("/associations");
       } else {
         Alert.alert("Erreur", data.message);
@@ -40,6 +41,16 @@ export default function TabOneScreen() {
     }
   };
 
+  useEffect(() => {
+    const checkUser = async () => {
+      const userId = await SecureStore.getItemAsync("userId");
+      if (userId) {
+        console.log("🔐 Utilisateur déjà connecté :", userId);
+        router.replace("/profile"); // ou vers ton écran d'accueil
+      }
+    };
+    checkUser();
+  }, []);
 
   console.log(navigation);
   console.log(navigation.getState());
