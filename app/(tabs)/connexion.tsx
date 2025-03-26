@@ -31,6 +31,8 @@ export default function TabOneScreen() {
       if (data.success) {
         Alert.alert("Bienvenue", "Connexion réussie !");
         await SecureStore.setItemAsync("userId", String(data.user.id));
+        await SecureStore.setItemAsync("nom", String(data.user.nom.toString()));
+        await SecureStore.setItemAsync("prenom", String(data.user.prenom.toString()));
         router.push("/associations");
       } else {
         Alert.alert("Erreur", data.message);

@@ -4,6 +4,7 @@ import { Text, Image, View, StyleSheet, Button, ScrollView } from "react-native"
 import { useLocalSearchParams, router } from "expo-router";
 import AppBackground from "@/components/AppBackground";
 import {useSelectedAsso} from "@/components/SelectedAssoContext";
+import RegularButton from "@/components/RegularButton";
 
 interface AssociationDetail {
     IdAsso: number;
@@ -14,7 +15,9 @@ interface AssociationDetail {
 
 export default function AssoDetail() {
     const [asso, setAsso] = useState<AssociationDetail | null>(null);
+    const [totalDon, setTotalDon] = useState<number>(0);
     const { id } = useSelectedAsso();
+    const objectif = 30000;
 
     const images: Record<string, any> = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
@@ -110,6 +113,13 @@ export default function AssoDetail() {
                 })
                 .catch(err => console.error("❌ Erreur fetch asso :", err));
         }
+        if (id) {
+            fetch(`https://backenddevmobile-production.up.railway.app/api/dons/somme?id=${id}`)
+                .then(res => res.json())
+                .then(data => setTotalDon(data.total))
+                .catch(err => console.error("❌ Erreur fetch dons :", err));
+        }
+
     }, [id]); // ✅ on exécute uniquement si `id` change
 
 
@@ -126,11 +136,18 @@ export default function AssoDetail() {
                 <View style={styles.card}>
                 <Image source={getImageSource(asso.LogoName)} style={styles.image} />
                 </View>
+                <View style={styles.progressContainer}>
+                    <View style={[styles.progressBar, { width: `${(totalDon / objectif) * 100}%` }]} />
+                </View>
+                <Text style={styles.totalText}>€{totalDon.toLocaleString()}</Text>
                 <Text style={styles.description}>{asso.Description}</Text>
-                <View style={{ marginTop: 20 }}>
-                    <Button title="Faire un don" onPress={() => {
+                <View>
+                    <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Faire un Don" onPress={() => {
                         router.push(`/payment?id=${asso.IdAsso}`);
-                    }} />
+                    }}></RegularButton>
+                    <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Planifier un Don Récurrent" onPress={() => {
+                        router.push(`/payment?id=${asso.IdAsso}`);
+                    }}></RegularButton>
                 </View>
             </ScrollView>
         </AppBackground>
@@ -166,4 +183,32 @@ const styles = StyleSheet.create({
         lineHeight: 22,
         textAlign: "justify",
     },
+    loginButton: {
+        backgroundColor: "#4968df",
+        paddingVertical: 12,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 20,
+    },
+    loginText: {
+        color: "white",
+        fontSize: 20,
+        fontWeight: "bold",
+    },
+    progressContainer: {
+        height: 10,
+        backgroundColor: "#ddd",
+        borderRadius: 10,
+        overflow: "hidden",
+        marginVertical: 15,
+    },
+    progressBar: {
+        height: "100%",
+        backgroundColor: "blue",
+    },
+    totalText: {
+        fontWeight: "bold",
+        fontSize: 18,
+    },
+
 });
