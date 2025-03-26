@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     totalText: {
         fontWeight: "bold",
         fontSize: 18,
+        marginBottom: -30,
     },
 
 });
