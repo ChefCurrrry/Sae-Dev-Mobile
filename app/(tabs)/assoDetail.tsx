@@ -139,7 +139,7 @@ export default function AssoDetail() {
                 <View style={styles.progressContainer}>
                     <View style={[styles.progressBar, { width: `${(totalDon / objectif) * 100}%` }]} />
                 </View>
-                <Text style={styles.totalText}>€{totalDon.toLocaleString()}</Text>
+                <Text style={styles.totalText}>€{totalDon}</Text>
                 <Text style={styles.description}>{asso.Description}</Text>
                 <View>
                     <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Faire un Don" onPress={() => {
@@ -178,7 +178,6 @@ const styles = StyleSheet.create({
     },
     description: {
         marginTop: 50,
-        marginBottom: 20,
         fontSize: 20,
         lineHeight: 22,
         textAlign: "justify",
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         borderRadius: 10,
         alignItems: "center",
-        marginTop: 20,
+        marginTop: 15,
     },
     loginText: {
         color: "white",
@@ -204,7 +203,7 @@ const styles = StyleSheet.create({
     },
     progressBar: {
         height: "100%",
-        backgroundColor: "blue",
+        backgroundColor: "#031c9c",
     },
     totalText: {
         fontWeight: "bold",
