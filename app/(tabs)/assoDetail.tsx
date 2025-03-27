@@ -130,7 +130,9 @@ export default function AssoDetail() {
 
 
     if (!asso) return <Text>Chargement...</Text>;
-
+    const unsetType = async () => {
+        await SecureStore.deleteItemAsync("type");
+    }
     return (
         <AppBackground title={asso.NomAsso}>
             <ScrollView>
@@ -143,21 +145,20 @@ export default function AssoDetail() {
                 <Text style={styles.totalText}>€{totalDon}</Text>
                 <Text style={styles.description}>{asso.Description}</Text>
                 <View>
-                    <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Faire un Don" onPress={() => {
-                        router.push(`/payment?id=${asso.IdAsso}`);
-                    }}></RegularButton>
+                    <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Faire un Don" onPress={() => {unsetType();
+                        router.push(`/payment?id=${asso.IdAsso}`);}} />
                     <RegularButton
                         styleButton={styles.loginButton}
                         styleText={styles.loginText}
                         text="Planifier un Don Récurrent"
                         onPress={async () => {
                             const userId = await SecureStore.getItemAsync("userId");
-
+                            const type = await SecureStore.setItemAsync("type", "recurrent");
                             if (!userId) {
                                 Alert.alert("Connexion requise", "Veuillez vous connecter pour planifier un don récurrent.");
                                 router.push("/connexion");
                             } else {
-                                router.push(`/payment?id=${asso.IdAsso}&type=recurrent`);
+                                router.push(`/payment?id=${asso.IdAsso}`);
                             }
                         }}
                     />

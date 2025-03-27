@@ -19,7 +19,7 @@ export default function Payment() {
     const [expiryMonth, setExpiryMonth] = useState('');
     const [expiryYear, setExpiryYear] = useState('');
     const [cvv, setCvv] = useState('');
-    const { type } = useLocalSearchParams();
+
     const { id } = useSelectedAsso();
 
     const formatDateToSQL = (date: Date) => {
@@ -28,6 +28,8 @@ export default function Payment() {
 
 
     const handleConfirm = async () => {
+        const type  = await SecureStore.getItemAsync("type");
+        console.log("🔍 Type :", type);
         if (!amount || !cardNumber || !expiryMonth || !expiryYear || !cvv) {
             Alert.alert("Remplissez tous les champs");
             return;
