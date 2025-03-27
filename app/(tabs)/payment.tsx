@@ -19,47 +19,67 @@ export default function Payment() {
     const [expiryMonth, setExpiryMonth] = useState('');
     const [expiryYear, setExpiryYear] = useState('');
     const [cvv, setCvv] = useState('');
+    const { type } = useLocalSearchParams();
     const { id } = useSelectedAsso();
 
-    const formatDateToSQL = (date) => {
+    const formatDateToSQL = (date: Date) => {
         return date.toISOString().slice(0, 19).replace("T", " ");
     };
 
 
     const handleConfirm = async () => {
-        if (amount && cardNumber && expiryMonth && expiryYear && cvv) {
-            const idUser = await SecureStore.getItemAsync("userId");
-            const donData = {
-                idUtilisateur: idUser ? Number(idUser) : null,
-                idAssociation: id, //
-                montant: Number(amount),
-                date: formatDateToSQL(new Date()),
-                // autres infos si besoin
-            };
-
-            try {
-                console.log("🔼 Don envoyé :", donData);
-                const response = await fetch("https://backenddevmobile-production.up.railway.app/api/dons/registerDon", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(donData),
-                });
-
-                const data = await response.json();
-                if (response.ok && data.success) {
-                    Alert.alert("Merci 🙌", "Votre don a bien été enregistré !");
-                    router.push("/associations");
-                } else {
-                    console.error("❌ Réponse backend :", data);
-                    Alert.alert("Erreur", data.message || "Une erreur est survenue.");
-                }
-
-            } catch (error) {
-                console.error("❌ Erreur lors de l'envoi du don :", error);
-                Alert.alert("Erreur", "Impossible de contacter le serveur.");
-            }
-        } else {
+        if (!amount || !cardNumber || !expiryMonth || !expiryYear || !cvv) {
             Alert.alert("Remplissez tous les champs");
+            return;
+        }
+
+        if (!id) {
+            Alert.alert("Erreur", "Association non définie.");
+            return;
+        }
+
+        const idUser = await SecureStore.getItemAsync("userId");
+
+        // Si don récurrent et pas connecté → rediriger
+        if (type === "recurrent" && !idUser) {
+            Alert.alert("Connexion requise", "Veuillez vous connecter pour planifier un don récurrent.");
+            router.push("/connexion");
+            return;
+        }
+
+        const donData = {
+            idUtilisateur: idUser ? Number(idUser) : null,
+            idAssociation: Number(id),
+            montant: Number(amount),
+            date: formatDateToSQL(new Date()),
+            // tu peux ajouter une fréquence ici si besoin (par ex. "mensuel")
+        };
+
+        const endpoint =
+            type === "recurrent"
+                ? "https://backenddevmobile-production.up.railway.app/api/dons/registerRecurrentDon"
+                : "https://backenddevmobile-production.up.railway.app/api/dons/registerDon";
+
+        try {
+            console.log("📦 Don envoyé :", donData);
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(donData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                Alert.alert("Merci 🙌", type === "recurrent" ? "Don récurrent enregistré !" : "Don enregistré !");
+                router.push("/associations");
+            } else {
+                console.error("❌ Réponse backend :", data);
+                Alert.alert("Erreur", data.message || "Une erreur est survenue.");
+            }
+        } catch (error) {
+            console.error("❌ Erreur lors de l'envoi du don :", error);
+            Alert.alert("Erreur", "Impossible de contacter le serveur.");
         }
     };
 

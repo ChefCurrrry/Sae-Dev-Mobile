@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button } from "react-native";
 import AppBackground from "@/components/AppBackground";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import RegularButton from "@/components/RegularButton";
 
 export default function ProfilScreen() {
     const [nom, setNom] = useState("");
@@ -31,7 +32,9 @@ export default function ProfilScreen() {
         <AppBackground title="Mon Profil">
             <View style={styles.container}>
                 <Text style={styles.text}>Bienvenue {prenom} {nom} 👋</Text>
-                <Button title={"DECONNEXION"} onPress={handleDisconnect} />
+                <RegularButton text={"DECONNEXION"} styleButton={styles.loginButton} styleText={styles.loginText} onPress={handleDisconnect} />
+                <RegularButton text={"Mes Dons Planifiés"} styleButton={styles.loginButton} styleText={styles.loginText} onPress={handleDisconnect} />
+                <RegularButton text={"Voir les Associations"} styleButton={styles.loginButton} styleText={styles.loginText} onPress={() => {router.push("/associations")}} />
             </View>
         </AppBackground>
     );
@@ -39,7 +42,7 @@ export default function ProfilScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -49,5 +52,18 @@ const styles = StyleSheet.create({
         color: "#333",
         textAlign: "center",
         marginBottom: 20,
+    },
+    loginButton: {
+        width: "100%",
+        backgroundColor: "#4968df",
+        paddingVertical: 12,
+        borderRadius: 10,
+        alignItems: "center",
+        marginBottom: 15,
+    },
+    loginText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });

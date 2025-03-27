@@ -1,10 +1,11 @@
 // app/(tabs)/assoDetail.tsx
 import React, { useEffect, useState } from "react";
-import { Text, Image, View, StyleSheet, Button, ScrollView } from "react-native";
+import { Text, Image, View, StyleSheet, Button, ScrollView, Alert } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import AppBackground from "@/components/AppBackground";
 import {useSelectedAsso} from "@/components/SelectedAssoContext";
 import RegularButton from "@/components/RegularButton";
+import * as SecureStore from "expo-secure-store";
 
 interface AssociationDetail {
     IdAsso: number;
@@ -145,9 +146,21 @@ export default function AssoDetail() {
                     <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Faire un Don" onPress={() => {
                         router.push(`/payment?id=${asso.IdAsso}`);
                     }}></RegularButton>
-                    <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Planifier un Don Récurrent" onPress={() => {
-                        router.push(`/payment?id=${asso.IdAsso}`);
-                    }}></RegularButton>
+                    <RegularButton
+                        styleButton={styles.loginButton}
+                        styleText={styles.loginText}
+                        text="Planifier un Don Récurrent"
+                        onPress={async () => {
+                            const userId = await SecureStore.getItemAsync("userId");
+
+                            if (!userId) {
+                                Alert.alert("Connexion requise", "Veuillez vous connecter pour planifier un don récurrent.");
+                                router.push("/connexion");
+                            } else {
+                                router.push(`/payment?id=${asso.IdAsso}&type=recurrent`);
+                            }
+                        }}
+                    />
                 </View>
             </ScrollView>
         </AppBackground>
