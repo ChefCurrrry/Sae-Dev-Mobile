@@ -11,6 +11,7 @@ import RegularButton from "@/components/RegularButton";
 import BackGround from "@/components/BackGround";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import {useSelectedAsso} from "@/components/SelectedAssoContext";
 
 export default function Payment() {
     const [amount, setAmount] = useState('');
@@ -18,32 +19,41 @@ export default function Payment() {
     const [expiryMonth, setExpiryMonth] = useState('');
     const [expiryYear, setExpiryYear] = useState('');
     const [cvv, setCvv] = useState('');
-    const {idAsso} = useLocalSearchParams();
+    const { id } = useSelectedAsso();
+
+    const formatDateToSQL = (date) => {
+        return date.toISOString().slice(0, 19).replace("T", " ");
+    };
+
 
     const handleConfirm = async () => {
         if (amount && cardNumber && expiryMonth && expiryYear && cvv) {
-            const idUser = await SecureStore.getItemAsync("UserId");
+            const idUser = await SecureStore.getItemAsync("userId");
             const donData = {
-                idUtilisateur : idUser,
-                idAssociation: idAsso, // 👈 récupéré de l'URL
+                idUtilisateur: idUser ? Number(idUser) : null,
+                idAssociation: id, //
                 montant: Number(amount),
-                date: new Date().toISOString(),
+                date: formatDateToSQL(new Date()),
                 // autres infos si besoin
             };
 
             try {
+                console.log("🔼 Don envoyé :", donData);
                 const response = await fetch("https://backenddevmobile-production.up.railway.app/api/dons/registerDon", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(donData),
                 });
 
-                if (response.ok) {
+                const data = await response.json();
+                if (response.ok && data.success) {
                     Alert.alert("Merci 🙌", "Votre don a bien été enregistré !");
                     router.push("/associations");
                 } else {
-                    Alert.alert("Erreur", "Une erreur est survenue.");
+                    console.error("❌ Réponse backend :", data);
+                    Alert.alert("Erreur", data.message || "Une erreur est survenue.");
                 }
+
             } catch (error) {
                 console.error("❌ Erreur lors de l'envoi du don :", error);
                 Alert.alert("Erreur", "Impossible de contacter le serveur.");
@@ -106,7 +116,6 @@ export default function Payment() {
                     placeholderTextColor="#444"
                     value={cvv}
                     onChangeText={(text) => setCvv(text.replace(/[^0-9]/g, ''))}
-                    secureTextEntry={true}
                     maxLength={3}
                 />
             </View>
