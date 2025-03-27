@@ -457,7 +457,7 @@ export default function AssociationDisplayScreen() {
                         onPress={() => {
                             setFilterVisible2(false);
                             // @ts-ignore
-                            reouter.push("/trouverAsso");
+                            router.push("/trouverAsso");
                         }}
                     >
                         🔍 Trouver une association

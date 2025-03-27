@@ -2,12 +2,11 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
 import {useTagSelection} from "@/components/TagSelectionContext";
-import {useRouter} from "expo-router";
-import {useNavigation} from "@react-navigation/native";
+import {router} from "expo-router";
 export default function AssociationPage2() {
 
     const { setTag2 } = useTagSelection();
-    const navigation = useNavigation();
+
 
     return (
         <View style={styles.container}>

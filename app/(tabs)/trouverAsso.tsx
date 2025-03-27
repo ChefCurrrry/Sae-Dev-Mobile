@@ -2,11 +2,11 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RegularButton from "@/components/RegularButton";
 import {useTagSelection} from "@/components/TagSelectionContext";
-import {useNavigation} from "@react-navigation/native";
+import {router} from "expo-router";
+
 export default function AssociationPage1() {
 
     const { setTag1 } = useTagSelection();
-    const router = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -27,7 +27,7 @@ export default function AssociationPage1() {
                         setTag1(2); // ID de ce tag dans ta DB TAG1
                         console.log("tag choisi : 1" )
                         // @ts-ignore
-                        router.navigate("trouverAsso2");
+                        router.push("/trouverAsso2");
                     }}
                 />
                 <RegularButton
