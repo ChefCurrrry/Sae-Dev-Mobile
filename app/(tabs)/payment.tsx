@@ -1,60 +1,105 @@
 import React, { useState } from 'react';
 import {
-    SafeAreaView,
     View,
     Text,
+    TextInput,
     TouchableOpacity,
-    StyleSheet, Image
+    StyleSheet,
+    Image,
 } from 'react-native';
 import RegularButton from "@/components/RegularButton";
 import BackGround from "@/components/BackGround";
+import { Picker } from '@react-native-picker/picker';
+import { router } from "expo-router";
 
 export default function Payment() {
-    // État pour suivre l'option sélectionnée, à null par défaut
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
+    const [amount, setAmount] = useState('');
+    const [cardNumber, setCardNumber] = useState('');
+    const [expiryMonth, setExpiryMonth] = useState('');
+    const [expiryYear, setExpiryYear] = useState('');
+    const [cvv, setCvv] = useState('');
 
-    // Liste d'options de paiement
     const paymentOptions = [
         { id: 1, label: 'Carte bancaire', image: require('@/assets/images/card.png') },
         { id: 2, label: 'Google & Apple Pay', image: require('@/assets/images/card.png') },
         { id: 3, label: 'Virement SEPA', image: require('@/assets/images/card.png') },
     ];
 
-    const handlePress = () => {
-        if (selectedOption !== null) {
-            console.log(`Option sélectionnée : ${selectedOption}`);
+    const handleConfirm = () => {
+        if (selectedOption && amount && cardNumber && expiryMonth && expiryYear && cvv) {
+            console.log("Paiement validé");
+            router.push("/associations");
         } else {
-            console.log('Aucune option sélectionnée');
+            console.log("Veuillez remplir tous les champs");
         }
-    }
+    };
 
     return (
         <BackGround>
-                <Text style={styles.subtitle}>Sélectionnez votre moyen de paiement</Text>
-
-                {/* Liste des options de paiement */}
-                {paymentOptions.map((option) => {
-                    const isSelected = selectedOption === option.id;
-                    return (
-                        <TouchableOpacity
-                            key={option.id}
-                            style={[
-                                styles.paymentOption,
-                                isSelected && styles.selectedOption
-                            ]}
-                            onPress={() => setSelectedOption(option.id)}
-                        >
-                            <Text style={styles.paymentOptionText}>{option.label}</Text>
-                            <Image source={option.image}/>
-                        </TouchableOpacity>
-                    );
-                })}
+            <Text style={styles.subtitle}>Sélectionnez votre moyen de paiement</Text>
 
 
-            {/* Bouton confirmation avec RegularButton */}
+            {/* Zone de saisie du montant */}
+            <TextInput
+                style={styles.input}
+                placeholder="Montant du don (€)"
+                keyboardType="numeric"
+                value={amount}
+                onChangeText={setAmount}
+            />
+
+            {/* Numéro de carte */}
+            <TextInput
+                style={styles.input}
+                placeholder="Numéro de carte bancaire"
+                keyboardType="numeric"
+                value={cardNumber}
+                onChangeText={setCardNumber}
+            />
+
+            {/* Date d'expiration */}
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={expiryMonth}
+                    onValueChange={(itemValue) => setExpiryMonth(itemValue)}
+                    style={styles.picker}
+                >
+                    <Picker.Item label="Mois" value="" />
+                    {Array.from({ length: 12 }, (_, i) => {
+                        const month = String(i + 1).padStart(2, '0');
+                        return <Picker.Item key={month} label={month} value={month} />;
+                    })}
+                </Picker>
+
+                <Picker
+                    selectedValue={expiryYear}
+                    onValueChange={(itemValue) => setExpiryYear(itemValue)}
+                    style={styles.picker}
+                >
+                    <Picker.Item label="Année" value="" />
+                    {Array.from({ length: 10 }, (_, i) => {
+                        const year = String(new Date().getFullYear() + i);
+                        return <Picker.Item key={year} label={year} value={year} />;
+                    })}
+                </Picker>
+            </View>
+
+            {/* CVV */}
+            <TextInput
+                style={styles.input}
+                placeholder="CVV"
+                keyboardType="numeric"
+                secureTextEntry={true}
+                value={cvv}
+                onChangeText={setCvv}
+                maxLength={3}
+            />
+
+            {/* Bouton de confirmation */}
             <RegularButton
-                text="Confirmer"
-                onPress={handlePress}
+                text="Valider le paiement"
+                onPress={handleConfirm}
                 styleButton={styles.confirmButton}
                 styleText={styles.confirmButtonText}
             />
@@ -62,7 +107,6 @@ export default function Payment() {
     );
 }
 
-// Styles de base
 const styles = StyleSheet.create({
     subtitle: {
         fontSize: 23,
@@ -90,12 +134,34 @@ const styles = StyleSheet.create({
         fontSize: 17,
         color: '#333',
     },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 12,
+        marginHorizontal: 20,
+        marginTop: 15,
+        fontSize: 16,
+    },
+    pickerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 20,
+        marginTop: 15,
+    },
+    picker: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+    },
     confirmButton: {
         backgroundColor: '#5E76FA',
         paddingVertical: 15,
         marginHorizontal: 20,
-        marginBottom: 10,
-        marginTop: 20,
+        marginBottom: 20,
+        marginTop: 30,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -105,4 +171,3 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
-
