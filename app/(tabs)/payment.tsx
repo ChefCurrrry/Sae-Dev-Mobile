@@ -3,100 +3,116 @@ import {
     View,
     Text,
     TextInput,
-    TouchableOpacity,
     StyleSheet,
-    Image,
+    Alert,
 } from 'react-native';
+import { useLocalSearchParams } from "expo-router";
 import RegularButton from "@/components/RegularButton";
 import BackGround from "@/components/BackGround";
-import { Picker } from '@react-native-picker/picker';
 import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 
 export default function Payment() {
-    const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [amount, setAmount] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [expiryMonth, setExpiryMonth] = useState('');
     const [expiryYear, setExpiryYear] = useState('');
     const [cvv, setCvv] = useState('');
+    const {idAsso} = useLocalSearchParams();
 
-    const paymentOptions = [
-        { id: 1, label: 'Carte bancaire', image: require('@/assets/images/card.png') },
-        { id: 2, label: 'Google & Apple Pay', image: require('@/assets/images/card.png') },
-        { id: 3, label: 'Virement SEPA', image: require('@/assets/images/card.png') },
-    ];
+    const handleConfirm = async () => {
+        if (amount && cardNumber && expiryMonth && expiryYear && cvv) {
+            const idUser = await SecureStore.getItemAsync("UserId");
+            const donData = {
+                idUtilisateur : idUser,
+                idAssociation: idAsso, // 👈 récupéré de l'URL
+                montant: Number(amount),
+                date: new Date().toISOString(),
+                // autres infos si besoin
+            };
 
-    const handleConfirm = () => {
-        if (selectedOption && amount && cardNumber && expiryMonth && expiryYear && cvv) {
-            console.log("Paiement validé");
-            router.push("/associations");
+            try {
+                const response = await fetch("https://backenddevmobile-production.up.railway.app/api/dons", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(donData),
+                });
+
+                if (response.ok) {
+                    Alert.alert("Merci 🙌", "Votre don a bien été enregistré !");
+                    router.push("/associations");
+                } else {
+                    Alert.alert("Erreur", "Une erreur est survenue.");
+                }
+            } catch (error) {
+                console.error("❌ Erreur lors de l'envoi du don :", error);
+                Alert.alert("Erreur", "Impossible de contacter le serveur.");
+            }
         } else {
-            console.log("Veuillez remplir tous les champs");
+            Alert.alert("Remplissez tous les champs");
         }
     };
 
+
     return (
         <BackGround>
-            <Text style={styles.subtitle}>Sélectionnez votre moyen de paiement</Text>
+            <Text style={styles.subtitle}>Informations de paiement</Text>
 
-
-            {/* Zone de saisie du montant */}
             <TextInput
                 style={styles.input}
                 placeholder="Montant du don (€)"
-                keyboardType="numeric"
+                placeholderTextColor="#444"
                 value={amount}
-                onChangeText={setAmount}
+                onChangeText={(text) => setAmount(text.replace(/[^0-9]/g, ''))}
             />
 
-            {/* Numéro de carte */}
             <TextInput
                 style={styles.input}
                 placeholder="Numéro de carte bancaire"
-                keyboardType="numeric"
+                placeholderTextColor="#444"
                 value={cardNumber}
-                onChangeText={setCardNumber}
+                maxLength={19}
+                onChangeText={(text) => {
+                    // Supprime les caractères non numériques
+                    const cleaned = text.replace(/[^0-9]/g, '').slice(0, 16);
+
+                    // Ajoute un espace toutes les 4 chiffres
+                    const formatted = cleaned.replace(/(.{4})/g, '$1 ').trim();
+
+                    setCardNumber(formatted);
+                }}
             />
 
-            {/* Date d'expiration */}
-            <View style={styles.pickerContainer}>
-                <Picker
-                    selectedValue={expiryMonth}
-                    onValueChange={(itemValue) => setExpiryMonth(itemValue)}
-                    style={styles.picker}
-                >
-                    <Picker.Item label="Mois" value="" />
-                    {Array.from({ length: 12 }, (_, i) => {
-                        const month = String(i + 1).padStart(2, '0');
-                        return <Picker.Item key={month} label={month} value={month} />;
-                    })}
-                </Picker>
-
-                <Picker
-                    selectedValue={expiryYear}
-                    onValueChange={(itemValue) => setExpiryYear(itemValue)}
-                    style={styles.picker}
-                >
-                    <Picker.Item label="Année" value="" />
-                    {Array.from({ length: 10 }, (_, i) => {
-                        const year = String(new Date().getFullYear() + i);
-                        return <Picker.Item key={year} label={year} value={year} />;
-                    })}
-                </Picker>
+            <View style={styles.expiryContainer}>
+                <TextInput
+                    style={[styles.input, styles.expiryInput]}
+                    placeholder="MM"
+                    placeholderTextColor="#444"
+                    value={expiryMonth}
+                    onChangeText={(text) => setExpiryMonth(text.replace(/[^0-9]/g, ''))}
+                    maxLength={2}
+                />
+                <TextInput
+                    style={[styles.input, styles.expiryInput]}
+                    placeholder="YY"
+                    placeholderTextColor="#444"
+                    value={expiryYear}
+                    onChangeText={(text) => setExpiryYear(text.replace(/[^0-9]/g, ''))}
+                    maxLength={2}
+                />
+                <TextInput
+                    style={[styles.input, styles.expiryInput]}
+                    placeholder="CVV"
+                    placeholderTextColor="#444"
+                    value={cvv}
+                    onChangeText={(text) => setCvv(text.replace(/[^0-9]/g, ''))}
+                    secureTextEntry={true}
+                    maxLength={3}
+                />
             </View>
 
-            {/* CVV */}
-            <TextInput
-                style={styles.input}
-                placeholder="CVV"
-                keyboardType="numeric"
-                secureTextEntry={true}
-                value={cvv}
-                onChangeText={setCvv}
-                maxLength={3}
-            />
 
-            {/* Bouton de confirmation */}
+
             <RegularButton
                 text="Valider le paiement"
                 onPress={handleConfirm}
@@ -114,26 +130,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
     },
-    paymentOption: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#000000',
-        borderRadius: 8,
-        paddingVertical: 15,
-        paddingHorizontal: 15,
-        marginBottom: 10,
-        marginTop: 20,
-    },
-    selectedOption: {
-        borderColor: '#5E76FA',
-        backgroundColor: '#EEF0FF',
-    },
-    paymentOptionText: {
-        fontSize: 17,
-        color: '#333',
-    },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
@@ -143,18 +139,13 @@ const styles = StyleSheet.create({
         marginTop: 15,
         fontSize: 16,
     },
-    pickerContainer: {
+    expiryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 20,
-        marginTop: 15,
+        marginHorizontal: 0,
     },
-    picker: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        backgroundColor: '#fff',
-        borderRadius: 8,
+    expiryInput: {
+        flex: 0.48,
     },
     confirmButton: {
         backgroundColor: '#5E76FA',
