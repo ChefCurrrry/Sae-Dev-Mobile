@@ -32,7 +32,7 @@ export default function Payment() {
             };
 
             try {
-                const response = await fetch("https://backenddevmobile-production.up.railway.app/api/dons", {
+                const response = await fetch("https://backenddevmobile-production.up.railway.app/api/dons/registerDon", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(donData),
