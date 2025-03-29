@@ -1,13 +1,18 @@
-import { Image, View, StyleSheet } from "react-native";
-import React from "react";
+import {Image, View, StyleSheet, TouchableOpacity} from "react-native";
+import React, {useState} from "react";
 import { router } from "expo-router";
 import RegularButton from "@/components/RegularButton";
 import AppText from "@/components/AppText";
 import { useTheme } from "@/components/ThemeContext";
+import SettingsModal from "@/components/SettingsModal";
 
 export default function bienvenueDisplayScreen() {
-    const { theme } = useTheme();
+    const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
+    const [largeText, setLargeText] = useState(false);
+
+
 
     const handlePress = () => {
         router.push("/associations");
@@ -16,10 +21,13 @@ export default function bienvenueDisplayScreen() {
     return (
         <>
             <View style={styles.header}>
+                <TouchableOpacity style={styles.settingsButton} onPress={() => setShowSettingsModal(true)}>
+                    <Image style={styles.icon} source={require("../assets/images/parametres-cog.png")} />
+                </TouchableOpacity>
                 <Image source={require("../assets/images/franceAssosSante.png")} style={styles.logo} />
             </View>
 
-            <View style={[styles.container, { backgroundColor: isDark ? "#1E1E1E" : "#F5F5F5" }]} />
+            <View style={[styles.container, { backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5" }]} />
 
             <View style={[styles.formContainer, { backgroundColor: isDark ? "#1E1E1E" : "#fff" }]}>
                 <AppText style={styles.title}>Bienvenue sur notre Application</AppText>
@@ -35,6 +43,15 @@ export default function bienvenueDisplayScreen() {
                     onPress={handlePress}
                 />
             </View>
+            <SettingsModal
+                visible={showSettingsModal}
+                onClose={() => setShowSettingsModal(false)}
+                toggleTheme={toggleTheme}
+                isDark={isDark}
+                largeText={largeText}
+                setLargeText={setLargeText}
+            />
+
         </>
     );
 }
@@ -53,7 +70,6 @@ const styles = StyleSheet.create({
     logo: {
         width: "100%",
         height: 200,
-        tintColor: "white",
         marginTop: -120,
         resizeMode: "contain",
     },
@@ -86,5 +102,17 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 16,
         fontWeight: "bold",
+    },
+    icon: {
+        width: 40,
+        height: 40,
+        tintColor: "#fff",
+    },
+    settingsButton: {
+        position: "absolute",
+        top: 35,
+        right: 20,
+        padding: 5,
+        zIndex: 10,
     },
 });

@@ -1,9 +1,19 @@
-import { Alert, StyleSheet, TextInput, TouchableOpacity, View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+    Alert,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
+    ScrollView,
+    Platform,
+} from "react-native";
 import React, { useState } from "react";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
-import {Checkbox} from "react-native-paper";
+import { Checkbox } from "react-native-paper";
+import AppText from "@/components/AppText";
+import { useTheme } from "@/components/ThemeContext";
 
 export default function RegisterScreen() {
     const [nom, setNom] = useState("");
@@ -13,8 +23,8 @@ export default function RegisterScreen() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-
-
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
 
     const handleRegister = async () => {
         if (!nom || !prenom || !email || !age || !password || !confirmPassword) {
@@ -33,11 +43,14 @@ export default function RegisterScreen() {
         }
 
         try {
-            const response = await fetch("https://backenddevmobile-production.up.railway.app/api/users/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nom, prenom, email, age, password }),
-            });
+            const response = await fetch(
+                "https://backenddevmobile-production.up.railway.app/api/users/register",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nom, prenom, email, age, password }),
+                }
+            );
 
             const data = await response.json();
 
@@ -54,98 +67,117 @@ export default function RegisterScreen() {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer} >
-        <BackGround>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <BackGround>
+                <AppText style={styles.title}>Créez votre compte</AppText>
 
-                    <Text style={styles.title}>Créez votre compte</Text>
+                <TextInput
+                    style={[styles.input, {
+                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ddd",
+                    }]}
+                    placeholder="Nom"
+                    placeholderTextColor="#aaa"
+                    value={nom}
+                    onChangeText={setNom}
+                />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nom"
-                        placeholderTextColor="#aaa"
-                        value={nom}
-                        onChangeText={setNom}
-                    />
+                <TextInput
+                    style={[styles.input, {
+                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ddd",
+                    }]}
+                    placeholder="Prénom"
+                    placeholderTextColor="#aaa"
+                    value={prenom}
+                    onChangeText={setPrenom}
+                />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Prénom"
-                        placeholderTextColor="#aaa"
-                        value={prenom}
-                        onChangeText={setPrenom}
-                    />
+                <TextInput
+                    style={[styles.input, {
+                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ddd",
+                    }]}
+                    placeholder="Âge"
+                    placeholderTextColor="#aaa"
+                    keyboardType="numeric"
+                    value={age}
+                    onChangeText={setAge}
+                />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Âge"
-                        placeholderTextColor="#aaa"
-                        keyboardType="numeric"
-                        value={age}
-                        onChangeText={setAge}
-                    />
+                <TextInput
+                    style={[styles.input, {
+                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ddd",
+                    }]}
+                    placeholder="nom.prenom@gmail.com"
+                    placeholderTextColor="#aaa"
+                    keyboardType="email-address"
+                    value={email}
+                    onChangeText={setEmail}
+                />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="nom.prenom@gmail.com"
-                        placeholderTextColor="#aaa"
-                        keyboardType="email-address"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
+                <TextInput
+                    style={[styles.input, {
+                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ddd",
+                    }]}
+                    placeholder="Mot de passe"
+                    placeholderTextColor="#aaa"
+                    secureTextEntry={!showPassword}
+                    value={password}
+                    onChangeText={setPassword}
+                />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Mot de passe"
-                        placeholderTextColor="#aaa"
-                        secureTextEntry={!showPassword}
-                        value={password}
-                        onChangeText={setPassword}
-                    />
+                <TextInput
+                    style={[styles.input, {
+                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ddd",
+                    }]}
+                    placeholder="Confirmer le mot de passe"
+                    placeholderTextColor="#aaa"
+                    secureTextEntry={!showPassword}
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Confirmer le mot de passe"
-                        placeholderTextColor="#aaa"
-                        secureTextEntry={!showPassword}
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                    />
-                    <View style={styles.checkboxContainer}>
-                        <View style={styles.checkboxBorder}>
-                            <Checkbox
-                                status={showPassword ? "checked" : "unchecked"}
-                                onPress={() => setShowPassword(!showPassword)}
-                                color="#6C63FF"
-                                uncheckedColor="#6C63FF"
-                            />
-                        </View>
-                        <Text style={styles.checkboxText}>
-                            Afficher le mot de passe
-                        </Text>
+                <View style={styles.checkboxContainer}>
+                    <View style={[styles.checkboxBorder, { backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5" }]}>
+                        <Checkbox
+                            status={showPassword ? "checked" : "unchecked"}
+                            onPress={() => setShowPassword(!showPassword)}
+                            color="#6C63FF"
+                            uncheckedColor="#6C63FF"
+                        />
                     </View>
+                    <AppText style={styles.checkboxText}>Afficher le mot de passe</AppText>
+                </View>
 
+                <RegularButton
+                    styleButton={styles.registerButton}
+                    styleText={styles.registerText}
+                    text="S'inscrire"
+                    onPress={handleRegister}
+                />
 
-                    <RegularButton
-                        styleButton={styles.registerButton}
-                        styleText={styles.registerText}
-                        text="S'inscrire"
-                        onPress={handleRegister}
-                            />
-
-                    <Text style={styles.signupText}>
-                        Vous avez un compte ?
-                            <Text style={styles.signupLink} onPress={() => router.push("/connexion")}> Se Connecter</Text>
-                    </Text>
-
-        </BackGround>
+                <AppText style={styles.signupText}>
+                    Vous avez un compte ?
+                    <AppText style={styles.signupLink} onPress={() => router.push("/connexion")}> Se connecter</AppText>
+                </AppText>
+            </BackGround>
         </ScrollView>
     );
 }
 
-// **Styles**
 const styles = StyleSheet.create({
     scrollContainer: {
-        flex: 1,
+        flexGrow: 1,
     },
     title: {
         fontSize: 28,
@@ -156,13 +188,11 @@ const styles = StyleSheet.create({
     input: {
         width: "100%",
         height: 50,
-        backgroundColor: "#F5F5F5",
         borderRadius: 10,
         paddingHorizontal: 15,
         fontSize: 16,
         marginBottom: 15,
         borderWidth: 1,
-        borderColor: "#ddd",
     },
     registerButton: {
         backgroundColor: "#4968df",
@@ -179,7 +209,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 14,
         marginTop: 15,
-        color: "black",
     },
     signupLink: {
         color: "#4968df",
@@ -189,19 +218,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginBottom: 15,
-
     },
     checkboxBorder: {
         borderWidth: 1,
         borderColor: "#4968df",
         borderRadius: 10,
-        backgroundColor: "#F5F5F5",
     },
     checkboxText: {
         fontSize: 12,
         marginLeft: 10,
-        color: "black",
     },
 });
-
-

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import {
     View,
-    Text,
     TextInput,
     StyleSheet,
     Alert,
+    Text,
 } from 'react-native';
-import { useLocalSearchParams } from "expo-router";
-import RegularButton from "@/components/RegularButton";
-import BackGround from "@/components/BackGround";
 import { router } from "expo-router";
+import BackGround from "@/components/BackGround";
+import RegularButton from "@/components/RegularButton";
 import * as SecureStore from "expo-secure-store";
-import {useSelectedAsso} from "@/components/SelectedAssoContext";
+import { useSelectedAsso } from "@/components/SelectedAssoContext";
+import { useTheme } from "@/components/ThemeContext";
 
 export default function Payment() {
     const [amount, setAmount] = useState('');
@@ -19,17 +19,17 @@ export default function Payment() {
     const [expiryMonth, setExpiryMonth] = useState('');
     const [expiryYear, setExpiryYear] = useState('');
     const [cvv, setCvv] = useState('');
-
     const { id } = useSelectedAsso();
+
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
 
     const formatDateToSQL = (date: Date) => {
         return date.toISOString().slice(0, 19).replace("T", " ");
     };
 
-
     const handleConfirm = async () => {
-        const type  = await SecureStore.getItemAsync("type");
-        console.log("🔍 Type :", type);
+        const type = await SecureStore.getItemAsync("type");
         if (!amount || !cardNumber || !expiryMonth || !expiryYear || !cvv) {
             Alert.alert("Remplissez tous les champs");
             return;
@@ -42,7 +42,6 @@ export default function Payment() {
 
         const idUser = await SecureStore.getItemAsync("userId");
 
-        // Si don récurrent et pas connecté → rediriger
         if (type === "recurrent" && !idUser) {
             Alert.alert("Connexion requise", "Veuillez vous connecter pour planifier un don récurrent.");
             router.push("/connexion");
@@ -54,16 +53,13 @@ export default function Payment() {
             idAssociation: Number(id),
             montant: Number(amount),
             date: formatDateToSQL(new Date()),
-            // tu peux ajouter une fréquence ici si besoin (par ex. "mensuel")
         };
 
-        const endpoint =
-            type === "recurrent"
-                ? "https://backenddevmobile-production.up.railway.app/api/dons/registerRecurrentDon"
-                : "https://backenddevmobile-production.up.railway.app/api/dons/registerDon";
+        const endpoint = type === "recurrent"
+            ? "https://backenddevmobile-production.up.railway.app/api/dons/registerRecurrentDon"
+            : "https://backenddevmobile-production.up.railway.app/api/dons/registerDon";
 
         try {
-            console.log("📦 Don envoyé :", donData);
             const response = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -85,64 +81,99 @@ export default function Payment() {
         }
     };
 
-
     return (
         <BackGround>
-            <Text style={styles.subtitle}>Informations de paiement</Text>
+            <Text style={[styles.subtitle, { color: isDark ? "#fff" : "#000" }]}>
+                Informations de paiement
+            </Text>
 
             <TextInput
-                style={styles.input}
+                style={[
+                    styles.input,
+                    {
+                        backgroundColor: isDark ? "#2A2A2A" : "#fff",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ccc",
+                    }
+                ]}
                 placeholder="Montant du don (€)"
-                placeholderTextColor="#444"
+                placeholderTextColor={isDark ? "#aaa" : "#444"}
                 value={amount}
                 onChangeText={(text) => setAmount(text.replace(/[^0-9]/g, ''))}
             />
 
             <TextInput
-                style={styles.input}
+                style={[
+                    styles.input,
+                    {
+                        backgroundColor: isDark ? "#2A2A2A" : "#fff",
+                        color: isDark ? "#fff" : "#000",
+                        borderColor: isDark ? "#555" : "#ccc",
+                    }
+                ]}
                 placeholder="Numéro de carte bancaire"
-                placeholderTextColor="#444"
+                placeholderTextColor={isDark ? "#aaa" : "#444"}
                 value={cardNumber}
                 maxLength={19}
                 onChangeText={(text) => {
-                    // Supprime les caractères non numériques
                     const cleaned = text.replace(/[^0-9]/g, '').slice(0, 16);
-
-                    // Ajoute un espace toutes les 4 chiffres
                     const formatted = cleaned.replace(/(.{4})/g, '$1 ').trim();
-
                     setCardNumber(formatted);
                 }}
             />
 
             <View style={styles.expiryContainer}>
                 <TextInput
-                    style={[styles.input, styles.expiryInput]}
+                    style={[
+                        styles.input,
+                        styles.expiryInput,
+                        {
+                            backgroundColor: isDark ? "#2A2A2A" : "#fff",
+                            color: isDark ? "#fff" : "#000",
+                            borderColor: isDark ? "#555" : "#ccc",
+                        }
+                    ]}
                     placeholder="MM"
-                    placeholderTextColor="#444"
+                    placeholderTextColor={isDark ? "#aaa" : "#444"}
                     value={expiryMonth}
                     onChangeText={(text) => setExpiryMonth(text.replace(/[^0-9]/g, ''))}
                     maxLength={2}
                 />
+
                 <TextInput
-                    style={[styles.input, styles.expiryInput]}
+                    style={[
+                        styles.input,
+                        styles.expiryInput,
+                        {
+                            backgroundColor: isDark ? "#2A2A2A" : "#fff",
+                            color: isDark ? "#fff" : "#000",
+                            borderColor: isDark ? "#555" : "#ccc",
+                        }
+                    ]}
                     placeholder="YY"
-                    placeholderTextColor="#444"
+                    placeholderTextColor={isDark ? "#aaa" : "#444"}
                     value={expiryYear}
                     onChangeText={(text) => setExpiryYear(text.replace(/[^0-9]/g, ''))}
                     maxLength={2}
                 />
+
                 <TextInput
-                    style={[styles.input, styles.expiryInput]}
+                    style={[
+                        styles.input,
+                        styles.expiryInput,
+                        {
+                            backgroundColor: isDark ? "#2A2A2A" : "#fff",
+                            color: isDark ? "#fff" : "#000",
+                            borderColor: isDark ? "#555" : "#ccc",
+                        }
+                    ]}
                     placeholder="CVV"
-                    placeholderTextColor="#444"
+                    placeholderTextColor={isDark ? "#aaa" : "#444"}
                     value={cvv}
                     onChangeText={(text) => setCvv(text.replace(/[^0-9]/g, ''))}
                     maxLength={3}
                 />
             </View>
-
-
 
             <RegularButton
                 text="Valider le paiement"
@@ -163,7 +194,6 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        borderColor: '#ccc',
         borderRadius: 8,
         padding: 12,
         marginHorizontal: 20,
@@ -173,10 +203,10 @@ const styles = StyleSheet.create({
     expiryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 0,
+        marginHorizontal: 20,
     },
     expiryInput: {
-        flex: 0.48,
+        flex: 0.3,
     },
     confirmButton: {
         backgroundColor: '#5E76FA',

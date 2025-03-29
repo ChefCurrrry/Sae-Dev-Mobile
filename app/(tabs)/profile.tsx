@@ -130,7 +130,7 @@ export default function ProfilScreen() {
             </View>
 
             {/* 🔽 Modal Dons Planifiés */}
-            <Modal visible={showModal} animationType="slide" transparent={true}>
+            <Modal visible={showModal} animationType="fade" transparent={true}>
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalContent, { backgroundColor: modalBackground }]}>
 

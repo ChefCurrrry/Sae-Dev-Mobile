@@ -5,6 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import { useTheme } from "@/components/ThemeContext";
 import AppText from "@/components/AppText";
 import RegularButton from "@/components/RegularButton";
+import SettingsModal from "@/components/SettingsModal";
 
 interface Props {
     children: React.ReactNode;
@@ -45,39 +46,14 @@ export default function AppBackground({ children, title }: Props) {
             <View style={[styles.content, { backgroundColor: isDark ? "#1E1E1E" : "#fff" }]}>
                 {children}
             </View>
-            <Modal visible={showSettingsModal} transparent={true} animationType="fade">
-                <View style={styles.modalOverlay}>
-                    <View style={[styles.settingsModal, { backgroundColor: modalBackground }]}>
-
-                        <AppText style={styles.title}>⚙️ Paramètres</AppText>
-
-                        <TouchableOpacity
-                            style={styles.settingOption}
-                            onPress={toggleTheme}
-                        >
-                            <AppText style={styles.settingText}>
-                                {isDark ? "🌙 Mode sombre activé" : "☀️ Mode clair activé"}
-                            </AppText>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={styles.settingOption}
-                            onPress={() => setLargeText(prev => !prev)}
-                        >
-                            <AppText style={styles.settingText}>
-                                {largeText ? "🔠 Texte agrandi activé" : "🔡 Texte standard"}
-                            </AppText>
-                        </TouchableOpacity>
-
-                        <RegularButton
-                            text="Fermer"
-                            styleButton={styles.loginButton}
-                            styleText={styles.loginText}
-                            onPress={() => setShowSettingsModal(false)}
-                        />
-                    </View>
-                </View>
-            </Modal>
+            <SettingsModal
+                visible={showSettingsModal}
+                onClose={() => setShowSettingsModal(false)}
+                toggleTheme={toggleTheme}
+                isDark={isDark}
+                largeText={largeText}
+                setLargeText={setLargeText}
+            />
         </View>
     );
 }
