@@ -114,6 +114,7 @@ export default function ProfilScreen() {
                     styleButton={styles.loginButton}
                     styleText={styles.loginText}
                     onPress={() => {
+                        console.log(donList);
                         setShowModal(true);
                         fetchDonsPlanifiés();
                     }}

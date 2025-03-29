@@ -7,7 +7,7 @@ export default function BackGround({children}){
     return (
         <>
             <View style={styles.header}>
-                <Image source={require("../assets/images/qr-code.png")} style={styles.logo}/>
+                <Image source={require("../assets/images/franceAssosSante.png")} style={styles.logo}/>
             </View>
             <View style={styles.container}/>
             <View style={styles.formContainer}>
@@ -29,10 +29,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#4968df",
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: "100%",
+        height: 200,
         tintColor: "white",
         marginTop: -120,
+        resizeMode: "contain",
     },
     formContainer: {
         marginTop: -750,

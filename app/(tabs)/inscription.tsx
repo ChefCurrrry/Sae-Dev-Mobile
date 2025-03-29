@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, router } from "expo-router";
 import BackGround from "@/components/BackGround";
 import RegularButton from "@/components/RegularButton";
+import {Checkbox} from "react-native-paper";
 
 export default function RegisterScreen() {
     const [nom, setNom] = useState("");
@@ -11,6 +12,8 @@ export default function RegisterScreen() {
     const [age, setAge] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
 
 
     const handleRegister = async () => {
@@ -94,7 +97,7 @@ export default function RegisterScreen() {
                         style={styles.input}
                         placeholder="Mot de passe"
                         placeholderTextColor="#aaa"
-                        secureTextEntry
+                        secureTextEntry={!showPassword}
                         value={password}
                         onChangeText={setPassword}
                     />
@@ -103,17 +106,31 @@ export default function RegisterScreen() {
                         style={styles.input}
                         placeholder="Confirmer le mot de passe"
                         placeholderTextColor="#aaa"
-                        secureTextEntry
+                        secureTextEntry={!showPassword}
                         value={confirmPassword}
                         onChangeText={setConfirmPassword}
                     />
+                    <View style={styles.checkboxContainer}>
+                        <View style={styles.checkboxBorder}>
+                            <Checkbox
+                                status={showPassword ? "checked" : "unchecked"}
+                                onPress={() => setShowPassword(!showPassword)}
+                                color="#6C63FF"
+                                uncheckedColor="#6C63FF"
+                            />
+                        </View>
+                        <Text style={styles.checkboxText}>
+                            Afficher le mot de passe
+                        </Text>
+                    </View>
+
 
                     <RegularButton
                         styleButton={styles.registerButton}
                         styleText={styles.registerText}
                         text="S'inscrire"
                         onPress={handleRegister}
-                    />
+                            />
 
                     <Text style={styles.signupText}>
                         Vous avez un compte ?
@@ -167,6 +184,23 @@ const styles = StyleSheet.create({
     signupLink: {
         color: "#4968df",
         fontWeight: "bold",
+    },
+    checkboxContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 15,
+
+    },
+    checkboxBorder: {
+        borderWidth: 1,
+        borderColor: "#4968df",
+        borderRadius: 10,
+        backgroundColor: "#F5F5F5",
+    },
+    checkboxText: {
+        fontSize: 12,
+        marginLeft: 10,
+        color: "black",
     },
 });
 
