@@ -46,6 +46,8 @@ export default function AssociationDisplayScreen() {
     const tagBg = isDark ? "#333" : "#ddd";
     const tagColor = isDark ? "#fff" : "#000";
 
+    const [selectedTags, setSelectedTags] = useState<(number | null)[]>([tag1, tag2, tag3]);
+
     const images: Record<string, any> = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
         "ActionTraitement.png": require("@/assets/images/asso/ActionTraitement.png"),
@@ -127,11 +129,12 @@ export default function AssociationDisplayScreen() {
         "VCA.png": require("@/assets/images/asso/VCA.png"),
         "VM.png": require("@/assets/images/asso/VM.png"),
         "VMEH.png": require("@/assets/images/asso/VMEH.png"),
-
+        "default": require("@/assets/images/default.png"),
     };
 
-
-    const [selectedTags, setSelectedTags] = useState<(number | null)[]>([null, null, null]);
+    const getImageSource = (logoName: string) => {
+        return images[logoName] || require("@/assets/images/default.png");
+    };
 
     const toggleTag = (groupIndex: number, tagId: number) => {
         setSelectedTags(prev => {
@@ -146,9 +149,9 @@ export default function AssociationDisplayScreen() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                tag1: selectedTags[0] || null,
-                tag2: selectedTags[1] || null,
-                tag3: selectedTags[2] || null,
+                tag1: selectedTags[0],
+                tag2: selectedTags[1],
+                tag3: selectedTags[2],
             }),
         })
             .then(res => res.json())
@@ -156,62 +159,55 @@ export default function AssociationDisplayScreen() {
             .catch(err => console.error("Erreur filtrage tags", err));
     };
 
-    const getImageSource = (logoName: string) => {
-        return images[logoName] || require("@/assets/images/default.png");
+    const fetchTags = async () => {
+        try {
+            const res1 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags1");
+            const res2 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags2");
+            const res3 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags3");
+
+            const data1 = await res1.json();
+            const data2 = await res2.json();
+            const data3 = await res3.json();
+
+            setTags1(data1.map((t: any) => ({ id: t.IdTag1, name: t.NomTag1 })));
+            setTags2(data2.map((t: any) => ({ id: t.IdTag2, name: t.NomTag2 })));
+            setTags3(data3.map((t: any) => ({ id: t.IdTag3, name: t.NomTag3 })));
+        } catch (e) {
+            console.error("❌ Erreur fetch tags :", e);
+        }
+    };
+
+    const fetchAllAssociations = async () => {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            setAssociations(data);
+            setFilteredAssociations(data);
+        } catch (err) {
+            console.error("❌ Erreur fetch associations :", err);
+        }
     };
 
     useEffect(() => {
-        const fetchTags = async () => {
-            try {
-                const res1 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags1");
-                const res2 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags2");
-                const res3 = await fetch("https://backenddevmobile-production.up.railway.app/api/tags/tags3");
-
-                const data1Raw = await res1.json();
-                const data2Raw = await res2.json();
-                const data3Raw = await res3.json();
-
-                const data1: Tag[] = data1Raw.map((tag: any) => ({ id: tag.IdTag1, name: tag.NomTag1 }));
-                const data2: Tag[] = data2Raw.map((tag: any) => ({ id: tag.IdTag2, name: tag.NomTag2 }));
-                const data3: Tag[] = data3Raw.map((tag: any) => ({ id: tag.IdTag3, name: tag.NomTag3 }));
-
-                setTags1(data1);
-                setTags2(data2);
-                setTags3(data3);
-            } catch (error) {
-                console.error("❌ Erreur chargement des tags :", error);
-            }
-        };
-
         fetchTags();
 
-        if (tag1 === null && tag2 === null && tag3 === null) {
-            fetch(API_URL)
-                .then((res) => res.json())
-                .then((data) => {
-                    setAssociations(data);
-                    setFilteredAssociations(data);
-                })
-                .catch((error) => console.error("❌ Erreur chargement associations :", error));
-        } else {
+        // 🔄 Applique directement les tags sélectionnés depuis le contexte
+        const shouldFilter = tag1 !== null || tag2 !== null || tag3 !== null;
+        if (shouldFilter) {
+            setSelectedTags([tag1, tag2, tag3]);
             handleTagFilter();
+        } else {
+            fetchAllAssociations();
         }
-    }, [tag1, tag2, tag3]);
+    }, []);
 
     const resetTags = () => {
-        fetch(API_URL)
-            .then((res) => res.json())
-            .then((data) => {
-                setAssociations(data);
-                setFilteredAssociations(data);
-            })
-            .catch((error) => console.error("❌ Erreur chargement :", error));
+        fetchAllAssociations();
+        setSelectedTags([null, null, null]);
     };
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        if (!Array.isArray(associations)) return;
-
         if (query.trim() === "") {
             setFilteredAssociations(associations);
         } else {
@@ -265,25 +261,25 @@ export default function AssociationDisplayScreen() {
                 renderItem={({ item }) => <AssociationCard association={item} />}
             />
 
-            {/* Modal filtre */}
+            {/* Modal filtres */}
             <Modal isVisible={isFilterVisible} onBackdropPress={() => setFilterVisible(false)} style={styles.bottomModal}>
                 <View style={[styles.modalContent, { backgroundColor: modalBg }]}>
                     <AppText style={styles.modalTitle}>Filtrer les associations</AppText>
 
                     {[tags1, tags2, tags3].map((tagGroup, index) => (
-                        <View key={`group-${index}`}>
+                        <View key={index}>
                             <AppText style={styles.tagTitle}>Catégorie {index + 1}</AppText>
                             <View style={styles.tagContainer}>
                                 {tagGroup.map(tag => (
                                     <AppText
-                                        key={`tag-${index}-${tag.id}`}
+                                        key={tag.id}
                                         onPress={() => toggleTag(index, tag.id)}
                                         style={[
                                             styles.tag,
                                             {
                                                 backgroundColor: selectedTags[index] === tag.id ? "#4968df" : tagBg,
-                                                color: selectedTags[index] === tag.id ? "#fff" : tagColor
-                                            }
+                                                color: selectedTags[index] === tag.id ? "#fff" : tagColor,
+                                            },
                                         ]}
                                     >
                                         {tag.name}
@@ -296,12 +292,7 @@ export default function AssociationDisplayScreen() {
                     <AppText
                         style={styles.applyButton}
                         onPress={() => {
-                            const noTagSelected = selectedTags.every(t => t === null);
-                            if (noTagSelected) {
-                                setFilteredAssociations(associations);
-                            } else {
-                                handleTagFilter();
-                            }
+                            handleTagFilter();
                             setFilterVisible(false);
                         }}
                     >
@@ -320,12 +311,11 @@ export default function AssociationDisplayScreen() {
                 </View>
             </Modal>
 
-            {/* Modal \"perdu\" */}
+            {/* Modal question */}
             <Modal isVisible={isFilterVisible2} onBackdropPress={() => setFilterVisible2(false)} style={styles.bottomModal}>
                 <View style={[styles.modalContent, { backgroundColor: modalBg }]}>
                     <AppText style={styles.modalTitle}>Vous êtes perdu ?</AppText>
                     <AppText style={styles.modalTitle}>Décrivez ce qui vous touche ou vous motive :</AppText>
-
                     <AppText
                         style={styles.applyButton}
                         onPress={() => {

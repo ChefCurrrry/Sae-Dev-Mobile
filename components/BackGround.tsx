@@ -7,8 +7,7 @@ import SettingsModal from "@/components/SettingsModal";
 // @ts-ignore
 export default function BackGround({ children }) {
     const [showSettingsModal, setShowSettingsModal] = useState(false);
-    const { theme, toggleTheme } = useTheme();
-    const [largeText, setLargeText] = useState(false);
+    const { theme, toggleTheme, isLargeText, toggleTextSize } = useTheme();
     const isDark = theme === "dark";
 
     return (
@@ -30,10 +29,11 @@ export default function BackGround({ children }) {
                 visible={showSettingsModal}
                 onClose={() => setShowSettingsModal(false)}
                 toggleTheme={toggleTheme}
+                toggleTextSize={toggleTextSize}
                 isDark={isDark}
-                largeText={largeText}
-                setLargeText={setLargeText}
+                isLargeText={isLargeText}
             />
+
         </>
     );
 }

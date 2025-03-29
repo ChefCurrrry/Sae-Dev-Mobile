@@ -1,4 +1,3 @@
-// components/SettingsModal.tsx
 import React from "react";
 import { Modal, View, StyleSheet, TouchableOpacity } from "react-native";
 import AppText from "@/components/AppText";
@@ -9,18 +8,18 @@ interface Props {
     visible: boolean;
     onClose: () => void;
     toggleTheme: () => void;
+    toggleTextSize: () => void; // ✅ Ajouté
     isDark: boolean;
-    largeText: boolean;
-    setLargeText: (val: boolean) => void;
+    isLargeText: boolean; // ✅ Renommé pour cohérence
 }
 
 export default function SettingsModal({
                                           visible,
                                           onClose,
                                           toggleTheme,
+                                          toggleTextSize,
                                           isDark,
-                                          largeText,
-                                          setLargeText,
+                                          isLargeText,
                                       }: Props) {
     const modalBackground = isDark ? "#1E1E1E" : "#fff";
 
@@ -36,12 +35,9 @@ export default function SettingsModal({
                         </AppText>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.settingOption}
-                        onPress={() => setLargeText(!largeText)}
-                    >
+                    <TouchableOpacity onPress={toggleTextSize} style={styles.settingOption}>
                         <AppText style={styles.settingText}>
-                            {largeText ? "🔠 Texte agrandi activé" : "🔡 Texte standard"}
+                            {isLargeText ? "🔠 Texte agrandi activé" : "🔡 Texte standard"}
                         </AppText>
                     </TouchableOpacity>
 
@@ -56,6 +52,7 @@ export default function SettingsModal({
         </Modal>
     );
 }
+
 
 const styles = StyleSheet.create({
     modalOverlay: {

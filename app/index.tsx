@@ -7,10 +7,9 @@ import { useTheme } from "@/components/ThemeContext";
 import SettingsModal from "@/components/SettingsModal";
 
 export default function bienvenueDisplayScreen() {
-    const { theme, toggleTheme } = useTheme();
+    const { theme, toggleTheme, isLargeText, toggleTextSize } = useTheme();
     const isDark = theme === "dark";
     const [showSettingsModal, setShowSettingsModal] = useState(false);
-    const [largeText, setLargeText] = useState(false);
 
 
 
@@ -47,10 +46,11 @@ export default function bienvenueDisplayScreen() {
                 visible={showSettingsModal}
                 onClose={() => setShowSettingsModal(false)}
                 toggleTheme={toggleTheme}
+                toggleTextSize={toggleTextSize}
                 isDark={isDark}
-                largeText={largeText}
-                setLargeText={setLargeText}
+                isLargeText={isLargeText}
             />
+
 
         </>
     );
