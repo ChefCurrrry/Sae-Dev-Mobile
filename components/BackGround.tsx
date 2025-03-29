@@ -1,21 +1,27 @@
 import {Image, StyleSheet, View} from "react-native";
 import React from "react";
+import { useTheme } from "@/components/ThemeContext";
+
 
 
 // @ts-ignore
-export default function BackGround({children}){
+export default function BackGround({ children }) {
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
+
     return (
         <>
             <View style={styles.header}>
-                <Image source={require("../assets/images/franceAssosSante.png")} style={styles.logo}/>
+                <Image source={require("../assets/images/franceAssosSante.png")} style={styles.logo} />
             </View>
-            <View style={styles.container}/>
-            <View style={styles.formContainer}>
+            <View style={[styles.container, { backgroundColor: isDark ? "#1E1E1E" : "#F5F5F5" }]} />
+            <View style={[styles.formContainer, { backgroundColor: isDark ? "#1E1E1E" : "#fff" }]}>
                 {children}
             </View>
         </>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {

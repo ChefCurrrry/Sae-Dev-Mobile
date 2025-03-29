@@ -1,11 +1,21 @@
-// app/(tabs)/assoDetail.tsx
+// Adaptation du fichier assoDetail.tsx avec support du mode sombre et AppText
+
 import React, { useEffect, useState } from "react";
-import { Text, Image, View, StyleSheet, Button, ScrollView, Alert } from "react-native";
-import { useLocalSearchParams, router } from "expo-router";
+import {
+    Image,
+    View,
+    StyleSheet,
+    ScrollView,
+    Alert,
+    Text
+} from "react-native";
+import { router } from "expo-router";
 import AppBackground from "@/components/AppBackground";
-import {useSelectedAsso} from "@/components/SelectedAssoContext";
+import { useSelectedAsso } from "@/components/SelectedAssoContext";
 import RegularButton from "@/components/RegularButton";
 import * as SecureStore from "expo-secure-store";
+import AppText from "@/components/AppText";
+import { useTheme } from "@/components/ThemeContext";
 
 interface AssociationDetail {
     IdAsso: number;
@@ -19,6 +29,8 @@ export default function AssoDetail() {
     const [totalDon, setTotalDon] = useState<number>(0);
     const { id } = useSelectedAsso();
     const objectif = 30000;
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
 
     const images: Record<string, any> = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
@@ -108,61 +120,64 @@ export default function AssoDetail() {
         if (id) {
             fetch(`https://backenddevmobile-production.up.railway.app/api/associations/getAssoById?id=${id}`)
                 .then(res => res.json())
-                .then(data => {
-                    console.log("✅ Asso reçue :", data);
-                    setAsso(data);
-                })
+                .then(data => setAsso(data))
                 .catch(err => console.error("❌ Erreur fetch asso :", err));
-        }
-        if (id) {
+
             fetch(`https://backenddevmobile-production.up.railway.app/api/dons/somme?id=${id}`)
                 .then(res => res.json())
                 .then(data => setTotalDon(data.total))
                 .catch(err => console.error("❌ Erreur fetch dons :", err));
         }
-
-    }, [id]); // ✅ on exécute uniquement si `id` change
-
+    }, [id]);
 
     const getImageSource = (logoName: string) => {
         return images[logoName] || images["default"];
     };
 
-
-    if (!asso) return <Text>Chargement...</Text>;
     const unsetType = async () => {
         await SecureStore.deleteItemAsync("type");
-    }
+    };
+
+    if (!asso) return <AppText>Chargement...</AppText>;
+
     return (
         <AppBackground title={asso.NomAsso}>
             <ScrollView>
                 <View style={styles.card}>
-                <Image source={getImageSource(asso.LogoName)} style={styles.image} />
+                    <Image source={getImageSource(asso.LogoName)} style={styles.image} />
                 </View>
+
                 <View style={styles.progressContainer}>
                     <View style={[styles.progressBar, { width: `${(totalDon / objectif) * 100}%` }]} />
                 </View>
-                <Text style={styles.totalText}>€{totalDon}</Text>
-                <Text style={styles.description}>{asso.Description}</Text>
-                <View>
-                    <RegularButton styleButton={styles.loginButton} styleText={styles.loginText} text="Faire un Don" onPress={() => {unsetType();
-                        router.push(`/payment?id=${asso.IdAsso}`);}} />
-                    <RegularButton
-                        styleButton={styles.loginButton}
-                        styleText={styles.loginText}
-                        text="Planifier un Don Récurrent"
-                        onPress={async () => {
-                            const userId = await SecureStore.getItemAsync("userId");
-                            const type = await SecureStore.setItemAsync("type", "recurrent");
-                            if (!userId) {
-                                Alert.alert("Connexion requise", "Veuillez vous connecter pour planifier un don récurrent.");
-                                router.push("/connexion");
-                            } else {
-                                router.push(`/payment?id=${asso.IdAsso}`);
-                            }
-                        }}
-                    />
-                </View>
+                <AppText style={[styles.totalText, { color: isDark ? "#fff" : "#000" }]}>€{totalDon}</AppText>
+                <AppText style={[styles.description, { color: isDark ? "#fff" : "#000" }]}>{asso.Description}</AppText>
+
+                <RegularButton
+                    styleButton={styles.loginButton}
+                    styleText={styles.loginText}
+                    text="Faire un Don"
+                    onPress={() => {
+                        unsetType();
+                        router.push(`/payment?id=${asso.IdAsso}`);
+                    }}
+                />
+
+                <RegularButton
+                    styleButton={styles.loginButton}
+                    styleText={styles.loginText}
+                    text="Planifier un Don Récurrent"
+                    onPress={async () => {
+                        const userId = await SecureStore.getItemAsync("userId");
+                        await SecureStore.setItemAsync("type", "recurrent");
+                        if (!userId) {
+                            Alert.alert("Connexion requise", "Veuillez vous connecter pour planifier un don récurrent.");
+                            router.push("/connexion");
+                        } else {
+                            router.push(`/payment?id=${asso.IdAsso}`);
+                        }
+                    }}
+                />
             </ScrollView>
         </AppBackground>
     );
@@ -194,7 +209,7 @@ const styles = StyleSheet.create({
         marginTop: 50,
         fontSize: 20,
         lineHeight: 22,
-        textAlign: "justify",
+        textAlign: "left",
     },
     loginButton: {
         backgroundColor: "#4968df",
@@ -217,12 +232,11 @@ const styles = StyleSheet.create({
     },
     progressBar: {
         height: "100%",
-        backgroundColor: "#031c9c",
+        backgroundColor: "#4968df",
     },
     totalText: {
         fontWeight: "bold",
         fontSize: 18,
         marginBottom: -30,
     },
-
 });

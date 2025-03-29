@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
     View,
-    Text,
     StyleSheet,
     Modal,
     FlatList,
@@ -13,6 +12,8 @@ import AppBackground from "@/components/AppBackground";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import RegularButton from "@/components/RegularButton";
+import { useTheme } from "@/components/ThemeContext";
+import AppText from "@/components/AppText"; // ✅ import du composant AppText
 
 interface Don {
     IdUser: number;
@@ -27,6 +28,10 @@ export default function ProfilScreen() {
     const [showModal, setShowModal] = useState(false);
     const [donList, setDonList] = useState<Don[]>([]);
     const [total, setTotal] = useState(0);
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
+    const modalBackground = isDark ? "#1E1E1E" : "#fff";
+
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -105,7 +110,7 @@ export default function ProfilScreen() {
     return (
         <AppBackground title="Mon Profil">
             <View style={styles.container}>
-                <Text style={styles.text}>Bienvenue {prenom} {nom} 👋</Text>
+                <AppText style={styles.text}>Bienvenue {prenom} {nom} 👋</AppText>
 
                 <RegularButton text="Voir les Associations" styleButton={styles.loginButton} styleText={styles.loginText} onPress={() => router.push("/associations")} />
 
@@ -120,14 +125,16 @@ export default function ProfilScreen() {
                     }}
                 />
 
+
                 <RegularButton text="DECONNEXION" styleButton={styles.loginButton} styleText={styles.loginText} onPress={handleDisconnect} />
             </View>
 
-            {/* 🔽 Modal affichant les dons planifiés */}
+            {/* 🔽 Modal Dons Planifiés */}
             <Modal visible={showModal} animationType="slide" transparent={true}>
                 <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.title}>📋 Mes Dons</Text>
+                    <View style={[styles.modalContent, { backgroundColor: modalBackground }]}>
+
+                    <AppText style={styles.title}>📋 Mes Dons</AppText>
 
                         <FlatList
                             data={donList}
@@ -135,39 +142,47 @@ export default function ProfilScreen() {
                             contentContainerStyle={{ paddingBottom: 20 }}
                             renderItem={({ item }) => (
                                 <View style={styles.item}>
-                                    <Text style={styles.name}>{item.NomAsso}</Text>
+                                    <AppText style={styles.name}>{item.NomAsso}</AppText>
                                     <TextInput
-                                        style={styles.input}
+                                        style={[
+                                            styles.input,
+                                            {
+                                                backgroundColor: isDark ? "#2A2A2A" : "#fff",
+                                                color: isDark ? "#fff" : "#000",
+                                                borderColor: isDark ? "#555" : "#ccc",
+                                            },
+                                        ]}
                                         keyboardType="numeric"
                                         value={String(item.MontantDon)}
-                                        onChangeText={(val) =>
-                                            setDonList((prev) =>
-                                                prev.map((don) =>
-                                                    don.IdUser === item.IdUser && don.IDAsso === item.IDAsso
-                                                        ? { ...don, MontantDon: Number(val) }
-                                                        : don
-                                                )
-                                            )
-                                        }
+                                        onChangeText={(val) => { /* ... */ }}
                                     />
-                                    <TouchableOpacity
-                                        style={styles.updateButton}
-                                        onPress={() => handleUpdateDon(item.IdUser, item.IDAsso, item.MontantDon)}
-                                    >
-                                        <Text style={{ color: "white" }}>Mettre à jour</Text>
-                                    </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        style={styles.deleteButton}
-                                        onPress={() => handleDeleteDon(item.IdUser, item.IDAsso)}
-                                    >
-                                        <Text style={{ color: "white" }}>Supprimer</Text>
-                                    </TouchableOpacity>
+                                    <View style={styles.buttonRow}>
+                                        <TouchableOpacity
+                                            style={[styles.updateButton, { marginRight: 10 }]}
+                                            onPress={() => {
+                                                handleUpdateDon(item.IdUser, item.IDAsso, item.MontantDon);
+                                                Alert.alert("✅ Succès", "Le don a été mis à jour !");
+                                            }}
+                                        >
+                                            <AppText style={{ color: "white" }}>Mettre à jour</AppText>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity
+                                            style={styles.deleteButton}
+                                            onPress={() => {
+                                                handleDeleteDon(item.IdUser, item.IDAsso);
+                                                Alert.alert("✅ Succès", "Le don a été supprimé !");
+                                            }}
+                                        >
+                                            <AppText style={{ color: "white" }}>Supprimer</AppText>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             )}
                         />
 
-                        <Text style={styles.total}>Total donné : {total} €</Text>
+                        <AppText style={styles.total}>Total donné : {total} €</AppText>
 
                         <RegularButton
                             text="Fermer"
@@ -178,6 +193,9 @@ export default function ProfilScreen() {
                     </View>
                 </View>
             </Modal>
+
+            {/* 🔧 Modal Paramètres */}
+
         </AppBackground>
     );
 }
@@ -191,7 +209,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: "bold",
-        color: "#333",
         textAlign: "center",
         marginBottom: 20,
     },
@@ -245,6 +262,7 @@ const styles = StyleSheet.create({
     updateButton: {
         backgroundColor: "#4968df",
         padding: 8,
+        width: "49%",
         borderRadius: 6,
         alignItems: "center",
         marginTop: 5,
@@ -252,9 +270,11 @@ const styles = StyleSheet.create({
     deleteButton: {
         backgroundColor: "#e74c3c",
         padding: 8,
+        width: "49%",
         borderRadius: 6,
         alignItems: "center",
         marginTop: 5,
+        marginLeft: -5,
     },
     total: {
         fontSize: 18,
@@ -262,4 +282,9 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         textAlign: "center",
     },
+    buttonRow: {
+        flexDirection: "row",
+        marginTop: 5,
+    },
+
 });

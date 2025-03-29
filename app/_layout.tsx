@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { TagSelectionProvider } from "@/components/TagSelectionContext";
 import {SelectedAssoProvider} from "@/components/SelectedAssoContext";
+import { ThemeProvider } from "@/components/ThemeContext";
 
 
 export {
@@ -41,6 +42,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
+      <ThemeProvider>
       <SelectedAssoProvider>
       <TagSelectionProvider>
         <Stack>
@@ -49,5 +51,6 @@ function RootLayoutNav() {
         </Stack>
       </TagSelectionProvider>
       </SelectedAssoProvider>
+      </ThemeProvider>
   );
 }
