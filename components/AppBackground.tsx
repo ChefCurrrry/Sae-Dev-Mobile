@@ -18,8 +18,13 @@ export default function AppBackground({ children, title }: Props) {
 
     const handleProfileClick = async () => {
         const userId = await SecureStore.getItemAsync("userId");
+        const role = await SecureStore.getItemAsync("role");
         if (userId) {
-            router.push("/profile");
+            if(role =="user") {
+                router.push("/profile");
+            }
+            else
+                router.push("/profileAdmin")
         } else {
             router.push("/connexion");
         }

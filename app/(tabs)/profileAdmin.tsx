@@ -98,6 +98,45 @@ export default function AdminProfilScreen() {
         }
     };
 
+    const handleUpdateDon = async (idUtilisateur: number, idAssociation: number, montant: number) => {
+        try {
+            await fetch("https://backenddevmobile-production.up.railway.app/api/dons/updateRecurrentDon", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idUtilisateur, idAssociation, montant }),
+            });
+            fetchDonsPlanifiés();
+        } catch (error) {
+            console.error("❌ Erreur mise à jour du don :", error);
+        }
+    };
+
+    const handleDeleteDon = async (idUtilisateur: number, idAssociation: number) => {
+        Alert.alert(
+            "Confirmer la suppression",
+            "Voulez-vous vraiment supprimer ce don récurrent ?",
+            [
+                { text: "Annuler", style: "cancel" },
+                {
+                    text: "Supprimer",
+                    style: "destructive",
+                    onPress: async () => {
+                        try {
+                            await fetch("https://backenddevmobile-production.up.railway.app/api/dons/deleteRecurrentDon", {
+                                method: "DELETE",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ idUtilisateur, idAssociation }),
+                            });
+                            fetchDonsPlanifiés();
+                        } catch (error) {
+                            console.error("❌ Erreur suppression du don :", error);
+                        }
+                    },
+                },
+            ]
+        );
+    };
+
     const handleDeleteUser = async (id: number) => {
         Alert.alert(
             "Confirmer suppression",
@@ -177,40 +216,76 @@ export default function AdminProfilScreen() {
             </View>
 
             {/* 🔽 Modal Dons Planifiés */}
-            <Modal visible={showDonModal} transparent={true} animationType="fade">
+            <Modal visible={showDonModal} animationType="fade" transparent={true}>
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalContent, { backgroundColor: modalBackground }]}>
+
                         <AppText style={styles.title}>📋 Mes Dons</AppText>
+
                         <FlatList
                             data={donList}
                             keyExtractor={(item) => `${item.IdUser}-${item.IDAsso}`}
+                            contentContainerStyle={{ paddingBottom: 20 }}
                             renderItem={({ item }) => (
                                 <View style={styles.item}>
                                     <AppText style={styles.name}>{item.NomAsso}</AppText>
                                     <TextInput
-                                        style={[styles.input, {
-                                            backgroundColor: isDark ? "#2A2A2A" : "#fff",
-                                            color: isDark ? "#fff" : "#000",
-                                            borderColor: isDark ? "#555" : "#ccc",
-                                        }]}
+                                        style={[
+                                            styles.input,
+                                            {
+                                                backgroundColor: isDark ? "#2A2A2A" : "#fff",
+                                                color: isDark ? "#fff" : "#000",
+                                                borderColor: isDark ? "#555" : "#ccc",
+                                            },
+                                        ]}
                                         keyboardType="numeric"
                                         value={String(item.MontantDon)}
                                         onChangeText={(val) => {
-                                            const updated = donList.map(d =>
-                                                d.IdUser === item.IdUser && d.IDAsso === item.IDAsso
-                                                    ? { ...d, MontantDon: parseFloat(val) || 0 }
-                                                    : d
-                                            );
-                                            setDonList(updated);
+                                            const updatedList = donList.map((don) => {
+                                                if (don.IdUser === item.IdUser && don.IDAsso === item.IDAsso) {
+                                                    return { ...don, MontantDon: parseFloat(val) || 0 };
+                                                }
+                                                return don;
+                                            });
+                                            setDonList(updatedList);
                                         }}
                                     />
+
+                                    <View style={styles.buttonRow}>
+                                        <TouchableOpacity
+                                            style={[styles.updateButton, { marginRight: 10 }]}
+                                            onPress={() => {
+                                                handleUpdateDon(item.IdUser, item.IDAsso, item.MontantDon);
+                                                Alert.alert("✅ Succès", "Le don a été mis à jour !");
+                                            }}
+                                        >
+                                            <AppText style={{ color: "white" }}>Mettre à jour</AppText>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity
+                                            style={styles.deleteButton}
+                                            onPress={() => {
+                                                handleDeleteDon(item.IdUser, item.IDAsso);
+                                                Alert.alert("✅ Succès", "Le don a été supprimé !");
+                                            }}
+                                        >
+                                            <AppText style={{ color: "white" }}>Supprimer</AppText>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             )}
                         />
+
                         <AppText style={styles.total}>Total donné : {total} €</AppText>
-                        <RegularButton text="Fermer" onPress={() => setShowDonModal(false)} styleButton={styles.loginButton} styleText={styles.loginText}
-                                        accessibilityRole={"button"}
-                        accessibilityLabel={"Bouton de fermeture de l'onglet de récapitulatif des dons planifiés"}/>
+
+                        <RegularButton
+                            text="Fermer"
+                            styleButton={styles.loginButton}
+                            styleText={styles.loginText}
+                            onPress={() => setShowDonModal(false)}
+                            accessibilityRole={"Button"}
+                            accessibilityLabel={"Boutton de fermeture des récapitulatifs de dons"}
+                        />
                     </View>
                 </View>
             </Modal>
@@ -311,12 +386,28 @@ const styles = StyleSheet.create({
         padding: 8,
         marginVertical: 5,
     },
-    deleteButton: {
-        backgroundColor: "#e74c3c",
-        padding: 6,
+    updateButton: {
+        backgroundColor: "#4968df",
+        padding: 8,
+        flex: 1,
         borderRadius: 6,
         alignItems: "center",
-        marginTop: 10,
+        marginTop: 5,
+    },
+
+    deleteButton: {
+        backgroundColor: "#e74c3c",
+        padding: 8,
+        flex: 1,
+        borderRadius: 6,
+        alignItems: "center",
+        marginTop: 5,
+    },
+
+    buttonRow: {
+        flexDirection: "row",
+        justifyContent: "space-between", // ✅ meilleure distribution
+        gap: 10,
     },
     total: {
         fontSize: 18,
@@ -324,4 +415,5 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         textAlign: "center",
     },
+
 });

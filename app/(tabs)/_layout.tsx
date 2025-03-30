@@ -31,7 +31,7 @@ export default function TabLayout() {
             <Stack.Screen name="assoDetail" component={AssociationDetails} />
             <Stack.Screen name="profile" component={ProfilScreen} />
             <Stack.Screen name="forgotPassword" component={ForgotPassword} />
-            <Stack.Screen name="profilAdmin" component={AdminProfilScreen} />
+            <Stack.Screen name="profileAdmin" component={AdminProfilScreen} />
         </Stack.Navigator>
     );
 }
