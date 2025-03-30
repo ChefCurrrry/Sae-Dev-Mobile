@@ -14,12 +14,14 @@ import { useSelectedAsso } from "@/components/SelectedAssoContext";
 import { useTheme } from "@/components/ThemeContext";
 import AppText from "@/components/AppText";
 import {CardField, CardForm, useConfirmPayment} from "@stripe/stripe-react-native";
+import { useTagSelection } from "@/components/TagSelectionContext";
+
 
 export default function Payment() {
     const [amount, setAmount] = useState('');
     const { id } = useSelectedAsso();
     const { confirmPayment, loading } = useConfirmPayment();
-
+    const { setTag1, setTag2, setTag3 } = useTagSelection();
     const { theme } = useTheme();
     const isDark = theme === "dark";
 
@@ -62,6 +64,9 @@ export default function Payment() {
 
                 // Enregistrer le don dans ta BDD
                 await saveDon(paymentIntent.id);
+                setTag1(null);
+                setTag2(null);
+                setTag3(null);
                 router.push("/associations");
             }
 

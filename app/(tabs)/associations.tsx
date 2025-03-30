@@ -39,6 +39,7 @@ export default function AssociationDisplayScreen() {
     const [isFilterVisible2, setFilterVisible2] = useState(false);
     const { tag1, tag2, tag3 } = useTagSelection();
     const { setId } = useSelectedAsso();
+    const { setTag1, setTag2, setTag3 } = useTagSelection();
     const { theme } = useTheme();
     const isDark = theme === "dark";
 
@@ -204,6 +205,12 @@ export default function AssociationDisplayScreen() {
     const resetTags = () => {
         fetchAllAssociations();
         setSelectedTags([null, null, null]);
+        setTags1([]);
+        setTags2([]);
+        setTags3([]);
+        setTag1(null);
+        setTag2(null);
+        setTag3(null);
     };
 
     const handleSearch = (query: string) => {
