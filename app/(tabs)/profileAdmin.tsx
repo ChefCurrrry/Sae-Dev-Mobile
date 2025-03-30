@@ -77,7 +77,7 @@ export default function AdminProfilScreen() {
 
     const fetchUsers = async () => {
         try {
-            const res = await fetch("https://backenddevmobile-production.up.railway.app/api/users");
+            const res = await fetch("https://backenddevmobile-production.up.railway.app/api/users/getUser");
             const data = await res.json();
             setUsers(data);
         } catch (error) {
