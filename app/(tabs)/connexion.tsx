@@ -35,9 +35,14 @@ export default function TabOneScreen() {
         await SecureStore.setItemAsync("userId", String(data.user.id));
         await SecureStore.setItemAsync("nom", String(data.user.nom));
         await SecureStore.setItemAsync("prenom", String(data.user.prenom));
-        router.push("/associations");
-      } else {
-        Alert.alert("Erreur", data.message);
+        await SecureStore.setItemAsync("role", String(data.user.role)); // ✅ stocker le rôle
+
+        // ✅ Redirection selon rôle
+        if (data.user.role === "admin") {
+          router.replace("/profileAdmin");
+        } else {
+          router.replace("/profile");
+        }
       }
     } catch (error) {
       console.error("Erreur de connexion :", error);
@@ -48,8 +53,10 @@ export default function TabOneScreen() {
   useEffect(() => {
     const checkIfLoggedIn = async () => {
       const userId = await SecureStore.getItemAsync("userId");
-      if (userId) {
-        router.replace("/profile");
+      const role = await SecureStore.getItemAsync("role");
+
+      if (userId && role) {
+        router.replace(role === "admin" ? "/profileAdmin" : "/profile");
       } else {
         setCheckingLogin(false);
       }
