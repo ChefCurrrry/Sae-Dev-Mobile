@@ -46,6 +46,8 @@ export default function SettingsModal({
                         styleButton={styles.loginButton}
                         styleText={styles.loginText}
                         onPress={onClose}
+                        accessibilityLabel={"Boutton de fermeture des paramètres"}
+                        accessibilityRole={"Button"}
                     />
                 </View>
             </View>

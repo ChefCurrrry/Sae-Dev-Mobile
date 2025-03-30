@@ -10,6 +10,7 @@ import AssociationPage2 from "@/app/(tabs)/trouverAsso2";
 import AssociationPage3 from "@/app/(tabs)/trouverAsso3";
 import AssociationDetails from "@/app/(tabs)/assoDetail";
 import ProfilScreen from "@/app/(tabs)/profile";
+import ForgotPassword from "@/app/(tabs)/forgotPassword";
 
 // Ignore l'erreur spécifique
 LogBox.ignoreLogs(["Text strings must be rendered within a <Text> component"]);
@@ -28,6 +29,7 @@ export default function TabLayout() {
             <Stack.Screen name="trouverAsso3" component={AssociationPage3} />
             <Stack.Screen name="assoDetail" component={AssociationDetails} />
             <Stack.Screen name="profile" component={ProfilScreen} />
+            <Stack.Screen name="forgotPassword" component={ForgotPassword} />
         </Stack.Navigator>
     );
 }

@@ -180,6 +180,8 @@ export default function Payment() {
                 onPress={handleConfirm}
                 styleButton={styles.confirmButton}
                 styleText={styles.confirmButtonText}
+                accessibilityLabel={"Boutton de validation de paiement"}
+                accessibilityRole={"Button"}
             />
         </BackGround>
     );
@@ -202,8 +204,10 @@ const styles = StyleSheet.create({
     },
     expiryContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         marginHorizontal: 20,
+        width: '100%',
+        marginLeft: 0,
     },
     expiryInput: {
         flex: 0.3,

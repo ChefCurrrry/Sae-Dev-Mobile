@@ -6,7 +6,7 @@ import {
     FlatList,
     TextInput,
     TouchableOpacity,
-    Alert
+    Alert, Button
 } from "react-native";
 import AppBackground from "@/components/AppBackground";
 import { router } from "expo-router";
@@ -112,7 +112,12 @@ export default function ProfilScreen() {
             <View style={styles.container}>
                 <AppText style={styles.text}>Bienvenue {prenom} {nom} 👋</AppText>
 
-                <RegularButton text="Voir les Associations" styleButton={styles.loginButton} styleText={styles.loginText} onPress={() => router.push("/associations")} />
+                <RegularButton text="Voir les Associations"
+                               styleButton={styles.loginButton}
+                               styleText={styles.loginText}
+                               onPress={() => router.push("/associations")}
+                               accessibilityLabel={"Boutton d'accès à la page des associations"}
+                               accessibilityRole={"Button"}/>
 
                 <RegularButton
                     text="Mes Dons Planifiés"
@@ -123,10 +128,12 @@ export default function ProfilScreen() {
                         setShowModal(true);
                         fetchDonsPlanifiés();
                     }}
+                    accessibilityLabel={"Boutton d'accès aux récapitulatifs de dons"}
+                    accessibilityRole={"Button"}
                 />
 
 
-                <RegularButton text="DECONNEXION" styleButton={styles.loginButton} styleText={styles.loginText} onPress={handleDisconnect} />
+                <RegularButton text="DECONNEXION" styleButton={styles.loginButton} styleText={styles.loginText} onPress={handleDisconnect} accessibilityLabel={"Boutton de Déconnexion"} accessibilityRole={"Button"} />
             </View>
 
             {/* 🔽 Modal Dons Planifiés */}
@@ -154,7 +161,15 @@ export default function ProfilScreen() {
                                         ]}
                                         keyboardType="numeric"
                                         value={String(item.MontantDon)}
-                                        onChangeText={(val) => { /* ... */ }}
+                                        onChangeText={(val) => {
+                                            const updatedList = donList.map((don) => {
+                                                if (don.IdUser === item.IdUser && don.IDAsso === item.IDAsso) {
+                                                    return { ...don, MontantDon: parseFloat(val) || 0 };
+                                                }
+                                                return don;
+                                            });
+                                            setDonList(updatedList);
+                                        }}
                                     />
 
                                     <View style={styles.buttonRow}>
@@ -189,6 +204,8 @@ export default function ProfilScreen() {
                             styleButton={styles.loginButton}
                             styleText={styles.loginText}
                             onPress={() => setShowModal(false)}
+                            accessibilityRole={"Button"}
+                            accessibilityLabel={"Boutton de fermeture des récapitulatifs de dons"}
                         />
                     </View>
                 </View>

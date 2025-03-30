@@ -12,7 +12,7 @@ import { useTheme } from "@/components/ThemeContext";
 export default function TabOneScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [checkingLogin, setCheckingLogin] = useState(true);
   const navigation = useNavigation();
   const { theme } = useTheme();
@@ -64,77 +64,87 @@ export default function TabOneScreen() {
       <BackGround>
         <AppText style={styles.title}>Connectez-vous à votre compte</AppText>
 
-        {/* Email */}
         <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                color: isDark ? "#fff" : "#000",
-                borderColor: isDark ? "#555" : "#ddd",
-              },
-            ]}
+            style={[styles.input, {
+              backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+              color: isDark ? "#fff" : "#000",
+              borderColor: isDark ? "#555" : "#ddd"
+            }]}
             placeholder="nom.prenom@gmail.com"
             placeholderTextColor="#aaa"
             keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
+            accessibilityLabel="Champ pour entrer votre adresse email"
         />
 
-        {/* Password */}
         <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                color: isDark ? "#fff" : "#000",
-                borderColor: isDark ? "#555" : "#ddd",
-              },
-            ]}
+            style={[styles.input, {
+              backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+              color: isDark ? "#fff" : "#000",
+              borderColor: isDark ? "#555" : "#ddd"
+            }]}
             placeholder="***********"
             placeholderTextColor="#aaa"
-            secureTextEntry
+            secureTextEntry={!showPassword}
             value={password}
             onChangeText={setPassword}
+            accessibilityLabel="Champ pour entrer votre mot de passe"
         />
 
-        {/* Options */}
-        <View style={styles.row}>
-          <View style={styles.checkboxContainer}>
-            <View style={[styles.checkboxBorder, { backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5" }]}>
-              <Checkbox
-                  status={rememberMe ? "checked" : "unchecked"}
-                  onPress={() => setRememberMe(!rememberMe)}
-                  color={"#6C63FF"}
-                  uncheckedColor={"#6C63FF"}
-              />
-            </View>
-            <AppText style={styles.checkboxText}>Souviens-toi de moi</AppText>
+        {/* Afficher mot de passe */}
+        <TouchableOpacity
+            style={styles.checkboxTouchable}
+            onPress={() => setShowPassword(!showPassword)}
+            accessibilityRole="checkbox"
+            accessibilityLabel="Afficher le mot de passe"
+            accessibilityState={{ checked: showPassword }}
+        >
+          <View style={styles.checkboxBox}>
+            <Checkbox
+                status={showPassword ? "checked" : "unchecked"}
+                onPress={() => setShowPassword(!showPassword)}
+                color="#6C63FF"
+                uncheckedColor="#6C63FF"
+                theme={{ colors: { primary: "#6C63FF" } }}
+            />
           </View>
+          <AppText style={[styles.checkboxText, { color: isDark ? "#fff" : "#000" }]}>
+            Afficher le mot de passe
+          </AppText>
+        </TouchableOpacity>
 
-          <TouchableOpacity>
-            <AppText style={styles.forgotPassword}>Mot de passe oublié ?</AppText>
-          </TouchableOpacity>
-        </View>
+        <RegularButton
+            text="Mot de passe oublié ?"
+            onPress={() => router.push("/forgotPassword")}
+            styleButton={styles.forgotButton}
+            styleText={styles.forgotButtonText}
+            accessibilityLabel={"Boutton d'accès a formulaire d'oubli de mot de passe"}
+            accessibilityRole="Button"
+        />
 
-        {/* Connexion */}
         <RegularButton
             styleButton={styles.loginButton}
             styleText={styles.loginText}
             text="Se Connecter"
             onPress={handleLogin}
+            accessibilityLabel={"Boutton de confirmation de connexion"}
+            accessibilityRole="Button"
         />
 
-        {/* Inscription */}
         <AppText style={styles.signupText}>
           Pas encore de compte ?
-          <AppText style={styles.signupLink} onPress={() => router.push("/inscription")}> S'inscrire</AppText>
+          <AppText
+              style={styles.signupLink}
+              onPress={() => router.push("/inscription")}
+          >
+            {" "}S'inscrire
+          </AppText>
         </AppText>
       </BackGround>
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   title: {
     fontSize: 28,
@@ -151,28 +161,36 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderWidth: 1,
   },
-  row: {
+  checkboxTouchable: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  checkboxBox: {
+    borderWidth: 2,
+    borderColor: "#6C63FF",
+    borderRadius: 6,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 40,
+    height: 40,
+    marginRight: 8,
+  },
+  checkboxText: {
+    fontSize: 14,
+  },
+  forgotButton: {
+    backgroundColor: "#4968df",
+    borderWidth: 1,
+    borderColor: "#4968df",
+    paddingVertical: 10,
+    borderRadius: 10,
     alignItems: "center",
     marginBottom: 20,
   },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  checkboxBorder: {
-    borderWidth: 1,
-    borderColor: "#4968df",
-    borderRadius: 10,
-  },
-  checkboxText: {
-    fontSize: 12,
-    marginLeft: 10,
-  },
-  forgotPassword: {
-    color: "#4968df",
-    fontSize: 12,
+  forgotButtonText: {
+    color: "#fff",
+    fontSize: 16,
     fontWeight: "bold",
   },
   loginButton: {

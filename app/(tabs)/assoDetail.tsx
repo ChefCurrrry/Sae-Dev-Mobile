@@ -1,4 +1,4 @@
-// Adaptation du fichier assoDetail.tsx avec support du mode sombre et AppText
+// Adaptation du fichier assoDetail.tsx avec support du mode sombre, AppText et accessibilité
 
 import React, { useEffect, useState } from "react";
 import {
@@ -7,7 +7,7 @@ import {
     StyleSheet,
     ScrollView,
     Alert,
-    Text
+    AccessibilityRole
 } from "react-native";
 import { router } from "expo-router";
 import AppBackground from "@/components/AppBackground";
@@ -143,15 +143,41 @@ export default function AssoDetail() {
     return (
         <AppBackground title={asso.NomAsso}>
             <ScrollView>
-                <View style={styles.card}>
-                    <Image source={getImageSource(asso.LogoName)} style={styles.image} />
+                <View
+                    style={styles.card}
+                    accessible={true}
+                    accessibilityLabel={`Carte de présentation de l'association ${asso.NomAsso}`}
+                >
+                    <Image
+                        source={getImageSource(asso.LogoName)}
+                        style={styles.image}
+                        accessibilityLabel={`Logo de l'association ${asso.NomAsso}`}
+                        accessible
+                    />
                 </View>
 
-                <View style={styles.progressContainer}>
+                <View
+                    style={styles.progressContainer}
+                    accessible
+                    accessibilityRole="progressbar"
+                    accessibilityLabel={`Progression des dons, actuellement à ${Math.round((totalDon / objectif) * 100)}%`}
+                >
                     <View style={[styles.progressBar, { width: `${(totalDon / objectif) * 100}%` }]} />
                 </View>
-                <AppText style={[styles.totalText, { color: isDark ? "#fff" : "#000" }]}>€{totalDon}</AppText>
-                <AppText style={[styles.description, { color: isDark ? "#fff" : "#000" }]}>{asso.Description}</AppText>
+
+                <AppText
+                    style={[styles.totalText, { color: isDark ? "#fff" : "#000" }]}
+                    accessibilityLabel={`Montant total collecté : ${totalDon} euros`}
+                >
+                    €{totalDon}
+                </AppText>
+
+                <AppText
+                    style={[styles.description, { color: isDark ? "#fff" : "#000" }]}
+                    accessibilityLabel={`Description de l'association : ${asso.Description}`}
+                >
+                    {asso.Description}
+                </AppText>
 
                 <RegularButton
                     styleButton={styles.loginButton}
@@ -161,6 +187,8 @@ export default function AssoDetail() {
                         unsetType();
                         router.push(`/payment?id=${asso.IdAsso}`);
                     }}
+                    accessibilityLabel={"Faire un don à cette association"}
+                    accessibilityRole="button"
                 />
 
                 <RegularButton
@@ -177,6 +205,8 @@ export default function AssoDetail() {
                             router.push(`/payment?id=${asso.IdAsso}`);
                         }
                     }}
+                    accessibilityLabel="Planifier un don récurrent à cette association"
+                    accessibilityRole="button"
                 />
             </ScrollView>
         </AppBackground>
@@ -207,7 +237,6 @@ const styles = StyleSheet.create({
     },
     description: {
         marginTop: 50,
-        fontSize: 20,
         lineHeight: 22,
         textAlign: "left",
     },

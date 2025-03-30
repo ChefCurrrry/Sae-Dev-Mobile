@@ -12,7 +12,7 @@ export default function AppText({ children, style, ...props }: AppTextProps) {
     const isDark = theme === "dark";
 
     const defaultColor = isDark ? "#fff" : "#000";
-    const defaultSize = isLargeText ? 22 : 16;
+    const defaultSize = isLargeText ? 24 : 20;
 
     return (
         <Text

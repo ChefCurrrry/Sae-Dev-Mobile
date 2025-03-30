@@ -219,14 +219,30 @@ export default function AssociationDisplayScreen() {
     };
 
     const AssociationCard = ({ association }: { association: Association }) => (
-        <TouchableOpacity style={styles.wrapCard} onPress={() => {
-            setId(association.IdAsso);
-            router.push(`/assoDetail?id=${association.IdAsso}`);
-        }}>
+        <TouchableOpacity
+            style={styles.wrapCard}
+            onPress={() => {
+                setId(association.IdAsso);
+                router.push(`/assoDetail?id=${association.IdAsso}`);
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={`Voir les détails de l'association ${association.NomAsso}`}
+        >
             <View style={styles.card}>
-                <Image source={getImageSource(association.LogoName)} style={styles.image} />
+                <Image
+                    source={getImageSource(association.LogoName)}
+                    style={styles.image}
+                    accessible={true}
+                    accessibilityLabel={`Logo de ${association.NomAsso}`}
+                />
             </View>
-            <AppText style={styles.name}>{association.NomAsso}</AppText>
+            <AppText
+                style={styles.name}
+                accessible={true}
+                accessibilityLabel={`Nom de l'association : ${association.NomAsso}`}
+            >
+                {association.NomAsso}
+            </AppText>
         </TouchableOpacity>
     );
 
@@ -237,20 +253,32 @@ export default function AssociationDisplayScreen() {
                     styles.searchInput,
                     {
                         backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                        color: isDark ? "#fff" : "#000"
-                    }
+                        color: isDark ? "#fff" : "#000",
+                    },
                 ]}
                 placeholder="Rechercher une association..."
                 placeholderTextColor="#aaa"
                 value={searchQuery}
                 onChangeText={handleSearch}
+                accessibilityLabel="Champ de recherche pour les associations"
+                accessible={true}
             />
 
-            <AppText style={styles.filterButton} onPress={() => setFilterVisible(true)}>
+            <AppText
+                style={styles.filterButton}
+                onPress={() => setFilterVisible(true)}
+                accessibilityRole="button"
+                accessibilityLabel="Filtrer les associations par tags"
+            >
                 🎯 Filtrer par tags
             </AppText>
 
-            <AppText style={styles.filterButton} onPress={() => setFilterVisible2(true)}>
+            <AppText
+                style={styles.filterButton}
+                onPress={() => setFilterVisible2(true)}
+                accessibilityRole="button"
+                accessibilityLabel="Vous êtes perdu ? Cliquez ici pour obtenir de l'aide"
+            >
                 Vous êtes perdu ? Cliquez ici !
             </AppText>
 
@@ -259,10 +287,16 @@ export default function AssociationDisplayScreen() {
                 keyExtractor={(item) => item.IdAsso.toString()}
                 numColumns={2}
                 renderItem={({ item }) => <AssociationCard association={item} />}
+                accessible={true}
+                accessibilityLabel="Liste des associations filtrées"
             />
 
-            {/* Modal filtres */}
-            <Modal isVisible={isFilterVisible} onBackdropPress={() => setFilterVisible(false)} style={styles.bottomModal}>
+            {/* Modal 1 - Filtres */}
+            <Modal
+                isVisible={isFilterVisible}
+                onBackdropPress={() => setFilterVisible(false)}
+                style={styles.bottomModal}
+            >
                 <View style={[styles.modalContent, { backgroundColor: modalBg }]}>
                     <AppText style={styles.modalTitle}>Filtrer les associations</AppText>
 
@@ -270,20 +304,27 @@ export default function AssociationDisplayScreen() {
                         <View key={index}>
                             <AppText style={styles.tagTitle}>Catégorie {index + 1}</AppText>
                             <View style={styles.tagContainer}>
-                                {tagGroup.map(tag => (
-                                    <AppText
+                                {tagGroup.map((tag) => (
+                                    <TouchableOpacity
                                         key={tag.id}
                                         onPress={() => toggleTag(index, tag.id)}
-                                        style={[
-                                            styles.tag,
-                                            {
-                                                backgroundColor: selectedTags[index] === tag.id ? "#4968df" : tagBg,
-                                                color: selectedTags[index] === tag.id ? "#fff" : tagColor,
-                                            },
-                                        ]}
+                                        accessibilityRole="button"
+                                        accessibilityLabel={`Tag ${tag.name}`}
                                     >
-                                        {tag.name}
-                                    </AppText>
+                                        <AppText
+                                            style={[
+                                                styles.tag,
+                                                {
+                                                    backgroundColor:
+                                                        selectedTags[index] === tag.id ? "#4968df" : tagBg,
+                                                    color:
+                                                        selectedTags[index] === tag.id ? "#fff" : tagColor,
+                                                },
+                                            ]}
+                                        >
+                                            {tag.name}
+                                        </AppText>
+                                    </TouchableOpacity>
                                 ))}
                             </View>
                         </View>
@@ -295,6 +336,8 @@ export default function AssociationDisplayScreen() {
                             handleTagFilter();
                             setFilterVisible(false);
                         }}
+                        accessibilityRole="button"
+                        accessibilityLabel="Appliquer les filtres"
                     >
                         ✅ Appliquer les filtres
                     </AppText>
@@ -305,23 +348,31 @@ export default function AssociationDisplayScreen() {
                             resetTags();
                             setFilterVisible(false);
                         }}
+                        accessibilityRole="button"
+                        accessibilityLabel="Réinitialiser les filtres"
                     >
                         🔄 Voir toutes les associations
                     </AppText>
                 </View>
             </Modal>
 
-            {/* Modal question */}
-            <Modal isVisible={isFilterVisible2} onBackdropPress={() => setFilterVisible2(false)} style={styles.bottomModal}>
+            {/* Modal 2 - Aide */}
+            <Modal
+                isVisible={isFilterVisible2}
+                onBackdropPress={() => setFilterVisible2(false)}
+                style={styles.bottomModal}
+            >
                 <View style={[styles.modalContent, { backgroundColor: modalBg }]}>
                     <AppText style={styles.modalTitle}>Vous êtes perdu ?</AppText>
-                    <AppText style={styles.modalTitle}>Décrivez ce qui vous touche ou vous motive :</AppText>
+                    <AppText style={styles.modalTitle}>Décrivez ce qui vous touche :</AppText>
                     <AppText
                         style={styles.applyButton}
                         onPress={() => {
                             setFilterVisible2(false);
                             router.push("/trouverAsso");
                         }}
+                        accessibilityRole="button"
+                        accessibilityLabel="Démarrer le parcours guidé"
                     >
                         🔍 Trouver une association
                     </AppText>
