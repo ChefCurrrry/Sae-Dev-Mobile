@@ -205,9 +205,6 @@ export default function AssociationDisplayScreen() {
     const resetTags = () => {
         fetchAllAssociations();
         setSelectedTags([null, null, null]);
-        setTags1([]);
-        setTags2([]);
-        setTags3([]);
         setTag1(null);
         setTag2(null);
         setTag3(null);
