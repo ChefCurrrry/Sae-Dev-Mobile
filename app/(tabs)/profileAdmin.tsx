@@ -301,7 +301,7 @@ export default function AdminProfilScreen() {
                             renderItem={({ item }) => (
                                 <View style={styles.item}>
                                     <AppText style={styles.name}>{item.prenom} {item.nom}</AppText>
-                                    <AppText style={{ marginBottom: 5 }}>{item.email}</AppText>
+                                    <AppText style={styles.email}>{item.email}</AppText>
 
                                     <Picker
                                         selectedValue={item.role}
@@ -401,12 +401,12 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: 6,
         alignItems: "center",
-        marginTop: 5,
+        marginTop: -70,
     },
 
     buttonRow: {
         flexDirection: "row",
-        justifyContent: "space-between", // ✅ meilleure distribution
+        justifyContent: "space-between",
         gap: 10,
     },
     total: {
@@ -415,5 +415,10 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         textAlign: "center",
     },
+    email: {
+        fontSize: 14,
+        marginBottom: -72, // 👈 réduit l’espace
+    },
+
 
 });
