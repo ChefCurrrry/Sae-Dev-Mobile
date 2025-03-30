@@ -77,7 +77,8 @@ export default function AdminProfilScreen() {
 
     const fetchUsers = async () => {
         try {
-            const res = await fetch("https://backenddevmobile-production.up.railway.app/api/users/getUser");
+            const userId = await SecureStore.getItemAsync("userId");
+            const res = await fetch(`https://backenddevmobile-production.up.railway.app/api/users/getUser?id=${userId}`);
             const data = await res.json();
             setUsers(data);
         } catch (error) {
@@ -264,7 +265,7 @@ export default function AdminProfilScreen() {
                                         </TouchableOpacity>
 
                                         <TouchableOpacity
-                                            style={styles.deleteButton}
+                                            style={styles.deleteDonButton}
                                             onPress={() => {
                                                 handleDeleteDon(item.IdUser, item.IDAsso);
                                             }}
@@ -299,25 +300,44 @@ export default function AdminProfilScreen() {
                             data={users}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => (
-                                <View style={styles.item}>
-                                    <AppText style={styles.name}>{item.prenom} {item.nom}</AppText>
-                                    <AppText style={styles.email}>{item.email}</AppText>
+                                <View
+                                    style={[
+                                        styles.userCard,
+                                        { backgroundColor: isDark ? "#2A2A2A" : "#f2f2f2" },
+                                    ]}
+                                >
+                                    <View style={styles.userInfo}>
+                                        <AppText style={[styles.name, { color: isDark ? "#fff" : "#000" }]}>
+                                            {item.prenom} {item.nom}
+                                        </AppText>
+                                        <AppText style={[styles.email, { color: isDark ? "#ccc" : "#333" }]}>
+                                            {item.email}
+                                        </AppText>
+                                    </View>
 
-                                    <Picker
-                                        selectedValue={item.role}
-                                        style={{ color: isDark ? "#fff" : "#000" }}
-                                        onValueChange={(value) => handleUpdateRole(item.id, value)}
-                                    >
-                                        <Picker.Item label="user" value="user" />
-                                        <Picker.Item label="admin" value="admin" />
-                                    </Picker>
+                                    <View style={styles.userActions}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                const newRole = item.role === "admin" ? "user" : "admin";
+                                                handleUpdateRole(item.id, newRole);
+                                            }}
+                                            style={[
+                                                styles.roleBadge,
+                                                { backgroundColor: item.role === "admin" ? "#5E76FA" : "#aaa" },
+                                            ]}
+                                        >
+                                            <AppText style={styles.roleText}>
+                                                {item.role.toUpperCase()}
+                                            </AppText>
+                                        </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        style={styles.deleteButton}
-                                        onPress={() => handleDeleteUser(item.id)}
-                                    >
-                                        <AppText style={{ color: "#fff" }}>Supprimer</AppText>
-                                    </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.userDeleteButton}
+                                            onPress={() => handleDeleteUser(item.id)}
+                                        >
+                                            <AppText style={{ color: "#fff", fontSize: 12 }}>Supprimer</AppText>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             )}
                         />
@@ -403,6 +423,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: -70,
     },
+    deleteDonButton: {
+        backgroundColor: "#e74c3c",
+        padding: 8,
+        flex: 1,
+        borderRadius: 6,
+        alignItems: "center",
+        marginTop: 5, // 👈 on garde le bon alignement
+    },
 
     buttonRow: {
         flexDirection: "row",
@@ -419,6 +447,46 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: -72, // 👈 réduit l’espace
     },
+    roleBadge: {
+        alignSelf: "flex-start",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 12,
+        marginTop: 8,
+    },
+
+    roleText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 13,
+    },
+    userCard: {
+        backgroundColor: "#f2f2f2",
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 15,
+        flexDirection: "column",
+        gap: 8,
+    },
+
+    userInfo: {
+        marginBottom: 4,
+    },
+
+    userActions: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+
+    userDeleteButton: {
+        backgroundColor: "#e74c3c",
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+    },
+
+
 
 
 });
