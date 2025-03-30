@@ -128,6 +128,7 @@ export default function AdminProfilScreen() {
                                 body: JSON.stringify({ idUtilisateur, idAssociation }),
                             });
                             fetchDonsPlanifiés();
+                            Alert.alert("✅ Succès", "Le don a été supprimé !");
                         } catch (error) {
                             console.error("❌ Erreur suppression du don :", error);
                         }
@@ -266,7 +267,6 @@ export default function AdminProfilScreen() {
                                             style={styles.deleteButton}
                                             onPress={() => {
                                                 handleDeleteDon(item.IdUser, item.IDAsso);
-                                                Alert.alert("✅ Succès", "Le don a été supprimé !");
                                             }}
                                         >
                                             <AppText style={{ color: "white" }}>Supprimer</AppText>
