@@ -1,9 +1,10 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, AccessibilityInfo } from "react-native";
 import RegularButton from "@/components/RegularButton";
 import { useTagSelection } from "@/components/TagSelectionContext";
 import { router } from "expo-router";
 import { useTheme } from "@/components/ThemeContext";
+import AppText from "@/components/AppText";
 
 export default function AssociationPage1() {
     const { setTag1 } = useTagSelection();
@@ -11,65 +12,76 @@ export default function AssociationPage1() {
     const isDark = theme === "dark";
 
     return (
-        <View style={[styles.container, { backgroundColor: isDark ? "#1E1E1E" : "#FFFFFF" }]}>
+        <View
+            style={[styles.container, { backgroundColor: isDark ? "#1E1E1E" : "#FFFFFF" }]}
+            accessible={true}
+            accessibilityLabel="Page de sélection des causes"
+            accessibilityRole="header"
+        >
             {/* Section supérieure avec le fond bleu */}
             <View style={styles.header}>
-                <Text style={styles.title}>Trouvez l’association qui vous correspond</Text>
+                <Text
+                    style={styles.title}
+                    accessibilityRole="header"
+                    accessibilityLabel="Trouvez l’association qui vous correspond"
+                >
+                    Trouvez l’association qui vous correspond
+                </Text>
             </View>
 
-            <Text style={[styles.subtitle, { color: isDark ? "#fff" : "#3A3A3A" }]}>
+            <AppText
+                style={[styles.subtitle, { color: isDark ? "#fff" : "#3A3A3A" }]}
+                accessibilityRole="text"
+                accessibilityLabel="Les causes qui vous tiennent à cœur"
+            >
                 Les causes qui vous tiennent à cœur ?
-            </Text>
+            </AppText>
 
             {/* Boutons */}
             <View style={styles.buttonsContainer}>
                 <RegularButton
                     text="🩺 Santé et recherche médicale"
-                    styleButton={[
-                        styles.button,
-                        { backgroundColor: isDark ? "#333" : "#E5E5E5" },
-                    ]}
+                    styleButton={[styles.button, { backgroundColor: isDark ? "#333" : "#E5E5E5" }]}
                     styleText={{ color: isDark ? "#fff" : "#3A3A3A", fontSize: 14, fontWeight: "600" }}
                     onPress={() => {
                         setTag1(2);
                         router.push("/trouverAsso2");
                     }}
+                    accessibilityLabel="Santé et recherche médicale"
+                    accessibilityRole="button"
                 />
                 <RegularButton
                     text="🤝 Solidarité et inclusion"
-                    styleButton={[
-                        styles.button,
-                        { backgroundColor: isDark ? "#333" : "#E5E5E5" },
-                    ]}
+                    styleButton={[styles.button, { backgroundColor: isDark ? "#333" : "#E5E5E5" }]}
                     styleText={{ color: isDark ? "#fff" : "#3A3A3A", fontSize: 14, fontWeight: "600" }}
                     onPress={() => {
                         setTag1(1);
                         router.push("/trouverAsso2");
                     }}
+                    accessibilityLabel="Solidarité et inclusion"
+                    accessibilityRole="button"
                 />
                 <RegularButton
                     text="🌱 Environnement et écologie"
-                    styleButton={[
-                        styles.button,
-                        { backgroundColor: isDark ? "#333" : "#E5E5E5" },
-                    ]}
+                    styleButton={[styles.button, { backgroundColor: isDark ? "#333" : "#E5E5E5" }]}
                     styleText={{ color: isDark ? "#fff" : "#3A3A3A", fontSize: 14, fontWeight: "600" }}
                     onPress={() => {
                         setTag1(3);
                         router.push("/trouverAsso2");
                     }}
+                    accessibilityLabel="Environnement et écologie"
+                    accessibilityRole="button"
                 />
                 <RegularButton
                     text="🏠 Lutte contre la précarité"
-                    styleButton={[
-                        styles.button,
-                        { backgroundColor: isDark ? "#333" : "#E5E5E5" },
-                    ]}
+                    styleButton={[styles.button, { backgroundColor: isDark ? "#333" : "#E5E5E5" }]}
                     styleText={{ color: isDark ? "#fff" : "#3A3A3A", fontSize: 14, fontWeight: "600" }}
                     onPress={() => {
                         setTag1(4);
                         router.push("/trouverAsso2");
                     }}
+                    accessibilityLabel="Lutte contre la précarité"
+                    accessibilityRole="button"
                 />
             </View>
         </View>

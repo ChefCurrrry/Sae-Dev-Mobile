@@ -14,10 +14,19 @@ export default function AssociationPage2() {
         <View style={[styles.container, { backgroundColor: isDark ? "#1E1E1E" : "#FFFFFF" }]}>
             {/* Section supérieure avec le fond bleu */}
             <View style={styles.header}>
-                <Text style={styles.title}>Trouvez l’association qui vous correspond</Text>
+                <Text
+                    style={styles.title}
+                    accessibilityRole="header"
+                    accessibilityLabel="Trouvez l’association qui vous correspond"
+                >
+                    Trouvez l’association qui vous correspond
+                </Text>
             </View>
 
-            <Text style={[styles.subtitle, { color: isDark ? "#fff" : "#3A3A3A" }]}>
+            <Text
+                style={[styles.subtitle, { color: isDark ? "#fff" : "#3A3A3A" }]}
+                accessibilityLabel="Quel impact souhaitez-vous avoir avec votre don ?"
+            >
                 Quel impact souhaitez-vous avoir avec votre don ?
             </Text>
 
@@ -34,6 +43,8 @@ export default function AssociationPage2() {
                         setTag2(3);
                         router.push("/trouverAsso3");
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Choisir de soutenir les bénéficiaires"
                 />
                 <RegularButton
                     text="🤝 Financer la recherche et l'innovation"
@@ -46,6 +57,8 @@ export default function AssociationPage2() {
                         setTag2(1);
                         router.push("/trouverAsso3");
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Choisir de financer la recherche et l’innovation"
                 />
                 <RegularButton
                     text="Sensibiliser et éduquer"
@@ -58,6 +71,8 @@ export default function AssociationPage2() {
                         setTag2(2);
                         router.push("/trouverAsso3");
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Choisir de sensibiliser et éduquer"
                 />
             </View>
         </View>

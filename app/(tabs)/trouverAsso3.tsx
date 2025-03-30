@@ -14,10 +14,19 @@ export default function AssociationPage3() {
         <View style={[styles.container, { backgroundColor: isDark ? "#1E1E1E" : "#FFFFFF" }]}>
             {/* Section supérieure avec le fond bleu */}
             <View style={styles.header}>
-                <Text style={styles.title}>Trouvez l’association qui vous correspond</Text>
+                <Text
+                    style={styles.title}
+                    accessibilityRole="header"
+                    accessibilityLabel="Trouvez l’association qui vous correspond"
+                >
+                    Trouvez l’association qui vous correspond
+                </Text>
             </View>
 
-            <Text style={[styles.subtitle, { color: isDark ? "#fff" : "#3A3A3A" }]}>
+            <Text
+                style={[styles.subtitle, { color: isDark ? "#fff" : "#3A3A3A" }]}
+                accessibilityLabel="Préférez-vous une association déjà bien établie ou une plus petite structure ?"
+            >
                 Préférez-vous une association déjà bien établie ou une plus petite structure ?
             </Text>
 
@@ -38,6 +47,8 @@ export default function AssociationPage3() {
                         setTag3(1);
                         router.push("/associations");
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Choisir grande association"
                 />
                 <RegularButton
                     text="Petite association"
@@ -54,6 +65,26 @@ export default function AssociationPage3() {
                         setTag3(2);
                         router.push("/associations");
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Choisir petite association"
+                />
+                <RegularButton
+                    text="Peu importe"
+                    styleButton={[
+                        styles.button,
+                        { backgroundColor: isDark ? "#333" : "#E5E5E5" },
+                    ]}
+                    styleText={{
+                        color: isDark ? "#fff" : "#3A3A3A",
+                        fontSize: 14,
+                        fontWeight: "600",
+                    }}
+                    onPress={() => {
+                        setTag3(null); // valeur null si l'utilisateur ne choisit pas
+                        router.push("/associations");
+                    }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Choisir peu importe"
                 />
             </View>
         </View>
