@@ -28,57 +28,72 @@ export default function Payment() {
     };
 
     const handleConfirm = async () => {
-        const type = await SecureStore.getItemAsync("type");
         if (!amount) {
-            Alert.alert("Remplissez tous les champs");
+            Alert.alert("Montant requis");
             return;
         }
 
-        if (!id) {
-            Alert.alert("Erreur", "Association non définie.");
-            return;
-        }
+        try {
+            // 1. Récupérer le client secret depuis ton backend
+            const res = await fetch("https://backenddevmobile-production.up.railway.app/api/payment/create-payment-intent", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ amount: Math.round(parseFloat(amount) * 100) }),
+            });
 
+            const { clientSecret } = await res.json();
+
+            if (!clientSecret) {
+                Alert.alert("Erreur", "Échec de récupération du client secret.");
+                return;
+            }
+
+            // 2. Utiliser Stripe pour confirmer le paiement
+            const { paymentIntent, error } = await confirmPayment(clientSecret, {
+                paymentMethodType: "Card",
+            });
+
+            if (error) {
+                console.log("Erreur de paiement Stripe :", error);
+                Alert.alert("Erreur de paiement", error.message || "Une erreur est survenue");
+            } else if (paymentIntent) {
+                console.log("✅ Paiement confirmé :", paymentIntent.id);
+                Alert.alert("Paiement réussi 🎉");
+
+                // Enregistrer le don dans ta BDD
+                await saveDon(paymentIntent.id);
+                router.push("/associations");
+            }
+
+        } catch (err) {
+            console.error("Erreur :", err);
+            Alert.alert("Erreur", "Une erreur est survenue.");
+        }
+    };
+
+    const saveDon = async (paymentIntentId: string) => {
+        const type = await SecureStore.getItemAsync("type");
         const idUser = await SecureStore.getItemAsync("userId");
-
-        if (type === "recurrent" && !idUser) {
-            Alert.alert("Connexion requise", "Veuillez vous connecter pour planifier un don récurrent.");
-            router.push("/connexion");
-            return;
-        }
+        const endpoint = type === "recurrent"
+            ? "https://backenddevmobile-production.up.railway.app/api/dons/registerRecurrentDon"
+            : "https://backenddevmobile-production.up.railway.app/api/dons/registerDon";
 
         const donData = {
             idUtilisateur: idUser ? Number(idUser) : null,
             idAssociation: Number(id),
             montant: Number(amount),
-            date: formatDateToSQL(new Date()),
+            date: new Date().toISOString().slice(0, 19).replace("T", " "),
+            stripeId: paymentIntentId, // facultatif mais bon pour le suivi
         };
 
-        const endpoint = type === "recurrent"
-            ? "https://backenddevmobile-production.up.railway.app/api/dons/registerRecurrentDon"
-            : "https://backenddevmobile-production.up.railway.app/api/dons/registerDon";
-
-        try {
-            const response = await fetch(endpoint, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(donData),
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                Alert.alert("Merci 🙌", type === "recurrent" ? "Don récurrent enregistré !" : "Don enregistré !");
-                router.push("/associations");
-            } else {
-                console.error("❌ Réponse backend :", data);
-                Alert.alert("Erreur", data.message || "Une erreur est survenue.");
-            }
-        } catch (error) {
-            console.error("❌ Erreur lors de l'envoi du don :", error);
-            Alert.alert("Erreur", "Impossible de contacter le serveur.");
-        }
+        await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(donData),
+        });
     };
+
+
 
     return (
         <BackGround>
