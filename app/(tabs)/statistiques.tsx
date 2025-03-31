@@ -28,6 +28,7 @@ export default function StatistiquesDons() {
     };
 
     return (
+        <AppBackground>
             <View style={styles.container}>
 
                 {data.length > 0 ? (
