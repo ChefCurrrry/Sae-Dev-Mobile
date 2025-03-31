@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         tintColor: "#fff",
     },
     pageTitle: {
-        fontSize: 37,
+        fontSize: 33,
         fontWeight: "bold",
         color: "#fff",
         textAlign: "center",

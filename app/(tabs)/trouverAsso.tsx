@@ -5,6 +5,7 @@ import { useTagSelection } from "@/components/TagSelectionContext";
 import { router } from "expo-router";
 import { useTheme } from "@/components/ThemeContext";
 import AppText from "@/components/AppText";
+import AppBackground from "@/components/AppBackground";
 
 export default function AssociationPage1() {
     const { setTag1 } = useTagSelection();
@@ -12,29 +13,14 @@ export default function AssociationPage1() {
     const isDark = theme === "dark";
 
     return (
-        <View
-            style={[styles.container, { backgroundColor: isDark ? "#1E1E1E" : "#FFFFFF" }]}
-            accessible={true}
-            accessibilityLabel="Page de sélection des causes"
-            accessibilityRole="header"
-        >
-            {/* Section supérieure avec le fond bleu */}
-            <View style={styles.header}>
-                <Text
-                    style={styles.title}
-                    accessibilityRole="header"
-                    accessibilityLabel="Trouvez l’association qui vous correspond"
-                >
-                    Trouvez l’association qui vous correspond
-                </Text>
-            </View>
+        <AppBackground title="Trouvez l’association qui vous correspond">
 
             <AppText
                 style={[styles.subtitle, { color: isDark ? "#fff" : "#3A3A3A" }]}
                 accessibilityRole="text"
                 accessibilityLabel="Les causes qui vous tiennent à cœur"
             >
-                Les causes qui vous tiennent à cœur ?
+                Quelle est la cause qui vous tient à cœur ?
             </AppText>
 
             {/* Boutons */}
@@ -84,7 +70,7 @@ export default function AssociationPage1() {
                     accessibilityRole="button"
                 />
             </View>
-        </View>
+        </AppBackground>
     );
 }
 
