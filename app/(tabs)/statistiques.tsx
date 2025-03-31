@@ -34,7 +34,7 @@ export default function StatistiquesDons() {
     return (
         <AppBackground title="Statistiques de Dons">
             <View style={styles.container}>
-                <AppText style={styles.title}>Top 5 associations (par montant de dons)</AppText>
+                <AppText style={styles.title}>Top 5 associations avec le plus de dons </AppText>
 
                 {data.length > 0 ? (
                     <BarChart
