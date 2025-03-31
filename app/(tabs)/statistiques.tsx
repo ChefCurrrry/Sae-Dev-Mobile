@@ -15,7 +15,10 @@ export default function StatistiquesDons() {
     useEffect(() => {
         fetch("https://backenddevmobile-production.up.railway.app/api/dons/top-associations")
             .then((res) => res.json())
-            .then((resData) => setData(resData))
+            .then((resData) => {
+                console.log("👉 Données reçues :", resData);
+                setData(resData);
+            })
             .catch((err) => console.error("Erreur chargement stats : ", err));
     }, []);
 
