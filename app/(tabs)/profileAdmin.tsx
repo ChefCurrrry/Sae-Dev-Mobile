@@ -201,7 +201,7 @@ export default function AdminProfilScreen() {
                 />
 
                 <RegularButton text="Graphiques de Dons"
-                               onPress={() => router.push("/profileAdmin")}
+                               onPress={() => router.push("/statistiques")}
                                styleButton={styles.loginButton}
                                styleText={styles.loginText}
                                accessibilityLabel={"Bouton d'accès aux statistiques de l'application"}
