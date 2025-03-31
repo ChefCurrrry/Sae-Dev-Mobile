@@ -147,12 +147,14 @@ export default function AssoDetail() {
                     style={styles.card}
                     accessible={true}
                     accessibilityLabel={`Carte de présentation de l'association ${asso.NomAsso}`}
+                    accessibilityRole="button"
                 >
                     <Image
                         source={getImageSource(asso.LogoName)}
                         style={styles.image}
                         accessibilityLabel={`Logo de l'association ${asso.NomAsso}`}
                         accessible
+                        accessibilityRole="image"
                     />
                 </View>
 
@@ -168,6 +170,7 @@ export default function AssoDetail() {
                 <AppText
                     style={[styles.totalText, { color: isDark ? "#fff" : "#000" }]}
                     accessibilityLabel={`Montant total collecté : ${totalDon} euros`}
+                    accessibilityRole="text"
                 >
                     €{totalDon}
                 </AppText>
