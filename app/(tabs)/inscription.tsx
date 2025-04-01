@@ -56,7 +56,7 @@ export default function RegisterScreen() {
 
             if (data.success) {
                 Alert.alert("Succès", "Inscription réussie !");
-                router.push("/connexion");
+                router.replace("/connexion");
             } else {
                 Alert.alert("Erreur", data.message);
             }
@@ -164,11 +164,13 @@ export default function RegisterScreen() {
                     styleText={styles.registerText}
                     text="S'inscrire"
                     onPress={handleRegister}
+                    accessibilityLabel={"Bouton d'enregistrement de l'inscription"}
+                    accessibilityRole={"button"}
                 />
 
                 <AppText style={styles.signupText}>
                     Vous avez un compte ?
-                    <AppText style={styles.signupLink} onPress={() => router.push("/connexion")}> Se connecter</AppText>
+                    <AppText style={styles.signupLink} onPress={() => router.replace("/connexion")}>Se connecter</AppText>
                 </AppText>
             </BackGround>
         </ScrollView>
