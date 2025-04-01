@@ -11,6 +11,7 @@ A partir d'ici tout se fait dans le terminal de commande :
 - git init
 - git remote add origin https://github.com/ChefCurrrry/backend_dev_mobile.git
 - git remote -v
+
 (
 s'il affiche :
 "origin https://github.com/ChefCurrrry/backend_dev_mobile.git (fetch)" et "origin https://github.com/ChefCurrrry/backend_dev_mobile.git (push)"
