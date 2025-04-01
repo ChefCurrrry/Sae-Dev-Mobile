@@ -1,20 +1,18 @@
-import {Image, View, StyleSheet, TouchableOpacity} from "react-native";
-import React, {useState} from "react";
+import { Image, View, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
 import { router } from "expo-router";
 import RegularButton from "@/components/RegularButton";
 import AppText from "@/components/AppText";
 import { useTheme } from "@/components/ThemeContext";
 import SettingsModal from "@/components/SettingsModal";
 
-export default function bienvenueDisplayScreen() {
+export default function ConfidentialiteScreen() {
     const { theme, toggleTheme, isLargeText, toggleTextSize } = useTheme();
     const isDark = theme === "dark";
     const [showSettingsModal, setShowSettingsModal] = useState(false);
 
-
-
     const handlePress = () => {
-        router.push("/confidentialite");
+        router.push("/associations");
     };
 
     return (
@@ -29,11 +27,17 @@ export default function bienvenueDisplayScreen() {
             <View style={[styles.container, { backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5" }]} />
 
             <View style={[styles.formContainer, { backgroundColor: isDark ? "#1E1E1E" : "#fff" }]}>
-                <AppText style={styles.title}>Bienvenue sur notre Application</AppText>
+                <AppText style={styles.title}>Vos informations sont en sécurité</AppText>
 
-                <AppText style={styles.title2}>Faites un geste pour la France, chaque don compte !</AppText>
-                <AppText style={styles.title2}>Choisissez une cause qui vous tiens à cœur et contribuez-y dès maintenant</AppText>
-                <AppText style={styles.title2}>Découvrez et aidez les associations partenaires en quelques clics !</AppText>
+                <AppText style={styles.title2}>
+                    Les données que vous renseignez dans l'application sont strictement confidentielles.
+                </AppText>
+                <AppText style={styles.title2}>
+                    Elles ne seront jamais partagées ou utilisées à des fins commerciales.
+                </AppText>
+                <AppText style={styles.title2}>
+                    Elles sont uniquement utilisées pour gérer vos dons et garantir un suivi sécurisé et transparent.
+                </AppText>
 
                 <RegularButton
                     styleButton={styles.loginButton}
@@ -44,6 +48,7 @@ export default function bienvenueDisplayScreen() {
                     accessibilityRole={"button"}
                 />
             </View>
+
             <SettingsModal
                 visible={showSettingsModal}
                 onClose={() => setShowSettingsModal(false)}
@@ -52,13 +57,10 @@ export default function bienvenueDisplayScreen() {
                 isDark={isDark}
                 isLargeText={isLargeText}
             />
-
-
         </>
     );
 }
 
-// Styles
 const styles = StyleSheet.create({
     container: {
         height: "70%",

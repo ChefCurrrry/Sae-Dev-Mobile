@@ -50,6 +50,7 @@ function RootLayoutNav() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="confidentialite" options={{ headerShown: false }} />
         </Stack>
       </TagSelectionProvider>
       </SelectedAssoProvider>
