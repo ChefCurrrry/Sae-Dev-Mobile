@@ -19,7 +19,7 @@ s'il affiche :
 - git pull origin master
 
 
-Maintenant, le backend est cloné aussi avec le projet principal
+Maintenant, le backend est cloné aussi avec le projet principal.
 Ensuite il faut réinstaller les dépendances et les modules mais aussi expo-cli :
 - Si vous êtes encore dans backend, revenez à la racine du projet avec cd../
 
