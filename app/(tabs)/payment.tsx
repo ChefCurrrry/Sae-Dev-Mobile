@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         padding: 4,
     },
     cardForm: {
-        height: 170, // ajuste si nécessaire
+        height: 180, // ajuste si nécessaire
         width: '100%',
     },
 
