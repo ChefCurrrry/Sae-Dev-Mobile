@@ -12,7 +12,7 @@ export default function ConfidentialiteScreen() {
     const [showSettingsModal, setShowSettingsModal] = useState(false);
 
     const handlePress = () => {
-        router.push("/associations");
+        router.replace("/associations");
     };
 
     return (
