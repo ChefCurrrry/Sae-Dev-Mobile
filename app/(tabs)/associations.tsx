@@ -49,6 +49,12 @@ export default function AssociationDisplayScreen() {
 
     const [selectedTags, setSelectedTags] = useState<(number | null)[]>([tag1, tag2, tag3]);
 
+    const categoryTitles = [
+        "Engagement Principal",
+        "Méthode de Soutien",
+        "Envergure de la Structure"
+    ];
+
     const images: Record<string, any> = {
         "AAAVAM.png": require("@/assets/images/asso/AAAVAM.png"),
         "ActionTraitement.png": require("@/assets/images/asso/ActionTraitement.png"),
@@ -306,7 +312,7 @@ export default function AssociationDisplayScreen() {
 
                     {[tags1, tags2, tags3].map((tagGroup, index) => (
                         <View key={index}>
-                            <AppText style={styles.tagTitle}>Catégorie {index + 1}</AppText>
+                            <AppText style={styles.tagTitle}>{categoryTitles[index]}</AppText>
                             <View style={styles.tagContainer}>
                                 {tagGroup.map((tag) => (
                                     <TouchableOpacity
