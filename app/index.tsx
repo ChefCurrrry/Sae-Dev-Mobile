@@ -14,7 +14,7 @@ export default function bienvenueDisplayScreen() {
 
 
     const handlePress = () => {
-        router.push("/confidentialite");
+        router.replace("/confidentialite");
     };
 
     return (
