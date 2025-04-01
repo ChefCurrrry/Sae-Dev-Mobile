@@ -170,7 +170,7 @@ export default function RegisterScreen() {
 
                 <AppText style={styles.signupText}>
                     Vous avez un compte ?
-                    <AppText style={styles.signupLink} onPress={() => router.replace("/connexion")}>Se connecter</AppText>
+                    <AppText style={styles.signupLink} onPress={() => router.replace("/connexion")}> Se connecter</AppText>
                 </AppText>
             </BackGround>
         </ScrollView>

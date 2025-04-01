@@ -143,7 +143,7 @@ export default function TabOneScreen() {
           Pas encore de compte ?
           <AppText
               style={styles.signupLink}
-              onPress={() => router.push("/inscription")}
+              onPress={() => router.replace("/inscription")}
           >
             {" "}S'inscrire
           </AppText>
