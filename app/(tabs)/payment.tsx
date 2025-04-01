@@ -4,7 +4,6 @@ import {
     TextInput,
     StyleSheet,
     Alert,
-    Text,
 } from 'react-native';
 import { router } from "expo-router";
 import BackGround from "@/components/BackGround";
@@ -13,21 +12,18 @@ import * as SecureStore from "expo-secure-store";
 import { useSelectedAsso } from "@/components/SelectedAssoContext";
 import { useTheme } from "@/components/ThemeContext";
 import AppText from "@/components/AppText";
-import {CardField, CardForm, useConfirmPayment} from "@stripe/stripe-react-native";
+import {CardForm, useConfirmPayment} from "@stripe/stripe-react-native";
 import { useTagSelection } from "@/components/TagSelectionContext";
 
 
 export default function Payment() {
     const [amount, setAmount] = useState('');
     const { id } = useSelectedAsso();
-    const { confirmPayment, loading } = useConfirmPayment();
+    const { confirmPayment } = useConfirmPayment();
     const { setTag1, setTag2, setTag3 } = useTagSelection();
     const { theme } = useTheme();
     const isDark = theme === "dark";
 
-    const formatDateToSQL = (date: Date) => {
-        return date.toISOString().slice(0, 19).replace("T", " ");
-    };
 
     const handleConfirm = async () => {
         if (!amount) {
