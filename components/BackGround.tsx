@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View, useWindowDimensions, ScrollView} from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@/components/ThemeContext";
 import SettingsModal from "@/components/SettingsModal";
@@ -40,9 +40,16 @@ export default function BackGround({ children }) {
                 styles.formContainer,
                 {
                     backgroundColor: isDark ? "#1E1E1E" : "#fff",
+                    maxHeight: height * 0.85, // permet de scroller si besoin
                 },
             ]}>
-                {children}
+                <ScrollView
+                    contentContainerStyle={{ paddingBottom: 30 }}
+                    keyboardShouldPersistTaps="handled"
+                    showsVerticalScrollIndicator={false}
+                >
+                    {children}
+                </ScrollView>
             </View>
 
             <SettingsModal
@@ -67,6 +74,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#4968df",
         position: "relative",
+
     },
     logo: {
         width: "100%",

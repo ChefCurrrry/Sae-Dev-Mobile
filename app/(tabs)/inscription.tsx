@@ -6,6 +6,9 @@ import {
     View,
     ScrollView,
     Platform,
+    KeyboardAvoidingView,
+    TouchableWithoutFeedback,
+    Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
@@ -67,119 +70,113 @@ export default function RegisterScreen() {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <BackGround>
-                <AppText style={styles.title}>Créez votre compte</AppText>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{backgroundColor: "transparent"}}>
 
-                <TextInput
-                    style={[styles.input, {
-                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                        color: isDark ? "#fff" : "#000",
-                        borderColor: isDark ? "#555" : "#ddd",
-                    }]}
-                    placeholder="Nom"
-                    placeholderTextColor="#aaa"
-                    value={nom}
-                    onChangeText={setNom}
-                />
+                    <BackGround>
+                        <AppText style={styles.title}>Créez votre compte</AppText>
 
-                <TextInput
-                    style={[styles.input, {
-                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                        color: isDark ? "#fff" : "#000",
-                        borderColor: isDark ? "#555" : "#ddd",
-                    }]}
-                    placeholder="Prénom"
-                    placeholderTextColor="#aaa"
-                    value={prenom}
-                    onChangeText={setPrenom}
-                />
-
-                <TextInput
-                    style={[styles.input, {
-                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                        color: isDark ? "#fff" : "#000",
-                        borderColor: isDark ? "#555" : "#ddd",
-                    }]}
-                    placeholder="Âge"
-                    placeholderTextColor="#aaa"
-                    keyboardType="numeric"
-                    value={age}
-                    onChangeText={setAge}
-                />
-
-                <TextInput
-                    style={[styles.input, {
-                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                        color: isDark ? "#fff" : "#000",
-                        borderColor: isDark ? "#555" : "#ddd",
-                    }]}
-                    placeholder="nom.prenom@gmail.com"
-                    placeholderTextColor="#aaa"
-                    keyboardType="email-address"
-                    value={email}
-                    onChangeText={setEmail}
-                />
-
-                <TextInput
-                    style={[styles.input, {
-                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                        color: isDark ? "#fff" : "#000",
-                        borderColor: isDark ? "#555" : "#ddd",
-                    }]}
-                    placeholder="Mot de passe"
-                    placeholderTextColor="#aaa"
-                    secureTextEntry={!showPassword}
-                    value={password}
-                    onChangeText={setPassword}
-                />
-
-                <TextInput
-                    style={[styles.input, {
-                        backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
-                        color: isDark ? "#fff" : "#000",
-                        borderColor: isDark ? "#555" : "#ddd",
-                    }]}
-                    placeholder="Confirmer le mot de passe"
-                    placeholderTextColor="#aaa"
-                    secureTextEntry={!showPassword}
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                />
-
-                <View style={styles.checkboxContainer}>
-                    <View style={[styles.checkboxBorder, { backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5" }]}>
-                        <Checkbox
-                            status={showPassword ? "checked" : "unchecked"}
-                            onPress={() => setShowPassword(!showPassword)}
-                            color="#6C63FF"
-                            uncheckedColor="#6C63FF"
+                        <TextInput
+                            style={[styles.input, getInputStyle(isDark)]}
+                            placeholder="Nom"
+                            placeholderTextColor="#aaa"
+                            value={nom}
+                            onChangeText={setNom}
                         />
-                    </View>
-                    <AppText style={styles.checkboxText}>Afficher le mot de passe</AppText>
-                </View>
 
-                <RegularButton
-                    styleButton={styles.registerButton}
-                    styleText={styles.registerText}
-                    text="S'inscrire"
-                    onPress={handleRegister}
-                    accessibilityLabel={"Bouton d'enregistrement de l'inscription"}
-                    accessibilityRole={"button"}
-                />
+                        <TextInput
+                            style={[styles.input, getInputStyle(isDark)]}
+                            placeholder="Prénom"
+                            placeholderTextColor="#aaa"
+                            value={prenom}
+                            onChangeText={setPrenom}
+                        />
 
-                <AppText style={styles.signupText}>
-                    Vous avez un compte ?
-                    <AppText style={styles.signupLink} onPress={() => router.replace("/connexion")}> Se connecter</AppText>
-                </AppText>
-            </BackGround>
-        </ScrollView>
+                        <TextInput
+                            style={[styles.input, getInputStyle(isDark)]}
+                            placeholder="Âge"
+                            placeholderTextColor="#aaa"
+                            keyboardType="numeric"
+                            value={age}
+                            onChangeText={setAge}
+                        />
+
+                        <TextInput
+                            style={[styles.input, getInputStyle(isDark)]}
+                            placeholder="nom.prenom@gmail.com"
+                            placeholderTextColor="#aaa"
+                            keyboardType="email-address"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+
+                        <TextInput
+                            style={[styles.input, getInputStyle(isDark)]}
+                            placeholder="Mot de passe"
+                            placeholderTextColor="#aaa"
+                            secureTextEntry={!showPassword}
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+
+                        <TextInput
+                            style={[styles.input, getInputStyle(isDark)]}
+                            placeholder="Confirmer le mot de passe"
+                            placeholderTextColor="#aaa"
+                            secureTextEntry={!showPassword}
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                        />
+
+                        <View style={styles.checkboxContainer}>
+                            <View style={[styles.checkboxBorder, { backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5" }]}>
+                                <Checkbox
+                                    status={showPassword ? "checked" : "unchecked"}
+                                    onPress={() => setShowPassword(!showPassword)}
+                                    color="#6C63FF"
+                                    uncheckedColor="#6C63FF"
+                                />
+                            </View>
+                            <AppText style={styles.checkboxText}>Afficher le mot de passe</AppText>
+                        </View>
+
+                        <RegularButton
+                            styleButton={styles.registerButton}
+                            styleText={styles.registerText}
+                            text="S'inscrire"
+                            onPress={handleRegister}
+                            accessibilityLabel="Bouton d'enregistrement de l'inscription"
+                            accessibilityRole="button"
+                        />
+
+                        <AppText style={styles.signupText}>
+                            Vous avez un compte ?
+                            <AppText style={styles.signupLink} onPress={() => router.replace("/connexion")}>
+                                {" "}Se connecter
+                            </AppText>
+                        </AppText>
+                    </BackGround>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 }
+
+// 🔧 Facteur style dynamique
+const getInputStyle = (isDark: boolean) => ({
+    backgroundColor: isDark ? "#2A2A2A" : "#F5F5F5",
+    color: isDark ? "#fff" : "#000",
+    borderColor: isDark ? "#555" : "#ddd",
+});
 
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
+        paddingBottom: 30,
+        backgroundColor: "transparent",
     },
     title: {
         fontSize: 28,
