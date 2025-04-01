@@ -43,7 +43,9 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
-      <StripeProvider publishableKey="pk_test_51R8M2DR64pdXuIYjdTlS5jTAcfTk6qNrLyTRvKBztCCBFuGtaRMcEX9lbXr4e4fUimfrhUDXNNKxdgGPztUxoXo900rtnKCkGS">
+      <StripeProvider publishableKey="pk_test_51R8M2DR64pdXuIYjdTlS5jTAcfTk6qNrLyTRvKBztCCBFuGtaRMcEX9lbXr4e4fUimfrhUDXNNKxdgGPztUxoXo900rtnKCkGS"
+                      merchantLocale="fr"
+      >
       <ThemeProvider>
       <SelectedAssoProvider>
       <TagSelectionProvider>
