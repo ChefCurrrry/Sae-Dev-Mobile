@@ -67,7 +67,7 @@ export default function Payment() {
                 setTag1(null);
                 setTag2(null);
                 setTag3(null);
-                router.push("/associations");
+                router.replace("/associations");
             }
 
         } catch (err) {
