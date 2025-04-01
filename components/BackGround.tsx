@@ -1,4 +1,4 @@
-import {Image, StyleSheet, TouchableOpacity, View, useWindowDimensions, ScrollView, Platform} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View, useWindowDimensions, ScrollView} from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@/components/ThemeContext";
 import SettingsModal from "@/components/SettingsModal";
@@ -40,7 +40,7 @@ export default function BackGround({ children }) {
                 styles.formContainer,
                 {
                     backgroundColor: isDark ? "#1E1E1E" : "#fff",
-
+                    maxHeight: height * 0.85,
                 },
             ]}>
                 <ScrollView
@@ -82,16 +82,12 @@ const styles = StyleSheet.create({
         marginTop: -120,
     },
     formContainer: {
-        position: "absolute",
-        top: Platform.OS === 'android' ? "35%" : "38%",
-        left: 20,
-        right: 20,
+        marginTop: -750,
         padding: 20,
+        marginHorizontal: 20,
         borderRadius: 20,
         elevation: 5,
-        backgroundColor: "#fff", // sera écrasé par le fond dynamique
     },
-
     icon: {
         width: 40,
         height: 40,
