@@ -27,8 +27,11 @@ export default function StatistiquesDons() {
         datasets: [
             {
                 data: data.map((item) => item.totalDons),
+                colors: data.map(() => (opacity = 1) => `rgba(73, 104, 223, ${opacity})`),
             },
         ],
+
+
     };
 
     return (
@@ -43,18 +46,33 @@ export default function StatistiquesDons() {
                         height={280}
                         yAxisSuffix="€"
                         fromZero
+                        withCustomBarColorFromData={true}
                         showValuesOnTopOfBars
                         chartConfig={{
-                            backgroundGradientFrom: isDark ? "#000" : "#fff",
-                            backgroundGradientTo: isDark ? "#000" : "#fff",
+                            backgroundGradientFrom: isDark ? "#1E1E1E" : "#fff",
+                            backgroundGradientTo: isDark ? "#1E1E1E" : "#fff",
                             decimalPlaces: 0,
-                            color: (opacity = 1) =>
-                                isDark
-                                    ? `rgba(255, 255, 255, ${opacity})`
-                                    : `rgba(73, 104, 223, ${opacity})`,
+
+                            color: () => "rgba(73, 104, 223, 1)",
                             labelColor: () => (isDark ? "#fff" : "#000"),
-                            barPercentage: 0.5,
+                            barPercentage: 0.6,
+
+
+                            propsForLabels: {
+                                fontSize: 16,
+                                fontWeight: "bold",
+                            },
+                            propsForBackgroundLines: {
+                                stroke: isDark ? "#444" : "#ccc",
+                            },
+                            propsForVerticalLabels: {
+                                fontSize: 15,
+                            },
+                            propsForHorizontalLabels: {
+                                fontSize: 14,
+                            },
                         }}
+
                         style={styles.chart}
                     />
                 ) : (
