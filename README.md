@@ -10,9 +10,11 @@ A partir d'ici tout se fait dans le terminal de commande :
 - cd backend
 - git init
 - git remote add origin https://github.com/ChefCurrrry/backend_dev_mobile.git
-- git remote -v (s'il affiche :
-                                origin  https://github.com/ChefCurrrry/backend_dev_mobile.git (fetch)
-                                origin  https://github.com/ChefCurrrry/backend_dev_mobile.git (push)
+- git remote -v
+(
+s'il affiche :
+origin  https://github.com/ChefCurrrry/backend_dev_mobile.git (fetch)
+origin  https://github.com/ChefCurrrry/backend_dev_mobile.git (push)
 )
 - git pull origin master
 
